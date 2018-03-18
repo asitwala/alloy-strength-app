@@ -2,7 +2,7 @@
   "name": "alloy-strength-app",
   "version": "1.0.0",
   "description": "A Vue app integrated with Express",
-  "author": "Amy Sitwala <amy.sitwala@morningstar.com>",
+  "author": "Amy Sitwala <asitwala17@gmail.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
