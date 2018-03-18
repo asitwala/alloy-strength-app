@@ -52,12 +52,17 @@
       }
     },
     mounted() {
-      this.getUsers();
+      this.getAllInfo();
+      //this.getUsers();
     },
     methods: {
       async getUsers() {
         let response = await UsersService.fetchUsers();
         this.users = response.data.users; 
+      },
+      async getAllInfo() {
+        let response = await UsersService.fetchAllInfo();
+        console.log(response);
       }
     }
   };
