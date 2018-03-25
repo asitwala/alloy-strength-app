@@ -3,23 +3,46 @@
         <h1>Video Library</h1>
         <!-- TODO: If we end up using Youtube --> 
         <!-- <youtube :video-id="videoId"></youtube> --> 
-        <div class="as-sub-video-filters">
-            <v-text-field :label="searchFieldPlaceholder"
-                v-model="search">
-            </v-text-field>
-            <v-select
-                :items="selectedOptions"
-            />
+        <div class="as-sub-videos-container">
+            <div class="as-sub-video-filters">
+                <div class="as-sub-video-search-container">
+                    <v-text-field class="as-sub-video-search"
+                        :label="searchFieldPlaceholder"
+                        v-model="search">
+                    </v-text-field>
+                </div>
 
+                <div class="as-sub-video-select-container">
+                    <v-select
+                        class="as-sub-video-select-level"
+                        autocomplete
+                        :label="selectedPlaceholder"
+                        :items="selectedOptions"
+                        v-model="selected"
+                    />
+                </div>
 
-        </div>
+                <div class="as-sub-video-clear-filters">
+                    <v-btn
+                        color="primary"
+                        :disabled="!hasFilters"
+                        @click="clearFilters"
+                        >
+                        Clear
+                    </v-btn>
+                </div>
+            
+            </div>
+            
+            <div class="as-sub-videos">
+                <as-sub-video v-for="subvideo in shownVideoInformation" 
+                    :key="subvideo.label"
+                    :video-info="subvideo">
+                </as-sub-video>
+            </div>
         
-        <div class="as-sub-videos">
-            <as-sub-video v-for="subvideo in shownVideoInformation" 
-                :key="subvideo.label"
-                :video-info="subvideo">
-            </as-sub-video>
         </div>
+   
     </div>
 
 </template>
@@ -71,7 +94,8 @@ export default {
             searchFieldPlaceholder: "Search for videos",
             search: '',
             selected: '',
-            selectedOptions: [...Array(25).keys()].map(x => (x + 1).toString())
+            selectedOptions: [...Array(25).keys()].map(x => (x + 1).toString()),
+            selectedPlaceholder: "Select a level"
         }; 
     },
     created() {
@@ -80,34 +104,50 @@ export default {
         });
     },
     methods: {
-        searchFor(val) {
-        
-            let valLowerCase = val.toLowerCase();
-            let subVideoLabelsLowerCase = 
-                this.subVideoInformation
-                .map(item => item.label.toLowerCase())
+        filterVideos() {
+            if (this.search) {
+                let valLowerCase = this.search.toLowerCase();
+                let subVideoLabelsLowerCase = 
+                    this.subVideoInformation
+                    .map(item => item.label.toLowerCase())
 
-            let selectedVideoLabels = 
-                subVideoLabelsLowerCase
-                .filter(item => _.includes(item, valLowerCase));
-            
-            this.shownVideoInformation = [];
+                let selectedVideoLabels = 
+                    subVideoLabelsLowerCase
+                    .filter(item => _.includes(item, valLowerCase));
+                
+                this.shownVideoInformation = [];
 
-            this.subVideoInformation.forEach(item => {
-                if (selectedVideoLabels.indexOf(item.label.toLowerCase()) >= 0) {
-                    this.shownVideoInformation.push(item);
-                }
-            });
+                this.subVideoInformation.forEach(item => {
+                    if (selectedVideoLabels.indexOf(item.label.toLowerCase()) >= 0) {
+                        this.shownVideoInformation.push(item);
+                    }
+                });
+            } else {
+                this.shownVideoInformation = this.subVideoInformation; 
+            }
+
+            if (this.selected) {
+                this.shownVideoInformation = this.shownVideoInformation.filter(item =>
+                    item.levels.indexOf(parseInt(this.selected)) >= 0
+                );
+            }
+        },
+        clearFilters() {
+            this.search = '';
+            this.selected = '';
         }
     },
     watch: {
-        search: function(newVal) {
-            if (newVal === '' ) {
-                this.shownVideoInformation = this.subVideoInformation;
-            }
-            else {
-                this.searchFor(newVal);
-            }
+        search: function() {
+            this.filterVideos();
+        },
+        selected: function() {
+            this.filterVideos();
+        }
+    },
+    computed: {
+        hasFilters() {
+            return (this.search || this.selected);
         }
     }
 };
@@ -127,7 +167,17 @@ export default {
 
     .as-sub-video-filters {
         display: flex;
-        justify-content: space-around; 
+        flex-wrap: wrap;
+
+    }
+
+    .as-sub-video-search-container {
+        width: 300px;
+        margin-right: 30px;
+    }
+
+    .as-sub-video-select-container {
+        width: 300px;
     }
 
 </style>

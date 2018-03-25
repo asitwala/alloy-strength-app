@@ -1,10 +1,42 @@
 <template>
  <div class="as-workout">
-    <div class="as-date-picker">
+    <div class="as-date-pickers">
+        <div class="as-date-pickers-text">
+            Select workout dates by clicking on the calendar or by 
+            using the dropdown menu and options.
+        </div>
+
         <v-date-picker
             width="300"
             v-model="date"
         />
+
+        <div class="as-workout-date-dropdown-options">
+            <v-btn
+                class="as-workout-date-back-btn"
+                fab 
+                small
+                color="primary">
+                <v-icon>fa-angle-left</v-icon>
+            </v-btn>
+
+            <v-select
+                class="body-1"
+                :items="workoutDates"
+                v-model="selectedWorkoutDate"
+                label="Select workout dates"
+                single-line
+            ></v-select>
+
+            <v-btn
+                class="as-workout-date-next-btn"
+                fab 
+                small
+                color="primary">
+                <v-icon>fa-angle-right</v-icon>
+            </v-btn>
+        </div>
+
     </div>
 
     <div class='as-subworkout-container'>
@@ -21,16 +53,35 @@
 <script>
 
 let Subworkout = require('./Subworkout.vue').default;
+import WorkoutService from '@/services/WorkoutService';
 
 export default {
     components: {
         'as-subworkout': Subworkout
     },
+    mounted() {
+        this.fetchWorkoutInfo();
+    },
+    methods: {
+        async fetchWorkoutInfo() {
+            let response = await WorkoutService.fetchWorkoutInfo();
+            this.subworkouts = this.subworkoutsOld;
+            this.date = response.data.date;
+        }
+    },
     data() {
         return {
-            date: null,
-
-            subworkouts: [
+            date: '',
+            selectedWorkoutDate: '',
+            subworkouts: [],
+            workoutDates: [
+                "Week 1: Day 1  \u2014  March 9, 2018",
+                "Week 1: Day 2  \u2014  March 12, 2018",
+                "Week 1: Day 3  \u2014  March 15, 2018",
+                "Week 2: Day 1  \u2014  March 18, 2018",
+                "Week 2: Day 2  \u2014  March 21, 2018",
+            ],
+            subworkoutsOld: [
                 {
                     name: 'Goblet Box Squat',
                     RPEOptions: [
@@ -54,7 +105,9 @@ export default {
                             value: false,
                             id: 2,
                             name: 'Weights',
-                            inputs: ['', '', '', '']
+                            filledSets: [145, 150, 160],
+                            inputs: ['', '', '', ''],
+                            editable: false,
                         },
                         {
                             value: false,
@@ -264,9 +317,27 @@ export default {
         width: 100%;
         flex-wrap: wrap;
         justify-content: space-evenly;
-        margin-top: 20px;
+        margin-top: 25px;
 
-        .as-date-picker {
+        .as-date-pickers {
+            &-text {
+                text-align: justify;
+                margin-bottom: 5px;
+            }
+            
+            .as-workout-date-dropdown-options {
+                display: flex;
+
+            }
+
+            .as-workout-date-back-btn,
+            .as-workout-date-next-btn {
+                margin-top: 18px;
+                height: 30px;
+                width: 30px;
+            }
+
+            width: 300px;
             margin-bottom: 20px; 
         }
 
