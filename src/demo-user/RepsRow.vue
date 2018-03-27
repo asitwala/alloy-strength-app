@@ -3,8 +3,8 @@
         <td>{{ repRow.name }}</td>
         <td v-for="(repInput, index) in repRow.inputs">
             <v-edit-dialog
-                :return-value="repRow.inputs[index]"
-            >{{ repRow.inputs[index] ? repRow.inputs[index] : '\u2014' }}
+                :return-value="repRow.inputs[index].value"
+            >{{ repRow.inputs[index].value ? repRow.inputs[index].value : '\u2014' }}
                 <v-text-field
                 slot="input"
                 label="Edit"

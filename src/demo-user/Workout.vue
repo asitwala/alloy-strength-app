@@ -40,6 +40,7 @@
     </div>
 
     <div class='as-subworkout-container'>
+        <p class="as-subworkout-suggested-disclaimer">* = suggested value</p>
         <as-subworkout v-for="subworkout in subworkouts" :key="subworkout.name"
             :name="subworkout.name"
             :RPEOptions="subworkout.RPEOptions"
@@ -65,7 +66,8 @@ export default {
     methods: {
         async fetchWorkoutInfo() {
             let response = await WorkoutService.fetchWorkoutInfo();
-            this.subworkouts = this.subworkoutsOld;
+            this.subworkouts = response.data.subworkouts;
+            //this.subworkouts = this.subworkoutsOld;
             this.date = response.data.date;
         }
     },
@@ -327,7 +329,6 @@ export default {
             
             .as-workout-date-dropdown-options {
                 display: flex;
-
             }
 
             .as-workout-date-back-btn,
@@ -339,6 +340,10 @@ export default {
 
             width: 300px;
             margin-bottom: 20px; 
+        }
+
+        .as-subworkout-suggested-disclaimer {
+            font-style: italic;
         }
 
         .as-subworkout-container {
