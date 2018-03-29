@@ -8,7 +8,7 @@
                 <v-text-field
                 slot="input"
                 label="Edit"
-                v-model="repRow.inputs[index]"
+                v-model="repRow.inputs[index].value"
                 mask="###"
                 single-line
                 ></v-text-field>

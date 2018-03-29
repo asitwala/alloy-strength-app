@@ -1,21 +1,16 @@
 <template>
     <tr class='as-tempo-row'>
         <td>{{ tempoRow.name }}</td>
-        <td v-for="(tempoCol, colIndex) in tempoRow.inputs">
-            <div class='as-tempo-col'>
-                <v-edit-dialog
-                    v-for="(tempoItem, itemIndex) in tempoCol" :key="itemIndex"
-                    :return-value="tempoRow.inputs[colIndex][itemIndex]"
-                >{{ tempoRow.inputs[colIndex][itemIndex] ? tempoRow.inputs[colIndex][itemIndex] : '\u2014' }}
-                    <v-text-field
-                    slot="input"
-                    label="Edit"
-                    v-model="tempoRow.inputs[colIndex][itemIndex]"
-                    mask="#"
-                    single-line
-                    ></v-text-field>
-                    <div class="as-tempo-divider" v-if="itemIndex < 2"></div>
-                </v-edit-dialog>
+        <td v-for="(tempoInput, inputIndex) in tempoRow.inputs">
+            <div class='as-tempo-col'> 
+                <div
+                    v-for="(tempoItem, itemIndex) in tempoInput.value" :key="itemIndex" 
+                >
+                    <div class="as-tempo-input">
+                        {{ tempoItem }}
+                        <div class="as-tempo-divider" v-if="itemIndex < 2"></div> 
+                    </div>
+                </div> 
             </div>
         </td>
     </tr>
@@ -30,7 +25,6 @@
             }
         }
     };
-
 </script>
 
 <style lang="scss">
@@ -48,6 +42,11 @@
         background-image: linear-gradient(to bottom, black 50%, transparent 50%);
         background-repeat: repeat-y; 
         margin: 0 12px;
+    }
+
+    .as-tempo-input {
+        display: flex;
+        align-items: center;
     }
 
 </style>

@@ -3,6 +3,33 @@
         <h1>Video Library</h1>
         <!-- TODO: If we end up using Youtube --> 
         <!-- <youtube :video-id="videoId"></youtube> --> 
+        <div class="as-main-video-container">
+            <div class="as-main-video">
+                <iframe src="https://drive.google.com/file/d/0BysnsnxGpKeUalBQWWNvekRiSFk/preview" 
+                    width="640" 
+                    height="360" 
+                    frameborder="0"
+                    scrolling="no" 
+                    seamless="" 
+                    allowfullscreen="allowfullscreen">
+                </iframe>
+                <div class="as-main-video-popover-disable"></div>
+            </div>
+
+            <v-card class="as-main-video-description">
+                <v-card-title>
+                    <h2>Main Card Title</h2>
+                    <div>
+                        
+                    </div>
+                </v-card-title>
+                <v-card-actions>
+                    
+                </v-card-actions>
+            </v-card>
+
+        </div>
+
         <div class="as-sub-videos-container">
             <div class="as-sub-video-filters">
                 <div class="as-sub-video-search-container">
@@ -49,7 +76,7 @@
 
 <script>
 
-// TODO: If we end up using Youtube 
+// TODO: If we end up using Youtube
 // import Vue from 'vue';
 // import VueYouTubeEmbed from 'vue-youtube-embed';
 // import { getIdFromURL } from 'vue-youtube-embed'; 
@@ -67,7 +94,7 @@ export default {
     },
     data() {
         return {
-            // videoId: getIdFromURL(testVideoURL) // TODO: If we end up using Youtube
+            //videoId: getIdFromURL(testVideoURL), // TODO: If we end up using Youtube
             subVideoInformation: [
                 {
                     label: 'DB Bench Press',
@@ -178,6 +205,32 @@ export default {
 
     .as-sub-video-select-container {
         width: 300px;
+    }
+
+    .as-main-video {
+        width: 640px; 
+        height: 360px; 
+        position: relative;
+    }
+
+    .as-main-video-popover-disable {
+        width: 50px; 
+        height: 50px; 
+        position: absolute; 
+        right: 0px; 
+        top: 0px;
+        background-color: black;
+    }
+    
+    .as-main-video-container {
+        display: flex; 
+        flex: 1; 
+        flex-wrap: wrap; 
+    }
+
+    .as-main-video-description {
+        max-width: 640px; 
+        min-width: 300px; 
     }
 
 </style>
