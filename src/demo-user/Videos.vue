@@ -20,7 +20,8 @@
                 <v-card-title>
                     <h2>Main Card Title</h2>
                     <div>
-                        
+                        <p>
+                        </p>
                     </div>
                 </v-card-title>
                 <v-card-actions>

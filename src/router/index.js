@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Homepage from '@/demo-home/Homepage';
+import Glossary from '@/demo-home/Glossary';
 import Users from '@/components/Users';
 
 import About from '@/demo-common/components/About';
@@ -50,6 +51,11 @@ export default new Router({
       path: '/videos',
       name: 'Videos',
       component: Videos
+    },
+    {
+      path: '/glossary',
+      name: 'Glossary',
+      component: Glossary
     }
   ]
 });
