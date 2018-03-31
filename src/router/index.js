@@ -11,6 +11,9 @@ import Terms from '@/demo-common/components/Terms';
 
 import Workout from '@/demo-user/Workout'; 
 import Videos from '@/demo-user/Videos'; 
+import UserStats from '@/demo-user/user-info/UserStats';
+import Progress from '@/demo-user/user-info/Progress'; 
+
 
 Vue.use(Router)
 
@@ -56,6 +59,16 @@ export default new Router({
       path: '/glossary',
       name: 'Glossary',
       component: Glossary
+    },
+    {
+      path: '/user-stats',
+      name: 'UserStats',
+      component: UserStats
+    },
+    {
+      path: '/progress',
+      name: 'Progress',
+      component: Progress
     }
   ]
 });
