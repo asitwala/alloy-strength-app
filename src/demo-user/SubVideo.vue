@@ -1,5 +1,5 @@
 <template>
-    <div class="as-sub-video">
+    <div class="as-sub-video" @click="sendVideoInfo">
         <div class="as-sub-video-thumbnail"
             :style="thumbnailStyle"></div>
         <div class="as-sub-video-label">
@@ -18,6 +18,11 @@
                 required: true
             }
         }, 
+        methods: {
+            sendVideoInfo() {
+                this.$emit('switch', this.videoInfo);    
+            }
+        },
         computed: {
             thumbnailStyle() {
                 return {
@@ -32,7 +37,9 @@
 <style lang="scss">
 
     .as-sub-video {
-        margin-right: 40px;
+        margin: 0 7.5px 7.5px 7.5px;
+        cursor: pointer;
+        display: inline-block;
     }
 
     .as-sub-video-thumbnail {
@@ -42,6 +49,7 @@
 
     .as-sub-video-label {
         font-weight: bold; 
+        max-width: 200px;
     }
 
 </style>

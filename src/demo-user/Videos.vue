@@ -1,11 +1,10 @@
 <template>
     <div class="as-video-library">
         <h1>Video Library</h1>
-        <!-- TODO: If we end up using Youtube --> 
-        <!-- <youtube :video-id="videoId"></youtube> --> 
+        <v-divider class="as-video-library-divider"/>
         <div class="as-main-video-container">
             <div class="as-main-video">
-                <iframe src="https://drive.google.com/file/d/0BysnsnxGpKeUalBQWWNvekRiSFk/preview" 
+                <iframe :src="selectedVideo.URL" 
                     width="640" 
                     height="360" 
                     frameborder="0"
@@ -18,15 +17,32 @@
 
             <v-card class="as-main-video-description">
                 <v-card-title>
-                    <h2>Main Card Title</h2>
-                    <div>
-                        <p>
+                    <h2>{{ selectedVideo.label }}</h2>
+                    <div class="as-main-video-description-body">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
+                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
+                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
+                            dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
+                            mollit anim id est laborum.
                         </p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
+                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
+                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
+                            dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
+                            mollit anim id est laborum.
+                        </p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
+                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
+                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
+                            dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
+                            mollit anim id est laborum.
+                        </p>
+                        
                     </div>
                 </v-card-title>
-                <v-card-actions>
-                    
-                </v-card-actions>
             </v-card>
 
         </div>
@@ -52,6 +68,7 @@
 
                 <div class="as-sub-video-clear-filters">
                     <v-btn
+                        class="as-sub-video-clear-button"
                         color="primary"
                         :disabled="!hasFilters"
                         @click="clearFilters"
@@ -63,10 +80,15 @@
             </div>
             
             <div class="as-sub-videos">
-                <as-sub-video v-for="subvideo in shownVideoInformation" 
+                <as-sub-video v-for="subvideo in sortedSubVideos" 
                     :key="subvideo.label"
-                    :video-info="subvideo">
+                    :video-info="subvideo"
+                    @switch="switchVideo"
+                    >
                 </as-sub-video>
+                <as-sub-video/>
+                <as-sub-video/>
+                <as-sub-video/>
             </div>
         
         </div>
@@ -77,47 +99,22 @@
 
 <script>
 
-// TODO: If we end up using Youtube
-// import Vue from 'vue';
-// import VueYouTubeEmbed from 'vue-youtube-embed';
-// import { getIdFromURL } from 'vue-youtube-embed'; 
-
-// let testVideoURL = 'https://www.youtube.com/watch?v=3jWRrafhO7M';
-// let testVideoURLs = []; 
-// Vue.use(VueYouTubeEmbed); 
-
 let SubVideo = require('./SubVideo').default; 
-import _ from 'lodash'; 
+import VideoService from '@/services/VideoService'; 
+import includes from 'lodash/includes'; 
+import sortBy from 'lodash/sortBy'; 
 
 export default {
     components: {
         'as-sub-video': SubVideo
     },
+    mounted() {
+        this.fetchVideoInfo();
+    },
     data() {
         return {
-            //videoId: getIdFromURL(testVideoURL), // TODO: If we end up using Youtube
-            subVideoInformation: [
-                {
-                    label: 'DB Bench Press',
-                    image: '../../static/video_placeholder.png',
-                    levels: [1, 2, 4]
-                },
-                {
-                    label: 'DB RDL',
-                    image: '../../static/video_placeholder.png',
-                    levels: [10, 20]
-                },
-                {
-                    label: 'CC Face Pull',
-                    image: '../../static/video_placeholder.png',
-                    levels: [2, 4, 6]
-                },
-                {
-                    label: 'DB Hip Thrust',
-                    image: '../../static/video_placeholder.png',
-                    levels: [1, 3, 5, 7]
-                }
-            ],
+            selectedVideo: {},
+            subVideoInformation: [],
             shownVideoInformation: [],
             searchFieldPlaceholder: "Search for videos",
             search: '',
@@ -126,12 +123,26 @@ export default {
             selectedPlaceholder: "Select a level"
         }; 
     },
-    created() {
-        this.subVideoInformation.forEach(subvideo => {
-            this.shownVideoInformation.push(subvideo);
-        });
-    },
     methods: {
+        fetchVideoInfo() {
+            VideoService.fetchVideoInfo().then(response => {
+                if (typeof response === 'object') {
+                    this.selectedVideo = response.data.selectedVideo; 
+                    this.subVideoInformation = response.data.videoList;
+
+                    let subVideoIndex = this.subVideoInformation.map(item => item.label).indexOf(this.selectedVideo.label);
+
+                    if (subVideoIndex >= 0) {
+                        this.subVideoInformation.splice(subVideoIndex, 1);
+                    }
+
+                    // Populate which videos are shown (may have to filter)
+                    this.subVideoInformation.forEach(subvideo => {
+                        this.shownVideoInformation.push(subvideo);
+                    });
+                }
+            });
+        },
         filterVideos() {
             if (this.search) {
                 let valLowerCase = this.search.toLowerCase();
@@ -141,7 +152,7 @@ export default {
 
                 let selectedVideoLabels = 
                     subVideoLabelsLowerCase
-                    .filter(item => _.includes(item, valLowerCase));
+                    .filter(item => includes(item, valLowerCase));
                 
                 this.shownVideoInformation = [];
 
@@ -163,6 +174,18 @@ export default {
         clearFilters() {
             this.search = '';
             this.selected = '';
+        },
+        switchVideo(subVideo) {
+            // Remove sub video from sub videos library
+            let subVideoIndex = this.subVideoInformation.map(item => item.label).indexOf(subVideo.label);
+
+            if (subVideoIndex >= 0) {
+                this.subVideoInformation.splice(subVideoIndex, 1);
+                this.subVideoInformation.push(this.selectedVideo);
+            }
+             // push main video to sub video
+            this.selectedVideo = subVideo; // set main video to sub video
+            this.shownVideoInformation = this.subVideoInformation; 
         }
     },
     watch: {
@@ -176,36 +199,72 @@ export default {
     computed: {
         hasFilters() {
             return (this.search || this.selected);
+        },
+        sortedSubVideos() {
+            return sortBy(this.shownVideoInformation, ['label']);
         }
     }
 };
 </script>
 <style lang="scss">
+
+    @import "~@/demo-common/styles/colors";
+
     .as-video-library {
         width: 85%; 
         margin: 0 auto; 
+
+        h1 {
+            margin: 15px 0 5px; 
+        }
+
+        &-divider {
+            margin-bottom: 15px;
+        }
+    }
+
+    .as-sub-videos-container {
+        padding: 15px 0;
+        margin-bottom: 15px;
+        background-color: $greyLighten2;
     }
 
     .as-sub-videos {
-        width: 100%;
-        display: flex;
-        justify-content: flex-start;
-        flex-wrap: wrap;
+        width: 90%;
+        margin: 0 auto;
+        height: 500px;
+        overflow-y: auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 200px);
+        grid-row-gap: 10px; 
+        justify-content: space-between; 
     }
 
     .as-sub-video-filters {
         display: flex;
         flex-wrap: wrap;
+        justify-content: flex-start;
+        width: 90%;
+        margin: 0 auto;
+        padding-left: 7.5px;
+        margin-bottom: 5px;
+    }
 
+    .as-sub-video-clear-button {
+        margin: 0 !important;
+        margin-top: 12px !important;
     }
 
     .as-sub-video-search-container {
         width: 300px;
         margin-right: 30px;
+        flex: 1; 
     }
 
     .as-sub-video-select-container {
         width: 300px;
+        margin-right: 30px;
+        flex: 1; 
     }
 
     .as-main-video {
@@ -215,12 +274,14 @@ export default {
     }
 
     .as-main-video-popover-disable {
-        width: 50px; 
-        height: 50px; 
-        position: absolute; 
-        right: 0px; 
-        top: 0px;
-        background-color: black;
+        width: 42px;
+        height: 42px;
+        position: absolute;
+        right: 11px;
+        top: 11px;
+        background: white url('../../static/logo.svg') no-repeat center;
+        background-size: contain;
+        border-radius: 2px;
     }
     
     .as-main-video-container {
@@ -231,7 +292,16 @@ export default {
 
     .as-main-video-description {
         max-width: 640px; 
+        flex: 1;
         min-width: 300px; 
+
+        .card__title {
+            padding-bottom: 0px;
+            .as-main-video-description-body {
+                height: 300px !important;
+                overflow-y: auto;
+            }
+        }
     }
 
 </style>

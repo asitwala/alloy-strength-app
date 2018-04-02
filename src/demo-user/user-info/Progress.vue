@@ -2,10 +2,11 @@
 
 <div class="as-progress">
     <div class="as-progress-summary">
-       <h1>Progress Report</h1>
+       <h1 class="as-progress-report-header">Level {{ level }} Performance Summary</h1>
         <v-divider/>
 
         <div class="as-progress-summary-content">
+            <h1 class="as-progress-status-header">You have PASSED Level {{ level }}!</h1>
             <h2>Core Exercises</h2>
             <v-card class="as-progress-exercise-table">
                 <v-card-title>
@@ -46,11 +47,14 @@
         <h1>Next Steps</h1>
         <v-divider/>
         <div class="as-progress-next-workout-content">
-            <h3>Your next set of workouts will be at 
-                <span class="as-progress-next-level">
-                    {{ "level 3".toUpperCase() }}
-                </span>.
-            </h3>
+            <div>
+                <h3>Your next set of workouts will be at 
+                    <span class="as-progress-next-level">
+                        {{ "level 2".toUpperCase() }}
+                    </span>.
+                </h3>
+            </div>
+            
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
                 incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
                 exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
@@ -70,9 +74,14 @@
 </template>
 
 <script>
+
+    import ProgressService from '@/services/ProgressService'; 
+
     export default {
         data() {
             return {
+                level: 0,
+                userId: 1,
                 coreExerciseTableHeaders: [
                     { value: 'exerciseType', text: 'Exercise Type' },
                     { value: 'exerciseName', text: 'Exercise Name' },
@@ -85,62 +94,21 @@
                     { value: 'max', text: 'Max (lbs)' },
                     { value: 'alloyResult', text: 'Alloy Result' }
                 ], 
-                coreExerciseTableItems: [ 
-                    {
-                        value: false,
-                        exerciseType: 'UB Hor Push',
-                        exerciseName: 'DB Bench Press',
-                        max: '175',
-                        alloyResult: 'FAILED'
-                    }, 
-                    {
-                        value: false,
-                        exerciseType: 'Squat',
-                        exerciseName: 'Goblet Box Squat',
-                        max: '154', 
-                        alloyResult: 'PASSED'
-                    },
-                    {
-                        value: false,
-                        exerciseType: 'Hinge',
-                        exerciseName: 'DB Pause RDL', 
-                        max: '164',
-                        alloyResult: 'PASSED'
-                    }
-                ],
-                secondaryExerciseTableItems: [
-                    {
-                        value: false,
-                        exerciseType: 'LB Uni Push',
-                        exerciseName: 'DB Reverse Lunge',
-                        max: '\u2014',
-                        alloyResult: 'PASSED'
-                    },
-                    {
-                        value: false,
-                        exerciseType: 'Carry',
-                        exerciseName: 'Suitcase Carry',
-                        max: '\u2014',
-                        alloyResult: 'FAILED'
-                    },
-                    {
-                        value: false,
-                        exerciseType: 'Ant Chain',
-                        exerciseName: 'Reverse Crunch',
-                        max: '\u2014',
-                        alloyResult: 'PASSED'
-                    },
-                    {
-                        value: false,
-                        exerciseType: 'Iso 3',
-                        exerciseName: 'Band Pullapart',
-                        max: '\u2014',
-                        alloyResult: 'PASSED'
-                    }
-                ]
+                coreExerciseTableItems: [],
+                secondaryExerciseTableItems: []
             }
         },
+        mounted() {
+            this.fetchProgressInfo();
+        },
         methods: {
+            fetchProgressInfo() {
+                ProgressService.fetchProgressInfo(this.userId).then(response => {
+                    this.level = response.data.level; 
+                    this.coreExerciseTableItems = response.data.coreExerciseTableItems;
+                    this.secondaryExerciseTableItems = response.data.secondaryExerciseTableItems;
+                });
+            },
             alloyResultClasses(alloyResult) {
                 return {
                     'as-alloy-result-failed': alloyResult === 'FAILED',
@@ -166,12 +134,16 @@
         width: 850px; 
         margin-bottom: 25px;
 
-        h1 {
+        .as-progress-report-header { // h1
             margin: 15px 0 15px 25px; 
         }
 
         &-content {
             margin: 0 25px; 
+
+            .as-progress-status-header {
+                margin-top: 15px;
+            }
 
             h2 {
                 margin: 15px 0 5px; 
@@ -213,8 +185,6 @@
 
             h3 {
                 margin: 15px 0 5px;
-                height: 31px;
-                line-height: 31px;
             }
         }
 
@@ -226,8 +196,12 @@
 
         &-button:nth-of-type(1) {
             margin-left: 0px;
+            margin-right: 12px;
         }
 
+        &-button:nth-of-type(2) {
+            margin-left: 0px;
+        }
     }
 
 </style>

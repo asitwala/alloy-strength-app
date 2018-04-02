@@ -1,22 +1,31 @@
 <template>
 <div class="as-user-stats">
     <div class="as-user-stats-header">
-        <h2> Level 2 </h2>
-        <p class="as-user-stats-level-remaining"> out of 25 </p>
-        <v-progress-circular
-            :size="100"
-            :width="15"
-            :rotate="360"
-            :value="levelProgress"
-            color="primary"
-        >
-        
-        {{ levelProgress }}%
-        </v-progress-circular>
+        <h1>Your Workout Stats for Level {{ level }}</h1>
+        <div class="as-user-stats-meta">
+            <v-progress-circular
+                :size="125"
+                :width="15"
+                :rotate="360"
+                :value="levelProgress"
+                color="primary"
+                class="as-user-stats-meta-diagram"
+            >
+            <div class="as-user-stats-meta-diagram-text">
+                <p class="as-user-stats-meta-diagram-text-level"><b>Level 1</b></p>
+                <v-divider class="as-user-stats-meta-diagram-text-divider"/>
+                <p class="as-user-stats-meta-diagram-text-percent">25% complete</p>
+            </div>
+            
+            </v-progress-circular>
+            <div class="as-user-stats-meta-text">
+                <p><b>Workouts Completed:</b> 3 out of 12 (25%)</p>
+            </div>
+           
+        </div>
+       
         
     </div>
-    <p class="as-user-stats-progress-text">{{ levelProgress }}% complete </p>
-    <v-progress-linear v-model="levelProgress"/>
     <v-card class="as-user-stats-table">
         <v-card-title>
             <v-data-table
@@ -40,10 +49,13 @@
 
 <script>
 
+import StatsService from '@/services/StatsService'; 
+
 export default {
     data() {
         return {
-            level: 2,
+            userId: 1,
+            level: 0,
             exerciseTableHeaders: [
                 { text: 'Exercise Type', value: 'exerciseType' },
                 { text: 'Exercise Name', value: 'exerciseName' },
@@ -51,52 +63,19 @@ export default {
                 { text: 'Alloy Result', value: 'alloyResult' },
                 { text: 'Last Set', value: 'lastSet' }
             ],
-            exerciseTableItems: [
-                {
-                    value: false,
-                    exerciseType: 'Squat',
-                    exerciseName: 'Goblet Box Squat',
-                    max: '154',
-                    alloyResult: 'FAILED',
-                    lastSet: '3 Repx x 154 lbs @ 10 RPE'
-                },
-                {
-                    value: false,
-                    exerciseType: 'Hinge',
-                    exerciseName: 'DB Pause RDL',
-                    max: '164',
-                    alloyResult: 'PASSED',
-                    lastSet: ''
-                },
-                {
-                    value: false,
-                    exerciseType: 'LB Uni Push',
-                    exerciseName: 'DB Reverse Lunge',
-                    max: '0',
-                    alloyResult: 'PASSED',
-                    lastSet: '\u2014'
-                },
-                {
-                    value: false,
-                    exerciseType: 'Carry',
-                    exerciseName: 'Suitcase Carry',
-                    max: '\u2014',
-                    alloyResult: '\u2014',
-                    lastSet: '\u2014'
-                },
-                {
-                    value: false,
-                    exerciseType: 'Ant Chain',
-                    exerciseName: 'Reverse Crunch',
-                    max: '\u2014',
-                    alloyResult: '\u2014',
-                    lastSet: '\u2014'
-                }
-            ]
-
+            exerciseTableItems: []
         };
     },
+    mounted() {
+        this.fetchStatsInfo(); 
+    },
     methods: {
+        fetchStatsInfo() {
+            StatsService.fetchStatsInfo(this.userId).then(response => {
+                this.level = response.data.level; 
+                this.exerciseTableItems = response.data.exerciseTableItems;
+            });
+        },
         alloyResultClasses(alloyResult) {
             return {
                 'as-alloy-result-failed': alloyResult === 'FAILED',
@@ -106,7 +85,7 @@ export default {
     },
     computed: {
         levelProgress() {
-            return ((this.level / 25) * 100);
+            return 25;
         }
     }
 
@@ -125,15 +104,43 @@ export default {
 
     .as-user-stats-header {
         margin-top: 15px;
-        display: flex; 
-        justify-content: flex-start;
     }
 
-    .as-user-stats-level-remaining {
-        margin-left: 5px;
-        line-height: 31px;
-        height: 31px;
-        margin-top: 2px;
+    .as-user-stats-meta {
+        display: flex;
+        margin-top: 15px;
+         
+
+        &-diagram {
+            margin-right: 15px;
+            margin-bottom: 5px;
+
+            &-text {
+                &-level {
+                    text-align: center;
+                    line-height: 0px;
+                    margin-top: 25px;
+                }
+
+                &-divider {
+                    width: 80%; 
+                    margin: 0 auto;
+                }
+
+                &-percent {
+                    text-align: center;
+                }
+            }
+        }
+
+        &-text {
+            margin-top: 25px;
+
+            p {
+                color: black;
+                line-height: 18px;
+            }
+        }
     }
 
     .as-user-stats-progress-text {
