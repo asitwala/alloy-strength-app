@@ -11,9 +11,9 @@ import Terms from '@/demo-common/components/Terms';
 
 import Workout from '@/demo-user/Workout'; 
 import Videos from '@/demo-user/Videos'; 
+import Initialize from '@/demo-user/user-info/Initialize'; 
 import UserStats from '@/demo-user/user-info/UserStats';
 import Progress from '@/demo-user/user-info/Progress'; 
-
 
 Vue.use(Router)
 
@@ -69,6 +69,11 @@ export default new Router({
       path: '/progress',
       name: 'Progress',
       component: Progress
+    },
+    {
+      path: '/initialize',
+      name: 'Initialize',
+      component: Initialize
     }
   ]
 });
