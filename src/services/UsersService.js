@@ -10,6 +10,16 @@ export default {
   },
 
   addUser(params) {
-    return Api().post('users', params);
+    console.log("params", params);
+    return Api().post(
+      'api/user/signup', 
+      params, 
+    {
+      headers: {
+        credentials: 'same-origin'
+      }
+    }
+    );
   }
 }
+

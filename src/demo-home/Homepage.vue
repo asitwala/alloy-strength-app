@@ -126,7 +126,12 @@
       async submitForm() {
         await UsersService.addUser({
           firstName: this.formData[0].fields[0].content,
-          email: this.formData[0].fields[3].content
+          lastName: this.formData[0].fields[1].content,
+          DOB: this.formData[0].fields[2].content,
+          email: this.formData[0].fields[3].content,
+          username: this.formData[0].fields[3].content,
+          P1: this.formData[0].fields[4].content,
+          P2: this.formData[0].fields[5].content,
         })
         this.showModal = false;
         this.$router.push({ name: 'Users' });
