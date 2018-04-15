@@ -1,73 +1,162 @@
 <template>
- <div class="as-workout">
-    <div class="as-date-pickers">
-        <div class="as-date-pickers-text">
-            Select workout dates by clicking on the calendar or by 
-            using the dropdown menu and options.
-        </div>
+<div class="as-workout-container">
+    <div style="width: 60%; margin: 0 auto">
+        <v-alert
+            type="warning"
+            dismissible
+            v-model="visible"
+            transition="as-fade"
+            style="position:fixed; width: 60%; z-index: 100; border-radius: 10px !important;
+                background-color: #ffe082 !important; color: black !important;">
+            It seems like some fields were left blank. Would you still like to submit? 
+            <v-btn @click="warningYes">Yes</v-btn>
+        </v-alert>
 
-        <v-date-picker
-            width="300"
-            v-model="date"
-        />
-
-        <div class="as-workout-date-dropdown-options">
-            <v-btn
-                @click="getLastWorkout"
-                class="as-workout-date-back-btn"
-                fab 
-                small
-                color="primary">
-                <v-icon>fa-angle-left</v-icon>
-            </v-btn>
-
-            <v-select
-                class="body-1"
-                :items="formattedWorkoutDates"
-                v-model="selectedWorkoutDate"
-                label="Select workout dates"
-                single-line
-            ></v-select>
-
-            <v-btn
-                @click="getNextWorkout"
-                class="as-workout-date-next-btn"
-                fab 
-                small
-                color="primary">
-                <v-icon>fa-angle-right</v-icon>
-            </v-btn>
-        </div>
-
+        <v-alert
+            type="warning"
+            dismissible
+            v-model="visible2"
+            transition="as-fade"
+            style="position:fixed; width: 60%; z-index: 100; border-radius: 10px !important;
+                background-color: #ffe082 !important; color: black !important;">
+            It seems like you've already entered some information. Are you sure you want to clear all fields?
+            <v-btn @click="warning2Yes">Yes</v-btn>
+        </v-alert>
     </div>
+    <div class="as-workout">
+        <div class="as-date-pickers">
+            <div class="as-date-pickers-text">
+                Select workout dates by clicking on the calendar or by 
+                using the dropdown menu and options.
+            </div>
 
-    <div class='as-subworkout-container'>
-        <div class="as-subworkout-options">
-            <p class="as-subworkout-suggested-disclaimer">Brackets () indicate a recommended value.<br>e.g. (7) in an RPE box means a target RPE of 7 for that set.</p>
-            <div class="as-subworkout-buttons">
-                <v-btn color="red" 
-                    style="color: white">
-                    Reset
+            <v-date-picker
+                width="300"
+                v-model="date"
+            />
+
+            <div class="as-workout-date-dropdown-options">
+                <v-btn
+                    @click="getLastWorkout"
+                    class="as-workout-date-back-btn"
+                    fab 
+                    small
+                    color="primary">
+                    <v-icon>fa-angle-left</v-icon>
                 </v-btn>
-                <v-btn color="primary"
-                    @click="postWorkoutInfo('SAVE')">
-                    Save
-                </v-btn>
-                <v-btn color="green" 
-                    style="color: white">
-                    Submit
+
+                <v-select
+                    class="body-1"
+                    :items="formattedWorkoutDates"
+                    v-model="selectedWorkoutDate"
+                    label="Select workout dates"
+                    single-line
+                ></v-select>
+
+                <v-btn
+                    @click="getNextWorkout"
+                    class="as-workout-date-next-btn"
+                    fab 
+                    small
+                    color="primary">
+                    <v-icon>fa-angle-right</v-icon>
                 </v-btn>
             </div>
-        </div>
-        
 
-        <as-subworkout v-for="subworkout in subworkouts" :key="subworkout.name"
-            :name="subworkout.name"
-            :RPEOptions="subworkout.RPEOptions"
-            :dataTableItems="subworkout.dataTableItems"
-        />
+        </div>
+
+        <div class='as-subworkout-container'>
+            <div class="as-subworkout-options">
+                <p class="as-subworkout-suggested-disclaimer">Brackets () indicate a recommended value.<br>e.g. (7) in an RPE box means a target RPE of 7 for that set.</p>
+                <div class="as-subworkout-buttons">
+                    <v-btn color="red" 
+                        @click="checkClear()"
+                        style="color: white">
+                        Clear
+                    </v-btn>
+                    <v-btn color="primary"
+                        @click="postWorkoutInfo('SAVE')">
+                        Update
+                    </v-btn>
+                    <v-btn color="green" 
+                        style="color: white">
+                        Submit
+                    </v-btn>
+                </div>
+            </div>
+
+            <v-card>
+                <v-card-title>
+                    <table class="as-workout-simple-view" v-if="simpleView">
+                        <thead>
+                            <tr>
+                                <th>Pattern</th>
+                                <th>Exercise</th>
+                                <th>Reps</th>
+                                <th>Weight</th>
+                                <th>RPE</th>
+                                <th>Tempo</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr v-for="subworkout in subworkouts" :key="subworkout.name">
+                                <td>{{subworkout.type}}</td>
+                                <td>{{subworkout.name}}</td>
+                                <td>
+                                    <div v-for="reps in subworkout.dataTableItems[0].inputs">
+                                        <span v-if="reps.status === 'Fixed'">{{ reps.value }}</span>
+                                        <input v-else-if="reps.status === 'Filled'" 
+                                            v-model="reps.value"/>
+                                        <input v-else-if="reps.status === 'Empty'"
+                                            v-model="reps.value" placeholder="Enter Reps"/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div v-for="weight in subworkout.dataTableItems[1].inputs">
+                                        <span v-if="weight.status === 'Fixed'">{{ weight.value }}</span>
+                                        <input v-else-if="weight.status === 'Filled'" 
+                                            v-model="weight.value"/>
+                                        <input v-else-if="weight.status === 'Empty'"
+                                            v-model="weight.value" placeholder="Enter Weights"/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div v-for="RPE in subworkout.dataTableItems[2].inputs">
+                                        <span v-if="RPE.status === 'Fixed'">{{ RPE.value }}</span>
+                                        <select v-else-if="RPE.status === 'Filled'" v-model="RPE.value">
+                                            <option v-for="RPEOption in subworkout.RPEOptions">
+                                                {{ RPEOption }}
+                                            </option>
+                                        </select>
+                                        <select v-else-if="RPE.status === 'Empty'" v-model="RPE.value">
+                                            <option disabled value="null">Please select RPE</option>
+                                            <option v-for="RPEOption in subworkout.RPEOptions">
+                                                {{ RPEOption }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div v-for="tempo in subworkout.dataTableItems[3].inputs">
+                                        <span v-if="tempo.status === 'Fixed'">{{ tempo.value.join(' | ') }}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </v-card-title>
+            </v-card>
+
+            <as-subworkout v-if="!simpleView" v-for="subworkout in subworkouts" :key="subworkout.name"
+                :name="subworkout.name"
+                :RPEOptions="subworkout.RPEOptions"
+                :dataTableItems="subworkout.dataTableItems"
+            />
+        </div>
     </div>
 </div>
+
 
 </template>
 
@@ -84,6 +173,28 @@ export default {
         this.fetchWorkoutInfo();
     },
     methods: {
+        checkClear() {
+            this.subworkouts.forEach((subworkout, subworkoutIndex) => {
+                subworkout.dataTableItems.forEach((row, rowIndex) => {
+                    row.inputs.forEach((input, inputIndex) => {
+                        if (input.value !== null || input.value !== '' && input.status === 'Empty') {
+                            this.visible2 = true; 
+                            return; 
+                        }
+                    });
+
+                });
+            });
+        },
+        warningYes() {
+            this.visible = false; 
+            this.checkBlankFields = false; 
+            this.postWorkoutInfo('SAVE');
+        },
+        warning2Yes() {
+            this.visible2 = false; 
+            this.fetchWorkoutInfo();
+        },
         getNextWorkout() {
             let index = this.formattedWorkoutDates.indexOf(this.selectedWorkoutDate) + 1;
             if (index >=0 && index < this.workoutDates.length) {
@@ -149,6 +260,10 @@ export default {
 
                             if (firstParameter && secondParameter && thirdParameter) {
                                 tempKey = `${firstParameter}|${secondParameter}|${thirdParameter}`;
+                                if (input.value === null | input.value === '' && this.checkBlankFields) {
+                                    this.visible = true; 
+                                    return; 
+                                }
                                 tempValue = input.value ? `${input.value}` : ''; 
                                 workout[tempKey] = tempValue; 
                             }
@@ -168,11 +283,15 @@ export default {
     },
     data() {
         return {
+            simpleView: true,
             date: '',
             selectedWorkoutDate: '',
             subworkouts: [],
             workoutDates: [],
-            formattedWorkoutDates: []
+            formattedWorkoutDates: [],
+            visible: false,
+            visible2: false,
+            checkBlankFields: true
         };
     },
     watch: {
@@ -201,6 +320,9 @@ export default {
 </script>
 
 <style lang="scss">
+    @import '~@/demo-common/styles/transitions';
+    @import '~@/demo-common/styles/colors';
+
     .as-workout {
         display: flex;
         width: 100%;
@@ -241,6 +363,16 @@ export default {
         .as-subworkout-container {
             width: 60%;
             min-width: 400px;
+        }
+    }
+
+    .as-workout-simple-view {
+        width: 100%; 
+        border-collapse: collapse; 
+
+        td, th {
+            border: 1px solid $greyLighten2;
+            padding: 8px;
         }
     }
 </style>

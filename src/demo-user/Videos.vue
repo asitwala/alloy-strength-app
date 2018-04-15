@@ -18,31 +18,12 @@
             <v-card class="as-main-video-description">
                 <v-card-title>
                     <h2>{{ selectedVideo.label }}</h2>
-                    <div class="as-main-video-description-body">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
-                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
-                            dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
-                            mollit anim id est laborum.
-                        </p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
-                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
-                            dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
-                            mollit anim id est laborum.
-                        </p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
-                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
-                            dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
-                            mollit anim id est laborum.
-                        </p>
-                        
-                    </div>
                 </v-card-title>
+                <v-card-text>
+                    <div class="as-main-video-description-body"
+                        v-html="videoDescription">                      
+                    </div>
+                </v-card-text>
             </v-card>
 
         </div>
@@ -202,6 +183,10 @@ export default {
         },
         sortedSubVideos() {
             return sortBy(this.shownVideoInformation, ['label']);
+        },
+        videoDescription() {
+            return (this.selectedVideo && this.selectedVideo.Description) ? this.selectedVideo.Description : 
+                '<p>This video has no description.</p>'
         }
     }
 };
@@ -296,10 +281,30 @@ export default {
         min-width: 300px; 
 
         .card__title {
-            padding-bottom: 0px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            margin-bottom: 0px;
+            background-color: $greyLighten2;
+        }
+
+        .card__text {
+            padding-right: 8px; 
+            padding-bottom: 8px;
+
             .as-main-video-description-body {
-                height: 300px !important;
+                height: 280px !important;
                 overflow-y: auto;
+                width: 100%; 
+
+                ul {
+                    list-style-position: outside !important;
+
+                    li {
+                        margin-left: 16px;
+                        margin-bottom: 16px;
+                        font-size: 12.5px;
+                    }
+                }
             }
         }
     }
