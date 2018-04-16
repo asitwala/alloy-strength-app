@@ -273,6 +273,7 @@ export default {
         display: flex; 
         flex: 1; 
         flex-wrap: wrap; 
+        justify-content: space-evenly;
     }
 
     .as-main-video-description {
@@ -284,7 +285,9 @@ export default {
             padding-top: 8px;
             padding-bottom: 8px;
             margin-bottom: 0px;
-            background-color: $greyLighten2;
+            background-color: $blueDarken4;
+            color: white; 
+            border-top-left-radius: 0px !important;
         }
 
         .card__text {

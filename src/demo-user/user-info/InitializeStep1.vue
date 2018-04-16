@@ -53,10 +53,6 @@
 <style lang="scss">
     @import '~@/demo-common/styles/colors';
 
-    .as-initialize-step-3 {
-        display: flex; 
-    }
-
     .as-initialize-step-3-packages {
         min-width: 350px; 
         width: 350px;

@@ -14,10 +14,10 @@
             <div v-show="extend" class="as-initialize-step-2-info">
                 <div class="as-initialize-step-2-left">
                     <v-card class="as-initialize-step-2-experience">
-                        <v-toolbar card>
-                            <v-toolbar-title class="white--text">Physical Stats</v-toolbar-title>
-                        </v-toolbar>
                         <v-card-title>
+                            <h2>Physical Stats</h2>
+                        </v-card-title>
+                        <v-card-text>
                             <div class="as-initialize-step-2-experience-div">
                                 <h3>Height</h3>
                                 <div class="as-initialize-step-2-experience-height">
@@ -31,40 +31,40 @@
                                     /> 
                                 </div>
                                 
-
                                 <h3>Weight</h3>
                                 <v-text-field
-                                    v-model="snatch"
+                                    v-model="weight"
                                     :suffix="units.weight"
                                 /> 
-
                             </div>
-                        </v-card-title>
+                        </v-card-text>
                     </v-card>
 
                     <v-card class="as-initialize-step-2-experience">
-                        <v-toolbar card>
-                            <v-toolbar-title class="white--text">Training Experience</v-toolbar-title>
-                        </v-toolbar>
                         <v-card-title>
+                            <h2>Training Experience</h2>
+                        </v-card-title>
+
+                        <v-card-text>
                             <div class="as-initialize-step-2-experience-div">
-                                <h3>Height</h3>
+                                <h3>Time</h3>
                                 <div class="as-initialize-step-2-experience-height">
                                     <v-text-field
-                                        v-model="height1"
-                                        :suffix="units.height1"
+                                        v-model="years"
+                                        suffix="years"
                                     /> 
                                     <v-text-field
-                                        v-model="height2"
-                                        :suffix="units.height2"
+                                        v-model="months"
+                                        suffix="months"
                                     /> 
                                 </div>
                                 
 
-                                <h3>Weight</h3>
+                                <h3>Primary Sports</h3>
                                 <v-text-field
-                                    v-model="snatch"
-                                    :suffix="units.weight"
+                                    textarea
+                                    v-model="sports"
+                                    placeholder="Please enter any major sports you play on a regular basis."
                                 /> 
 
                                 <v-select
@@ -76,16 +76,17 @@
                                     />
 
                             </div>
-                        </v-card-title>
+                        </v-card-text>
                     </v-card>
 
                 </div>
 
                 <v-card class="as-initialize-step-2-exercises">
-                    <v-toolbar card>
-                        <v-toolbar-title class="white--text">Known Max Lifts</v-toolbar-title>
-                    </v-toolbar>
                     <v-card-title>
+                        <h2>Known Max Lifts</h2>
+                    </v-card-title>
+
+                    <v-card-text>
                         <div class="as-initialize-step-2-exercises-div">
                             <h3>Leave field blank if unknown</h3>
                             <v-text-field
@@ -103,28 +104,14 @@
                                 label="Deadlift"
                                 :suffix="units.weight"
                             /> 
+                            <h3>Other</h3>
                             <v-text-field
-                                v-model="overheadPress"
-                                label="Overhead Press"
-                                :suffix="units.weight"
-                            /> 
-                            <v-text-field
-                                v-model="powerClean"
-                                label="Power Clean"
-                                :suffix="units.weight"
-                            /> 
-                            <v-text-field
-                                v-model="cleanAndJerk"
-                                label="Clean and Jerk"
-                                :suffix="units.weight"
-                            /> 
-                            <v-text-field
-                                v-model="snatch"
-                                label="Snatch"
-                                :suffix="units.weight"
+                                textarea
+                                v-model="otherExercises"
+                                :placeholder="`Please enter other known max lifts. For example, 'Overhead Press: 100 ${units.weight}'`"
                             /> 
                         </div>
-                    </v-card-title>
+                    </v-card-text>
                 </v-card>
             </div>
         </transition>
@@ -151,17 +138,12 @@
                 squat: '',
                 benchPress: '',
                 deadlift: '',
-                overheadPress: '',
-                powerClean: '',
-                cleanAndJerk: '', 
-                snatch: '',
+                otherExercises: '',
 
                 // experience
                 years: '',
                 months: '',
-                sport1: '',
-                sport2: '',
-                sport3: '',
+                sports: '',
                 priorExperience: {
                     value: '',
                     options: ['No', 'Yes']
@@ -203,9 +185,14 @@
     }
 
     .as-initialize-step-2-experience {
+
+        &:nth-of-type(1) {
+            margin-bottom: 20px;
+        }
+
         flex: 2;
         margin-right: 20px;
-        min-width: 350px;
+        min-width: 400px;
 
         &-div {
             flex: 1; 
@@ -223,12 +210,24 @@
 
     .as-initialize-step-2-exercises {
         flex: 1; 
-        min-width: 350px;
+        min-width: 400px;
 
         &-div {
             flex: 1; 
         }
     }
 
+    .as-initialize-step-2-left {
+        flex: 2;
+    }
+
+    .as-initialize-step-2-info {
+        .card__title {
+            background-color: $blueDarken4;
+            color: white; 
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+    }
 
 </style>
