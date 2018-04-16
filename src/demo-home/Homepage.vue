@@ -1,7 +1,48 @@
 <template>
   <div class="as-homepage">
     <v-btn color="primary" @click.stop="openModal">Sign Up</v-btn
-    ><v-btn color="primary">Log In</v-btn>
+    ><v-btn color="primary" @click.stop="openloginModal">Log In</v-btn>
+    <v-dialog
+      v-model="showloginModal"
+      max-width="750px"
+      transition="as-fade"
+      :persistent="true"
+      scrollable
+      >
+      <v-card class="as-modal">
+        <v-card-title class="as-modal-header">
+            <h3>LOG IN</h3>
+            <span>
+              <img src="../../static/graphic_header.png" class='as-signup-header-image' alt="Sign up image"
+              height="auto" width="110">
+              <v-btn
+                icon
+                ripple
+                class="as-modal-remove-button"
+                @click="closeloginModal">
+                &times
+              </v-btn>
+            </span>
+        </v-card-title>
+        <v-card-text>
+          <v-form>
+            <div v-for="field in loginData">
+              <v-text-field
+                v-if="field.type === 'input'"
+                v-model="field.content"
+                :label="field.text"
+              />
+            </div>
+
+          </v-form>
+        </v-card-text>
+
+        <v-card-actions class="as-modal-footer">
+          <v-btn color="primary" @click="loginSubmit">Log In</v-btn>
+        </v-card-actions>
+      </v-card>
+      
+    </v-dialog>
 
     <v-dialog
       v-model="showModal"
@@ -69,10 +110,22 @@
 <script>
   import LoginFormInfo from './LoginFormInfo';
   import UsersService from '@/services/UsersService';
+  const LoginFields = [
+      {
+        text: 'Username',
+        type: 'input'
+      },
+      {
+        text: 'Password',
+        type: 'input'
+      },
+  ];
 
   export default {
     created() {
       this.resetFormInfo();
+      this.$session.start();
+      console.log("this.$session", this.$session.getAll());
     },
     data() {
       return {
@@ -89,11 +142,16 @@
           }
         },
         formData: [],
-        showModal: false
+        loginData: [],
+        showModal: false,
+        showloginModal: false,
       };
     },
     methods: {
       resetFormInfo() {
+        LoginFields.forEach((field, fieldIndex) => {
+          this.loginData.push(LoginFields[fieldIndex]);
+        });
         LoginFormInfo.forEach((step, stepIndex) => {
           this.formData[stepIndex] = LoginFormInfo[stepIndex];
           LoginFormInfo[stepIndex].fields.forEach((field, fieldIndex) => {
@@ -123,13 +181,37 @@
           })
         })
       },
+      async loginSubmit() {
+        var postBody = {};
+        postBody.username = this.loginData[0].content;
+        postBody.password = this.loginData[1].content;
+        console.log("login submit");
+        console.log("this.postBody: ", postBody);
+        var loginResponse = await UsersService.loginUser(postBody);
+        if (loginResponse.data.Found) {
+          this.$session.set("userFound", true);          
+          if (loginResponse.data.Success) {
+            this.$session.set("user", loginResponse.data.User);
+            // this.$session.set("userId", loginResponse.data.User.id);
+            this.$session.set("viewingWID", loginResponse.data.User.currentWorkoutID);
+          }
+        }
+        console.log("loginResponse: ", loginResponse.data);
+        // console.log("this.loginData", this.loginData);
+      },
       async submitForm() {
+        console.log("submitting form");
         await UsersService.addUser({
           firstName: this.formData[0].fields[0].content,
           email: this.formData[0].fields[3].content
         })
         this.showModal = false;
         this.$router.push({ name: 'Users' });
+      },
+      async submitLogin() {
+        await UsersService.loginUser({
+          test: "test",
+        });
       },
       goForward() {
         if (this.currentNavPage === 2) {
@@ -151,6 +233,15 @@
         this.currentNavPage = 0; 
         this.showModal = true; 
         this.handleState();
+      },
+      openloginModal() {
+        // this.currentNavPage = 0; 
+        // this.showModal = true; 
+        this.showloginModal = true;
+        this.handleState();
+      },
+      closeloginModal() {
+        this.showloginModal = false;
       },
       handleState() {
         console.log('I Get here');
