@@ -7,6 +7,7 @@ export default {
         return Api().get(`/api/users/${userId}/workouts/${workoutId}/vue`);
     },
     postWorkoutInfo(workout) {
+        //Change to save-submit-clear soon
         return Api().post('/postWorkout', workout);
     }
 };

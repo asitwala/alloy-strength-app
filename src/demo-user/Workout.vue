@@ -60,7 +60,7 @@
             </div>
         </div>
         <div id="simpleTable" v-if="simpleView">
-            <form id="simpleViewForm" @submit="simpleFormSubmit">
+            <form id="simpleViewForm">
                 <table style="width:100%; margin-top:10px; margin-bottom:10px;">
                 <tr>
                     <th>Pattern</th>
@@ -78,9 +78,9 @@
                             {{Cell.code}}
                             <span v-if="Cell.status == 'Fixed'">{{Cell.value}}</span>
                             <input v-if="Cell.status =='Filled'" type="text" style="border: 1px solid black; float: right;"
-                            v-bind:value="Cell.value" v-bind:name="Cell.code">
+                            v-model="Cell.value" v-bind:name="Cell.code">
                             <input v-if="Cell.status =='Empty'" type="text" style="border: 1px solid black; float: right;"
-                            placeholder="Enter Reps" v-bind:name="Cell.code">
+                            v-model="Cell.value" placeholder="Enter Reps" v-bind:name="Cell.code">
                         </div>
                     </td>
                     <td class="dividedCell" style="padding:0px !important; position: relative;">                        
@@ -88,9 +88,9 @@
                             {{Cell.code}}
                             <span v-if="Cell.status == 'Fixed'">{{Cell.value}}</span>
                             <input v-if="Cell.status =='Filled'" type="text" style="border: 1px solid black; float: right;"
-                            v-bind:value="Cell.value" v-bind:name="Cell.code">
+                            v-model="Cell.value" v-bind:name="Cell.code">
                             <input v-if="Cell.status =='Empty'" type="text" style="border: 1px solid black; float: right;"
-                            placeholder="Enter Weight" v-bind:name="Cell.code">
+                            v-model="Cell.value" placeholder="Enter Weight" v-bind:name="Cell.code">
                         </div>
                     </td>
                     <td class="dividedCell" style="padding:0px !important; position: relative;">                        
@@ -98,9 +98,9 @@
                             {{Cell.code}}
                             <span v-if="Cell.status == 'Fixed'">{{Cell.value}}</span>
                             <input v-if="Cell.status =='Filled'" type="text" style="border: 1px solid black; float: right;"
-                            v-bind:value="Cell.value" v-bind:name="Cell.code">
+                            v-model="Cell.value" v-bind:name="Cell.code">
                             <input v-if="Cell.status =='Empty'" type="text" style="border: 1px solid black; float: right;"
-                            placeholder="Enter RPE" v-bind:name="Cell.code">
+                            v-model="Cell.value" placeholder="Enter RPE" v-bind:name="Cell.code">
                         </div>
                     </td>
                     <td class="dividedCell" style="padding:0px !important; position: relative;">                        
@@ -108,9 +108,9 @@
                             {{Cell.code}}
                             <span v-if="Cell.status == 'Fixed'">{{Cell.stringValue}}</span>
                             <input v-if="Cell.status =='Filled'" type="text" style="border: 1px solid black; float: right;"
-                            v-bind:value="Cell.value" v-bind:name="Cell.code">
+                            v-model="Cell.value" v-bind:name="Cell.code">
                             <input v-if="Cell.status =='Empty'" type="text" style="border: 1px solid black; float: right;"
-                            placeholder="Enter Tempo" v-bind:name="Cell.code">                            
+                            v-model="Cell.value" placeholder="Enter Tempo" v-bind:name="Cell.code">                            
                         </div>
                     </td>
                 </tr>
@@ -145,12 +145,21 @@ export default {
             if (index >=0 && index < this.workoutDates.length) {
                 this.selectedWorkoutDate = this.formattedWorkoutDates[index]; 
             }
+            if (this.$session.get("viewingWID") < this.$session.get("user").workoutDates.length) {
+                this.$session.set("viewingWID", this.$session.get("viewingWID") + 1);          
+            }
+            console.log("new VWID: ", this.$session.get("viewingWID"));
+            this.fetchWorkoutInfo();
         },
         getLastWorkout() {
             let index = this.formattedWorkoutDates.indexOf(this.selectedWorkoutDate) - 1; 
             if (index >=0 && index < this.workoutDates.length) {
                 this.selectedWorkoutDate = this.formattedWorkoutDates[index]; 
             }
+            if (this.$session.get("viewingWID") >= 1) {
+                this.$session.set("viewingWID", this.$session.get("viewingWID") - 1);          
+            }
+            this.fetchWorkoutInfo();
         },
         formatWorkoutDates() {
             this.workoutDates.forEach(date => {
@@ -173,7 +182,9 @@ export default {
                 console.log("response: ", response);
                 if (typeof response === 'object') {
                     this.workoutDates = response.data.workoutDates; 
+                    console.log("response.data.workoutDates: ", response.data.workoutDates);
                     this.formatWorkoutDates(); 
+                    console.log("formattedworkoutdates: ", this.formattedWorkoutDates);
                     this.subworkouts = response.data.subworkouts;
                     this.date = response.data.date;
                     this.simpleView = true;
