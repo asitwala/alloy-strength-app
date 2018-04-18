@@ -7,7 +7,10 @@ export default {
         return Api().get(`/api/users/${userId}/workouts/${workoutId}/vue`);
     },
     postWorkoutInfo(workout) {
+        var _URL = `/api/users/${workout.userId}/workouts/${workout.WID}/save`;
+        console.log("workout", workout);
+        console.log(_URL);
         //Change to save-submit-clear soon
-        return Api().post('/postWorkout', workout);
+        return Api().post(`/api/users/${workout.userId}/workouts/${workout.WID}/save`, workout);
     }
 };
