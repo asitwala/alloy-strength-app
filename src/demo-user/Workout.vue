@@ -206,6 +206,8 @@ export default {
             let alloySetInfo = {}; // on a subworkout basis 
 
             let workout = {};
+            workout.userId = this.$session.get("user").id;
+            workout.WID = this.$session.get("viewingWID");
             this.subworkouts.forEach((subworkout, subworkoutIndex) => {
                 let firstParameter = subworkoutIndex + 1; // make 1-indexed
                 
