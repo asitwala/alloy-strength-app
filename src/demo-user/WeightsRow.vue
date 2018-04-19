@@ -44,12 +44,13 @@
     @import '~@/demo-common/styles/colors'; 
 
     .as-editable-weight-row {
-        background-color: $lightBlueLighten2;
+        background-color: $blueLighten3;
         border-left: 1px solid white; 
     }
 
     .as-alloy-weight-row {
-        background-color: $orangeLighten2;
+        background-color: $blueGreyDarken1;
+        color: white !important;
         border-left: 1px solid white; 
     }
 

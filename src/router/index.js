@@ -53,7 +53,8 @@ export default new Router({
     {
       path: '/videos',
       name: 'Videos',
-      component: Videos
+      component: Videos,
+      props: true
     },
     {
       path: '/glossary',
