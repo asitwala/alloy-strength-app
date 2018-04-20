@@ -1,5 +1,21 @@
 <template>
  <div class="as-workout-container">
+    <div style="width: 60%; margin: 0 auto"> 
+         <v-alert 
+            class="notification-container"
+            icon="check_circle"
+            dismissible 
+            v-model="visible" 
+            transition="as-fade" 
+            style="position:fixed; width: 50%; z-index: 100; border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important; 
+                border-radius: 5px !important; 
+                min-height: 60px;
+                background-color: #4caf50 !important; color: white !important;"> 
+            <span style="margin-right: 5px;">Your workout was saved successfully!</span>
+        </v-alert> 
+        
+    </div> 
+
     <div class="as-workout-header">
         <div class="as-workout-options">
             <div class="as-subworkout-descs">
@@ -40,23 +56,30 @@
     </div>
 
     <div class="as-workout">
-         <div class='as-subworkout-container' v-if="!showSimpleView">
-            <div class="as-subworkout-options">
-                <h3>{{ titlePart2 }}</h3>
-                <p class="as-subworkout-suggested-disclaimer">Brackets [ ] indicate a recommended value, e.g. [ 7 ] in an RPE box means a target RPE of 7 for that set.</p>
+        <transition name="as-fade" v-if="!showSimpleView">
+            <div class="as-subworkout-container">
+                <div class="as-subworkout-options">
+                    <h3>{{ titlePart2 }}</h3>
+                    <p class="as-subworkout-suggested-disclaimer">Brackets [ ] indicate a recommended value, e.g. [ 7 ] in an RPE box means a target RPE of 7 for that set.</p>
+                </div>
+            
+                <as-subworkout v-for="(subworkout, subworkoutIndex) in subworkouts" :key="subworkout.name"
+                    :type="subworkout.type"
+                    :name="subworkout.name"
+                    :describer="subworkout.describer"
+                    :video="subworkout.hasVideo ? subworkout.selectedVideo : {}"
+                    :RPEOptions="subworkout.RPEOptions"
+                    :dataTableItems="subworkout.dataTableItems"
+                    :headers="headersList[subworkoutIndex]"
+                />
             </div>
-        
-            <as-subworkout v-for="(subworkout, subworkoutIndex) in subworkouts" :key="subworkout.name"
-                :type="subworkout.type"
-                :name="subworkout.name"
-                :describer="subworkout.describer"
-                :video="subworkout.hasVideo ? subworkout.selectedVideo : {}"
-                :RPEOptions="subworkout.RPEOptions"
-                :dataTableItems="subworkout.dataTableItems"
-                :headers="headersList[subworkoutIndex]"
-            />
-        </div>
+        </transition>
 
+        <transition name="as-fade" v-else>
+           <div class="as-simple-workout-container">
+                <as-simple-workout :subworkouts="subworkouts"/>
+            </div>
+        </transition>
 
         <div class="as-date-pickers" v-if="showCalendar">
             <div class="as-date-pickers-text">
@@ -113,12 +136,27 @@
 
 <script>
 
+let SimpleWorkout = require('./SimpleWorkout.vue').default; 
 let Subworkout = require('./Subworkout.vue').default;
 import WorkoutService from '@/services/WorkoutService';
 
+const headerMap = {
+    0: "1st",
+    1: "2nd",
+    2: "3rd",
+    3: "4th",
+    4: "5th",
+    5: "6th",
+    6: "7th",
+    7: "8th",
+    8: "9th",
+    9: "10th"
+};
+
 export default {
     components: {
-        'as-subworkout': Subworkout
+        'as-subworkout': Subworkout,
+        'as-simple-workout': SimpleWorkout
     },
     mounted() {
         this.fetchWorkoutInfo();
@@ -132,7 +170,6 @@ export default {
             if (this.$session.get("viewingWID") < this.$session.get("user").workoutDates.length) {
                 this.$session.set("viewingWID", this.$session.get("viewingWID") + 1);          
             }
-            console.log("new VWID: ", this.$session.get("viewingWID"));
             this.fetchWorkoutInfo();
         },
         getLastWorkout() {
@@ -150,20 +187,12 @@ export default {
                 this.formattedWorkoutDates.push(`Week ${date.Week}, Day ${date.Day}: ${date.Date}`);
             });
         },
-        postWorkoutDates(actionType) {
-
-        },
         fetchWorkoutInfo() {
-            console.log("this.$session", this.$session.getAll());
-            // console.log("this.$session:", this.$session);
-            var _User = this.$session.get("user");
-            var UserId = _User.id;
-            var workoutId = this.$session.get("viewingWID");
-            console.log("userId: ", UserId);
-            console.log("workoutId: ", workoutId);
+            let _User = this.$session.get("user");
+            let UserId = _User.id;
+            let workoutId = this.$session.get("viewingWID");
 
             WorkoutService.fetchWorkoutInfo(UserId, workoutId).then(response => {
-                console.log("response: ", response);
                 if (typeof response === 'object') {
                     let title = response.data.describer.split(' - '); 
                     let title1 = title[0].split(', '); 
@@ -171,103 +200,57 @@ export default {
                     this.titlePart1Extend = title1[1];
                     this.titlePart2 = title[1];
                     this.workoutDates = response.data.workoutDates; 
-                    console.log("response.data.workoutDates: ", response.data.workoutDates);
                     this.formatWorkoutDates(); 
-                    console.log("formattedworkoutdates: ", this.formattedWorkoutDates);
                     this.subworkouts = response.data.subworkouts;
                     this.date = response.data.date;
-                    this.simpleView = true;
-
-                    let headerMap = {
-                        0: "1st",
-                        1: "2nd",
-                        2: "3rd",
-                        3: "4th",
-                        4: "5th",
-                        5: "6th",
-                        6: "7th",
-                        7: "8th",
-                        8: "9th",
-                        9: "10th"
-                    };
-
-                    this.headersList = []; 
-
-                    this.subworkouts.forEach((subworkout, subworkoutIndex) => {
-
-                        subworkout.dataTableItems.forEach((row, rowIndex) => { 
-                            if (rowIndex === 0) {
-                                let tempHeaders = []; 
-                                tempHeaders.push({ text: '', value: '', sortable: false }); // set first column header to blank string
-                                row.inputs.forEach((input, inputIndex) => {
-                                    if (input.alloy) {
-                                        tempHeaders.push({ text: 'Alloy Set', value: '', sortable: false });
-                                    } else {
-                                        tempHeaders.push({ text: `${headerMap[inputIndex]} Set`, value: '', sortable: false });
-                                    }
-                                });
-                                this.headersList.push(tempHeaders);
-                            }
-                        });
-                    });
+                    this.setTableHeaders(); 
                 }
             });
         },
-        simpleFormSubmit: function(event) {
-            console.log("EVENT", event);
-            // console.log()
-            event.preventDefault();
+        setTableHeaders() {
+            this.headersList = []; 
+            this.subworkouts.forEach((subworkout, subworkoutIndex) => {
+                subworkout.dataTableItems.forEach((row, rowIndex) => { 
+                    if (rowIndex === 0) {
+                        let tempHeaders = []; 
+                        tempHeaders.push({ text: '', value: '', sortable: false }); // set first column header to blank string
+                        row.inputs.forEach((input, inputIndex) => {
+                            if (input.alloy) {
+                                tempHeaders.push({ text: 'Alloy Set', value: '', sortable: false });
+                            } else {
+                                tempHeaders.push({ text: `${headerMap[inputIndex]} Set`, value: '', sortable: false });
+                            }
+                        });
+                        this.headersList.push(tempHeaders);
+                    }
+                });
+            });
         },
         postWorkoutInfo(actionType) {
-            // put into a format Matt likes
-            let firstParameter = ''; 
-            let secondParameter = ''; 
-            let thirdParameter = ''; 
             let tempKey = '';
-            let tempValue = ''; 
-            let alloySetInfo = {}; // on a subworkout basis 
+            let tempValue = '';  
 
             let workout = {};
             workout.userId = this.$session.get("user").id;
             workout.WID = this.$session.get("viewingWID");
-            this.subworkouts.forEach((subworkout, subworkoutIndex) => {
-                let firstParameter = subworkoutIndex + 1; // make 1-indexed
-                
-                subworkout.dataTableItems.forEach((row, rowIndex) => {
-                    if (row.id === 1) {
-                        secondParameter = 'Reps';
-                    } else if (row.id === 2) {
-                        secondParameter = 'W';
-                    } else if (row.id === 3) {
-                        secondParameter = 'RPE'; 
-                    }
 
+            this.subworkouts.forEach((subworkout, subworkoutIndex) => {
+                subworkout.dataTableItems.forEach((row, rowIndex) => {
                     row.inputs.forEach((input, inputIndex) => {
                         if (input && (input.status === 'Empty' || input.status === 'Filled')) {
-                            // console.info('Input', input);
-                            /* Special Case: Alloy Set */ 
-                            if (!(secondParameter === 'Reps' && input.alloy)) {
-                                thirdParameter = inputIndex + 1; 
-                            } else if (secondParameter === 'Reps' && input.alloy && subworkout.alloyStage === 2) {
-                                secondParameter = 'X'; 
-                                thirdParameter = 'Alloy';
+                            tempKey = input.code
+                            tempValue = input.value ? `${input.value}` : ''; 
+                            if (tempValue === '') {
+                                this.visible = true;
                             }
-
-                            if (firstParameter && secondParameter && thirdParameter) {
-                                tempKey = `${firstParameter}|${secondParameter}|${thirdParameter}`;
-                                tempValue = input.value ? `${input.value}` : ''; 
-                                workout[tempKey] = tempValue; 
-                            }
-                        }                        
+                            workout[tempKey] = tempValue; 
+                        }
                     });
                 });
-            }); 
+            });
 
             if (actionType === 'SAVE') {
                 workout.SaveBtn = actionType; 
-            }
-            if (this.simpleView) {
-                // document.getElementById("simpleViewForm").submit();// Form submission
             }
 
             WorkoutService.postWorkoutInfo(workout).then(response => {
@@ -287,7 +270,8 @@ export default {
             workoutDates: [],
             formattedWorkoutDates: [],
             showCalendar: true,
-            showSimpleView: false
+            showSimpleView: false,
+            visible: false
         };
     },
     watch: {
@@ -307,7 +291,6 @@ export default {
                 WorkoutService.postWorkoutInfo(dateInformation).then(response => {
                     this.fetchWorkoutInfo();
                 });
-                // TODO -- call post here
             }
         }
     }
@@ -316,7 +299,23 @@ export default {
 </script>
 
 <style lang="scss">
+    @import '~@/demo-common/styles/transitions';
     @import '~@/demo-common/styles/colors';
+
+    .notification {
+        margin-left: 0px;
+
+        &.btn {
+            min-width: 70px !important;
+        }
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        .btn__content {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+    }
 
     .as-workout-container {
         width: 90%; 

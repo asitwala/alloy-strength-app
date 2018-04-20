@@ -194,6 +194,8 @@
             this.$session.set("user", loginResponse.data.User);
             // this.$session.set("userId", loginResponse.data.User.id);
             this.$session.set("viewingWID", loginResponse.data.User.currentWorkoutID);
+            this.showloginModal = false; 
+            this.$router.push({ name: 'Workout'});
           }
         }
         console.log("loginResponse: ", loginResponse.data);

@@ -11,7 +11,7 @@
                 <v-select
                 auto
                 :items="RPEOptions"
-                label="RPE"
+                :label="RPERow.inputs[index].value ? `${RPERow.inputs[index].value}` : `RPE`"
                 v-model="RPERow.inputs[index].value"
                 single-line
                 ></v-select>
