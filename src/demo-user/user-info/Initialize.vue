@@ -60,6 +60,9 @@
         }, 
         methods: {
             incrementStepper() {
+                if (this.stepper == 3) {
+                    this.$router.push({name: 'Workout'});
+                }
                 this.stepper += 1; 
             },
             decrementStepper() {
