@@ -86,6 +86,12 @@ import includes from 'lodash/includes';
 import sortBy from 'lodash/sortBy'; 
 
 export default {
+    props: {
+        videoFromWorkout: {
+            type: Object,
+            required: false
+        }
+    },
     components: {
         'as-sub-video': SubVideo
     },
@@ -121,6 +127,12 @@ export default {
                     this.subVideoInformation.forEach(subvideo => {
                         this.shownVideoInformation.push(subvideo);
                     });
+                }
+            }).finally(() => {
+                console.log('testing!');
+                if (Object.keys(this.videoFromWorkout).length > 0) {
+                    console.log('I get here!!!! Videos 1');
+                    this.switchVideo(this.videoFromWorkout);
                 }
             });
         },

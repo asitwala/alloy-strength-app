@@ -11,12 +11,12 @@
                 <v-select
                 auto
                 :items="RPEOptions"
-                label="RPE"
+                :label="RPERow.inputs[index].value ? `${RPERow.inputs[index].value}` : `RPE`"
                 v-model="RPERow.inputs[index].value"
                 single-line
                 ></v-select>
-                <p class="as-RPE-suggested">
-                    ({{ RPERow.inputs[index].suggested }})
+                <p class="as-RPE-suggested" v-if="RPERow.inputs[index].suggested">
+                    [ {{ RPERow.inputs[index].suggested }} ]
                 </p>
             </div>
         </td>
@@ -48,7 +48,7 @@
     @import '~@/demo-common/styles/colors'; 
 
     .as-editable-RPE-row {
-        background-color: $lightBlueLighten2;
+        background-color: $blueLighten2;
         border-left: 1px solid white; 
     }
 
