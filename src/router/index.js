@@ -11,6 +11,7 @@ import Terms from '@/demo-common/components/Terms';
 
 import Workout from '@/demo-user/Workout'; 
 import Videos from '@/demo-user/Videos'; 
+import Logout from '@/demo-user/Logout';
 import Initialize from '@/demo-user/user-info/Initialize'; 
 import UserStats from '@/demo-user/user-info/UserStats';
 import Progress from '@/demo-user/user-info/Progress'; 
@@ -74,6 +75,11 @@ export default new Router({
       path: '/initialize',
       name: 'Initialize',
       component: Initialize
+    },
+    {
+      path: '/logout',
+      name: 'Logout',
+      component: Logout
     }
   ]
 });

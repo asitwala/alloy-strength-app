@@ -53,7 +53,7 @@
       >
       <v-card class="as-modal">
         <v-card-title class="as-modal-header">
-            <h3>{{ step.title }}</h3>
+            <h3>{{step.title}}</h3>
             <span>
               <img src="../../static/graphic_header.png" class='as-signup-header-image' alt="Sign up image"
               height="auto" width="110">
@@ -194,32 +194,46 @@
             this.$session.set("user", loginResponse.data.User);
             // this.$session.set("userId", loginResponse.data.User.id);
             this.$session.set("viewingWID", loginResponse.data.User.currentWorkoutID);
+            this.closeloginModal();
+            this.$router.push({ name: 'Workout'});
           }
         }
         console.log("loginResponse: ", loginResponse.data);
         // console.log("this.loginData", this.loginData);
       },
       async submitForm() {
-        console.log("submitting form");
-        await UsersService.addUser({
-          firstName: this.formData[0].fields[0].content,
-          email: this.formData[0].fields[3].content
-        })
-        this.showModal = false;
-        this.$router.push({ name: 'Users' });
-      },
-      async submitLogin() {
-        await UsersService.loginUser({
-          test: "test",
-        });
+        console.log("submitting form: ", this.formData);
+        let signupBody = {
+          // name: this.formData[0].fields[0].content,
+          username: this.formData[0].fields[1].content,
+          P1: this.formData[0].fields[2].content,
+          P2: this.formData[0].fields[3].content,
+        }
+        console.log("signupBody:", signupBody);
+        let signupPost = await UsersService.signupUser(signupBody);
+        console.log("signupPost: ", signupPost);
+        // If success
+        if (!signupPost.data.LoginFormInfoerror) {
+          this.showModal = false;
+          this.$router.push({ name: 'Initialize'});
+          this.$session.set("user", signupPost.data.session.User);
+          this.$session.set("viewingWID", 1);
+          this.closeModal();
+        }
+        else {
+
+        }
+        // else, show error
+        // this.$router.push({ name: 'Users' });
       },
       goForward() {
-        if (this.currentNavPage === 2) {
-          // submit form + do form checking 
-          this.submitForm();
-        } else {
-          this.currentNavPage += 1;
-        }
+        this.submitForm();
+        // if (this.currentNavPage === 2) {
+        //   // submit form + do form checking 
+        //   this.submitForm();
+        // } else {
+        //   this.currentNavPage += 1;
+        // }
         this.handleState();
       },
       goBack() {
@@ -257,6 +271,7 @@
           this.navInfo.back.show = true; 
           this.navInfo.next.text = 'Submit';
         }
+        this.navInfo.next.text = 'Submit';
       }
     },
     computed: {
