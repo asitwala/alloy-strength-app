@@ -120,6 +120,8 @@
 </template>
 
 <script>
+    import UsersService from '@/services/UsersService';
+
     export default {
         data() {
             return {
@@ -154,6 +156,21 @@
                 weight: ''
             }
         }, 
+        methods: {
+            postInfoAndGetLevel() {
+                let params = {
+                    squatWeight: this.squat,
+                    benchWeight: this.benchPress,
+                    RPEExp: (this.priorExperience === 'Yes'),
+                    bodyWeight: this.weight
+                };
+
+                UsersService.getLevelInitially(this.$session.get('user').id, params).then(response => {
+                    this.$session.set('user', response.data.user); 
+                    this.$session.set('viewingWID', response.data.viewingWID);
+                });
+            }
+        },
         watch: {
             "system.value" (newVal) {
                 if (newVal === this.system.options[0]) { // Metric 

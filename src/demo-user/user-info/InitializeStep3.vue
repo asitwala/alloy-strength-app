@@ -1,6 +1,6 @@
 <template>
     <div class="as-initialize-step-3">
-        <h2>You've been placed at LEVEL 1</h2>
+        <h2>You've been placed at LEVEL {{ level }}</h2>
         <h2>You're almost there! All that's left is to select your workout days.</h2>
 
         <div class="as-initialize-step-3-container">
@@ -17,7 +17,7 @@
                     />
                 </v-form>
 
-                <h3 class="as-initialize-step-3-select-days">Select 3 days you'd like to work out on</h3>
+                <h3 class="as-initialize-step-3-select-days">Select {{ numWorkoutDays }} days you'd like to work out on</h3>
                 
                 <div class="as-initialize-step-3-days">
                     <div class="as-initialize-step-3-day"
@@ -37,21 +37,35 @@
 </template>
 
 <script>
+    import UsersService from '@/services/UsersService'; 
     import moment from 'moment'; 
     export default {
         data() {
             return {
-                days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
                 selectedDays: [], 
                 startDateCalendar: moment().format(`YYYY-MM-DD`),
                 startDate: moment().format(`MM/DD/YYYY`),
                 startDateRules: [
                     v => moment(v, 'MM/DD/YYYY', true).isValid() || 'Please use a valid date format.'
                 ],
-                validForm: false
+                validForm: false,
+                level: this.$session.get('user').level
             }
         },
         methods: {
+            generateWorkouts() {
+                let params = {
+                    startDate: this.startDateCalendar,
+                    workoutLevel: this.$session.get('user').level,
+                    workoutBlock: this.$session.get('user').blockNum
+                };
+                this.selectedDays.forEach((selectedDay, index) => {
+                    params[`Day-${index + 1}`] = this.days.indexOf(selectedDay);
+                });
+    
+                return UsersService.generateWorkouts(this.$session.get('user').id, params);
+            },
             supportCalendar(textValue) {
                 let dateKeys = textValue.split('/');  // YYYY, MM, DD
                 let month = dateKeys[0]; 
@@ -79,6 +93,11 @@
             },
             startDateCalendar: function(newValue) {
                 this.supportText(newValue); 
+            }
+        },
+        computed: {
+            numWorkoutDays() {
+                return this.level < 6 ? 3 : 4; 
             }
         }
     };

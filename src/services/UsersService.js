@@ -4,7 +4,6 @@ export default {
   fetchAllInfo() {
     return Api().get('');
   },
-  
   fetchUsers() {
     return Api().get('/users');
   },
@@ -14,7 +13,10 @@ export default {
   loginUser(params) {
     return Api().post(`/api/users/${params.username}/login`, params);
   },
-  logoutUser(params) {
-
+  getLevelInitially(userId, params) {
+    return Api().post(`/api/users/${userId}/get-level`, params);
+  }, 
+  generateWorkouts(userId, params) {
+    return Api().post(`/api/users/${userId}/get-next-workouts`, params);
   }
 }

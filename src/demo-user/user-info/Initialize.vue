@@ -15,15 +15,15 @@
                 
                 <v-stepper-items class="as-initialize-stepper-content-container">
                     <v-stepper-content step="1" class="as-initialize-stepper-content">
-                        <as-initialize-step-1/>
+                        <as-initialize-step-1 ref="step1"/>
                     </v-stepper-content>
 
                     <v-stepper-content step="2" class="as-initialize-stepper-content">
-                        <as-initialize-step-2/>
+                        <as-initialize-step-2 ref="step2"/>
                     </v-stepper-content>
 
                     <v-stepper-content step="3" class="as-initialize-stepper-content">
-                        <as-initialize-step-3/>
+                        <as-initialize-step-3 ref="step3"/>
                     </v-stepper-content> 
 
                     <v-btn @click="incrementStepper" 
@@ -60,8 +60,16 @@
         }, 
         methods: {
             incrementStepper() {
-                if (this.stepper == 3) {
-                    this.$router.push({name: 'Workout'});
+                if (this.stepper === 2) {
+                    this.$refs.step2.postInfoAndGetLevel();
+                }
+                else if (this.stepper == 3) {
+                    this.$refs.step3.generateWorkouts().then(response => {
+                        if (response.data) {
+                            console.log("RESPONSE from generate workouts", response.data);
+                            this.$router.push({name: 'Workout'});
+                        }
+                    });
                 }
                 this.stepper += 1; 
             },
