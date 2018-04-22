@@ -8,8 +8,12 @@
         <v-toolbar-title class="white--text as-toolbar-title" 
         @click="goToHomePage">ALLOY STRENGTH</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-toolbar-side-icon></v-toolbar-side-icon>
+        <v-toolbar-side-icon @click="toggleNavigation"></v-toolbar-side-icon>
       </v-toolbar>
+
+      <as-navigation
+        :visible="showNavigation"
+        @update-visibility="setNavigation"/>
 
       <router-view/>
 
@@ -68,12 +72,15 @@
 </template>
 
 <script>
+  import Navigation from '@/demo-home/Navigation'; 
   export default {
     name: 'App',
+    components: {
+      'as-navigation': Navigation
+    },
     data: () => ({
-
+      showNavigation: false,
       currentYear: (new Date()).getFullYear(),
-      // TODO -- set up router links to these pages 
       footerLinks: [
         {
           pathName:'About',
@@ -109,6 +116,20 @@
     methods: {
       goToHomePage() {
         this.$router.push({name: 'Homepage'});
+      },
+      toggleNavigation() {
+        this.showNavigation = !this.showNavigation;
+        console.log('Navigation 1', this.showNavigation);
+      },
+      setNavigation(val) {
+        this.showNavigation = val; 
+        console.log('Navigation 2', this.showNavigation);
+      }
+    },
+    computed: {
+      sessionExists() {
+        console.log("Should show up", this.$session.exists() && this.$session.has('user'));
+        return this.$session.exists() && this.$session.has('user'); 
       }
     }
   }

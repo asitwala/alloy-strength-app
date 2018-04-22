@@ -81,6 +81,12 @@ export default new Router({
       path: '/logout',
       name: 'Logout',
       component: Logout
+    },
+    {
+      path: '*',
+      component: {
+        template: '<div>404!</div>'
+      }
     }
   ]
 });
