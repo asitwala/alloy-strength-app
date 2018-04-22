@@ -25,9 +25,8 @@
                 <span v-if="Cell.status == 'Fixed'">{{Cell.value}}</span>
                 <v-text-field v-else-if="Cell.status === 'Filled'"
                     solo v-model="Cell.value"></v-text-field>
-                <v-text-field v-else-if="Cell.status === 'Empty'"
-                    label="Enter Weight"
-                    solo v-model="Cell.value"></v-text-field>
+                <input v-if="Cell.status =='Empty'" type="text" style="border: 1px solid black; float: right;"
+                v-model="Cell.value" placeholder="Enter Weight" v-bind:name="Cell.code">
             </div>
         </td>
         <td>                        
@@ -37,6 +36,14 @@
                 v-model="Cell.value" v-bind:name="Cell.code">
                 <input v-if="Cell.status =='Empty'" type="text" style="border: 1px solid black; float: right;"
                 v-model="Cell.value" placeholder="Enter RPE" v-bind:name="Cell.code">
+                <v-select
+                auto
+                v-if="Cell.status =='Empty'"
+                :items="subworkout.RPEOptions"
+                :label="Cell.value ? `${Cell.value}` : `RPE`"
+                v-model="Cell.value"
+                single-line
+                ></v-select>
             </div>
         </td>
         <td>                        

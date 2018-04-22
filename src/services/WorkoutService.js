@@ -12,5 +12,9 @@ export default {
         console.log(_URL);
         //Change to save-submit-clear soon
         return Api().post(`/api/users/${workout.userId}/workouts/${workout.WID}/save`, workout);
+    },
+    submitWorkoutInfo(workout) {
+        var _URL = `/api/users/${workout.userId}/workouts/${workout.WID}/submit`;
+        return Api().put(`/api/users/${workout.userId}/workouts/${workout.WID}/submit`, workout);        
     }
 };

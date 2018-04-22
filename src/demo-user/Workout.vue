@@ -47,7 +47,8 @@
                     Save
                 </v-btn>
                 <v-btn color="green" 
-                    class="as-subworkout-button">
+                    class="as-subworkout-button"
+                    @click="postWorkoutInfo('SUBMIT')">
                     Submit
                 </v-btn>
             </div>
@@ -251,11 +252,17 @@ export default {
 
             if (actionType === 'SAVE') {
                 workout.SaveBtn = actionType; 
+                WorkoutService.postWorkoutInfo(workout).then(response => {
+                    this.fetchWorkoutInfo();
+                });
+            }
+            else if (actionType === 'SUBMIT') {
+                workout.submitBtn = actionType; 
+                WorkoutService.submitWorkoutInfo(workout).then(response => {
+                    this.fetchWorkoutInfo();
+                });                
             }
 
-            WorkoutService.postWorkoutInfo(workout).then(response => {
-                this.fetchWorkoutInfo();
-            });
         }
     },
     data() {
