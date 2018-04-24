@@ -38,7 +38,8 @@
                 >
                 </v-checkbox>
                 <v-btn
-                    class="as-subworkout-button">
+                    class="as-subworkout-button"
+                    @click="postWorkoutInfo('RESET')">
                     Reset
                 </v-btn>
                 <v-btn color="primary"
@@ -251,6 +252,13 @@ export default {
             });
 
             if (actionType === 'SAVE') {
+                this.$dialog.confirm('Please confirm to continue')
+                .then(function () {
+                    console.log('Clicked on proceed')
+                })
+                .catch(function () {
+                    console.log('Clicked on cancel')
+                });
                 workout.SaveBtn = actionType; 
                 WorkoutService.postWorkoutInfo(workout).then(response => {
                     this.fetchWorkoutInfo();
@@ -261,6 +269,13 @@ export default {
                 WorkoutService.submitWorkoutInfo(workout).then(response => {
                     this.fetchWorkoutInfo();
                 });                
+            }
+            else if (actionType === 'RESET') {
+                let userId = this.$session.get("user").id;
+                let vWID = this.$session.get("viewingWID");
+                WorkoutService.clearWorkoutInfo(userId, vWID).then(response => {
+                    this.fetchWorkoutInfo();
+                });
             }
 
         }
