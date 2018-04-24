@@ -263,7 +263,9 @@ export default {
                 this.notificationType = "resetWarning"; 
                 this.notificationVisible = true; 
             } else {
-                this.clearWorkoutInfo(); 
+                let userId = this.$session.get("user").id;
+                let vWID = this.$session.get("viewingWID");
+                this.clearWorkoutInfo(userId, vWID); 
             }
         },
         saveWorkoutInfo() {
@@ -321,11 +323,10 @@ export default {
             });
         },
         clearWorkoutInfo() {
-            let workout = {};
-            workout.userId = this.$session.get("user").id;
-            workout.WID = this.$session.get("viewingWID");
+            let userId = this.$session.get("user").id;
+            let WID = this.$session.get("viewingWID");
 
-            WorkoutService.clearWorkoutInfo(workout).then(response => {
+            WorkoutService.clearWorkoutInfo(userId, WID).then(response => {
                 this.fetchWorkoutInfo();
                 this.notificationMessage = `Your workout was successfully reset!`;
                 this.notificationType = "reset";

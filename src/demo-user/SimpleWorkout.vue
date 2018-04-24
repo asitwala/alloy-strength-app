@@ -10,7 +10,9 @@
     </tr>
     <tr v-for="subworkout in subworkouts" :key="subworkout.name">
         <td>{{subworkout.type}}</td>
-        <td>{{subworkout.name}}</td>
+        <td>
+        <span style="display:flex; flex:1; flex-wrap:no-wrap;">{{subworkout.name}}</span>
+        <span style="display:flex; flex-wrap:wrap; word-wrap:break-word;">{{subworkout.describer}}</span></td>
         <td>                        
             <div v-for="Cell in subworkout.dataTableItems[0].inputs" :key="Cell.code">
                 <span v-if="Cell.status == 'Fixed'">{{Cell.value}}</span>
@@ -23,20 +25,25 @@
         <td>                        
             <div v-for="Cell in subworkout.dataTableItems[1].inputs" :key="Cell.code">
                 <span v-if="Cell.status == 'Fixed'">{{Cell.value}}</span>
-                <v-text-field v-else-if="Cell.status === 'Filled'"
-                    solo v-model="Cell.value"></v-text-field>
-                <v-text-field v-else-if="Cell.status === 'Empty'"
-                    label="Enter Weight"
-                    solo v-model="Cell.value"></v-text-field>
+                <input v-if="Cell.status =='Filled'" type="text" style="border: 1px solid black; float: right; padding-left:5px;"
+                v-model="Cell.value" placeholder="Enter Weight" v-bind:name="Cell.code" 
+                defaultValue="Cell.value">
+                <input v-if="Cell.status =='Empty'" type="text" style="border: 1px solid black; float: right; padding-left:5px;"
+                v-model="Cell.value" placeholder="Enter Weight" v-bind:name="Cell.code">
             </div>
         </td>
         <td>                        
             <div v-for="Cell in subworkout.dataTableItems[2].inputs" :key="Cell.code">
                 <span v-if="Cell.status == 'Fixed'">{{Cell.value}}</span>
-                <input v-if="Cell.status =='Filled'" type="text" style="border: 1px solid black; float: right;"
-                v-model="Cell.value" v-bind:name="Cell.code">
-                <input v-if="Cell.status =='Empty'" type="text" style="border: 1px solid black; float: right;"
-                v-model="Cell.value" placeholder="Enter RPE" v-bind:name="Cell.code">
+                <select v-model="Cell.value" v-if="Cell.status =='Filled'" style ="webkit-appearance: menulist; border: 1px solid black;">
+                    <option :value="Cell.value">{{Cell.value}}</option>
+                    <option :value="option" v-for="option in subworkout.RPEOptions" :key="option">{{option}}</option>
+                </select>
+                <select v-model="Cell.value" defaultValue="Select RPE" 
+                v-if="Cell.status =='Empty'" style ="webkit-appearance: menulist; border: 1px solid black;">
+                    <option :value="null" disabled>Select RPE</option>
+                    <option :value="option" v-for="option in subworkout.RPEOptions" :key="option">{{option}}</option>
+                </select>
             </div>
         </td>
         <td>                        
