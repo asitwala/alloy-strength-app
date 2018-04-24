@@ -18,5 +18,8 @@ export default {
   }, 
   generateWorkouts(userId, params) {
     return Api().post(`/api/users/${userId}/get-next-workouts`, params);
+  },
+  adminsetUser(userId, params) {
+    return Api().post(`/api/users/${userId}/admin/generate-workouts`, params);    
   }
 }
