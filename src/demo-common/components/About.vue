@@ -40,98 +40,88 @@
 
     <!-- Extended Content --> 
     <div class="as-about-content" v-if="extendedView">
-      <v-card height="auto" v-if="sterner">
-        <v-container fluid grid-list-lg>
-          <v-layout row>
-            <v-flex xs7>
-              <div>
-                <h2>Alex Sterner</h2>
-                <div>
-                  <p>
-                    Alex Sterner, BS, CSCS, USAW is the Co-Founder and Head Strength Coach at Alloy Strength. 
-                    He is a Certified Strength and Conditioning Specialist (CSCS) through the National Strength 
-                    and Conditioning Association (NSCA). His education in the field began at the University of 
-                    Connecticut, where he obtained a bachelor's degree in Kinesiology in 2014. While enrolled, 
-                    he interned in the varsity weight room for 7 of the school's athletic teams, and accumulated 
-                    over 1000 hours under Coach Maureen Butler and Coach Travis Illian.
-                  </p>
+      <v-card v-if="sterner" class="sterner-extended">
+        <div class="sterner-extended-content">
+          <h2>Alex Sterner</h2>
+          <v-divider/>
+          <div>
+            <p>
+              Alex Sterner, BS, CSCS, USAW is the Co-Founder and Head Strength Coach at Alloy Strength. 
+              He is a Certified Strength and Conditioning Specialist (CSCS) through the National Strength and 
+              Conditioning Association (NSCA). His education in the field began at the University of Connecticut, 
+              where he obtained a bachelor's degree in Kinesiology in 2014. While enrolled, he interned in the 
+              varsity weight room for 7 of the school's athletic teams, and accumulated over 1000 hours under 
+              Coach Maureen Butler and Coach Travis Illian.
+            </p>
 
-                  <p>
-                    Since graduating from UConn, Coach Sterner worked in a commercial fitness setting for a year 
-                    until moving to San Diego in the summer of 2015. He then worked at the Parisi Speed School, 
-                    providing a sport-performance environment to athletes of various ages. In October of 2016 
-                    he began working at the University of California San Diego where he teaches Recreation classes, 
-                    provides post-rehab care and personal training.
-                  </p>
+            <p>
+              Since graduating from UConn, Coach Sterner worked in a commercial fitness setting for a year until 
+              moving to San Diego in the summer of 2015. He then worked at the Parisi Speed School, providing a 
+              sport-performance environment to athletes of various ages. From October 2016-December 2017 he worked 
+              at the University of California San Diego where he taught Recreation classes, provides post-rehab 
+              care and personal training. Sterner is now a Strength Coach at the world-famous Glute Lab. Named one of 
+              the top 20 gyms in the US by Men’s Health, Glute Lab is owned by the “Glute Guy” Bret Contreras, PhD, CSCS*D, 
+              the world’s foremost authority on glute training.
+            </p>
 
-                  <p>
-                    Upon moving to San Diego, Coach Sterner continued competing in Brazilian Jiu-jitsu under Andre 
-                    Galvao at Atos HQ. It was here that he first met JT Torres, who he began strength training at 
-                    Parisi in the fall of 2015. Since then he and Coach Bryce have trained the majority of the Atos 
-                    HQ competition team. This includes organizing group lifting sessions for the 2017 IBJJF Worlds 
-                    camp, where Atos secured their first ever team title. In a 1-on-1 setting he coached Andre Galvao 
-                    through the 2017 IBJJF Worlds and 2017 ADCC Superfight, resulting in a gold medal for Galvao on 
-                    both occasions.
-                  </p>
-                </div>
-              </div>
-            </v-flex>
-            <v-flex xs5>
-              <v-card-media
-                src="https://vuetifyjs.com/static/doc-images/cards/foster.jpg"
-                height="200px"
-                contain
-              ></v-card-media>
-            </v-flex>
-          </v-layout>
-        </v-container>
+            <p>
+              Upon moving to San Diego, Coach Sterner continued competing in Brazilian Jiu-jitsu under Andre Galvao at 
+              Atos HQ. It was here that he first met JT Torres, who he began strength training at Parisi in the fall 
+              of 2015. Since then he and Coach Bryce have trained the majority of the Atos HQ competition team. This 
+              includes organizing group lifting sessions for the 2017 IBJJF Worlds camp, where Atos secured their first 
+              ever team title. In a 1-on-1 setting he coached Andre Galvao through the 2017 IBJJF Worlds and 2017 ADCC Superfight, 
+              resulting in a gold medal for Galvao on both occasions.
+            </p>
+          </div>
+        </div>
+
+        <div class="sterner-extended-pic-container">
+          <div class="sterner-extended-pic"></div>
+          <a href="" class="instagram">
+            <v-icon small>fa-instagram</v-icon>
+            <p>alex.sterner</p>
+          </a>
+        </div>
+        
       </v-card>
 
-      <v-card height="auto" v-if="bryce">
-        <v-container fluid grid-list-lg>
-          <v-layout row>
-            <v-flex xs7>
-              <div>
-                <h2>Alex Bryce</h2>
-                <div>
-                  <p>
-                    Alex Bryce, MSE, CSCS is the Co-Founder and Head Strength Coach at Alloy Strength. Bryce is a 
-                    Certified Strength and Conditioning Specialist (CSCS) through the National Strength and Conditioning 
-                    Association (NSCA). He has experience working with all ages and training levels, and an extensive 
-                    background in exercise technique, program design and periodization for both individuals and teams.
-                  </p>
+      <v-card v-if="bryce">
+        <div class="bryce-extended">
+          <div class="bryce-extended-pic"></div>
+          <div class="bryce-extended-content">
+            <h2>Alex Bryce</h2>
+            <v-divider/>
+            <div>
+              <p>
+                Alex Bryce, MSE, CSCS*D is the Co-Founder and Head Strength Coach at Alloy Strength. Bryce is 
+                a Certified Strength and Conditioning Specialist (CSCS) through the National Strength and Conditioning 
+                Association (NSCA). He has experience working with all ages and training levels, and an extensive background 
+                in exercise technique, program design and periodization for both individuals and teams.
+              </p>
 
-                  <p>
-                    Bryce resides in San Diego, working at the University of California San Diego as a trainer, coach, 
-                    and class lecturer. He is also a Strength Coach for the Atos Brazilian Jiu-Jitsu competition team, 
-                    who in June 2017 won the IBJJF World Title for the first time.
-                  </p>
+              <p>
+                Bryce resides in San Diego, working as a Strength Coach at the world-famous Glute Lab. Named one of the top 
+                20 gyms in the US by Men’s Health, Glute Lab is owned by the “Glute Guy” Bret Contreras, PhD, CSCS*D, the world’s 
+                foremost authority on glute training. He is also a Strength Coach for the Atos Brazilian Jiu-Jitsu competition team, 
+                who in June 2017 won the IBJJF World Title for the first time.
+              </p>
 
-                  <p>
-                    Bryce is a former Performance Specialist at EXOS, a top sports performance company with locations 
-                    worldwide. He earned his master’s degree in Exercise Science from the University of Kansas while 
-                    working as a Graduate Teaching Assistant, conducting research in KU’s Neuromechanics and Jayhawk 
-                    Athletic Performance Laboratories.
-                  </p>
+              <p>
+                Bryce is a former employee at the University of California San Diego as a trainer, coach, and class lecturer. 
+                He is also a former Performance Specialist at EXOS, a top sports performance company with locations worldwide. 
+                Bryce earned his master’s degree in Exercise Science from the University of Kansas while working as a Graduate 
+                Teaching Assistant, conducting research in KU’s Neuromechanics and Jayhawk Athletic Performance Laboratories.
+              </p>
 
-                  <p>
-                    A native of Storrs, CT, Alex received his bachelor's degree from the University of Connecticut in Strength 
-                    and Conditioning with a minor in Nutrition for Exercise and Sport. He spent two years as an Intern 
-                    with the Strength and Conditioning staff, and also interned at Cressey Performance, an elite training 
-                    center for professional baseball players.
-                  </p>
-                </div>
-              </div>
-            </v-flex>
-            <v-flex xs5>
-              <v-card-media
-                src="https://vuetifyjs.com/static/doc-images/cards/foster.jpg"
-                height="200px"
-                contain
-              ></v-card-media>
-            </v-flex>
-          </v-layout>
-        </v-container>
+              <p>
+                A native of Storrs, CT, Alex received his bachelor's degree from the University of Connecticut in Strength and 
+                Conditioning with a minor in Nutrition for Exercise and Sport. He spent two years as an Intern with the Strength 
+                and Conditioning staff, and also interned at Cressey Performance, an elite training center for professional 
+                baseball players.
+              </p>
+            </div>
+          </div>
+        </div>
       </v-card>
     </div>
   </div>
@@ -239,6 +229,80 @@
 
   .as-coaches-back {
     position: absolute; 
+  }
+
+
+  .sterner-extended {
+    display: flex; 
+    flex-wrap: wrap;
+
+    &-content {
+      flex: 1; 
+      padding: 20px;
+      min-width: 300px;
+
+      hr {
+        margin-top: 10px !important;
+        margin-bottom: 10px !important;
+      }
+
+    }
+
+    &-pic-container {
+      .instagram {
+        display: flex; 
+        justify-content: flex-start;
+        align-items: center;
+
+        i {
+          margin-right: 6px;
+        }
+
+        p {
+          margin: 0px !important;
+        }
+      }
+    }
+
+    &-pic {
+      background: url("../../../static/sterner-about.jpg") no-repeat center;
+      width: 300px; 
+      height: 415px; 
+      min-width: 300px;
+      background-size: cover; 
+      margin: 0 auto;
+    }
+  }
+
+  .bryce-extended {
+    display: flex; 
+    flex-wrap: wrap;
+
+    &-title {
+      display: flex; 
+      justify-content: flex-start;
+    }
+
+    &-content {
+      flex: 1; 
+      padding: 20px;
+      min-width: 300px;
+
+      hr {
+        margin-top: 10px !important;
+        margin-bottom: 10px !important;
+      }
+
+    }
+
+    &-pic {
+      background: url("../../../static/bryce-about.jpg") no-repeat center;
+      width: 300px; 
+      height: 415px; 
+      min-width: 300px;
+      background-size: cover; 
+      margin: 0 auto;
+    }
   }
 
 </style>

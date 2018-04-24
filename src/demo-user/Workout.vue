@@ -1,20 +1,18 @@
 <template>
  <div class="as-workout-container">
-    <div style="width: 60%; margin: 0 auto"> 
-         <v-alert 
-            class="notification-container"
-            icon="check_circle"
-            dismissible 
-            v-model="visible" 
-            transition="as-fade" 
-            style="position:fixed; width: 50%; z-index: 100; border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important; 
-                border-radius: 5px !important; 
-                min-height: 60px;
-                background-color: #4caf50 !important; color: white !important;"> 
-            <span style="margin-right: 5px;">Your workout was saved successfully!</span>
-        </v-alert> 
-        
-    </div> 
+
+    <as-notification
+        :visible="notificationVisible"
+        :type="notificationType"
+        @update-visibility="val => notificationVisible = val">
+        <template slot="notification-content">
+            <span> {{ notificationMessage }}</span>
+            <v-btn v-if="notificationType === 'resetWarning' || notificationType === 'submitWarning'"
+                class="notification-button"
+                small flat
+                @click="notificationAcknowledged">Yes</v-btn>
+        </template>
+    </as-notification>
 
     <div class="as-workout-header">
         <div class="as-workout-options">
@@ -38,16 +36,18 @@
                 >
                 </v-checkbox>
                 <v-btn
-                    class="as-subworkout-button">
+                    class="as-subworkout-button"
+                    @click="checkClear()">
                     Reset
                 </v-btn>
                 <v-btn color="primary"
                     class="as-subworkout-button"
-                    @click="postWorkoutInfo('SAVE')">
+                    @click="saveWorkoutInfo()">
                     Save
                 </v-btn>
                 <v-btn color="green" 
-                    class="as-subworkout-button">
+                    class="as-subworkout-button"
+                    @click="checkSubmit()">
                     Submit
                 </v-btn>
             </div>
@@ -138,6 +138,7 @@
 
 let SimpleWorkout = require('./SimpleWorkout.vue').default; 
 let Subworkout = require('./Subworkout.vue').default;
+let Notification = require('../demo-common/components/Notification.vue').default; 
 import WorkoutService from '@/services/WorkoutService';
 
 const headerMap = {
@@ -156,7 +157,8 @@ const headerMap = {
 export default {
     components: {
         'as-subworkout': Subworkout,
-        'as-simple-workout': SimpleWorkout
+        'as-simple-workout': SimpleWorkout,
+        'as-notification': Notification
     },
     mounted() {
         this.fetchWorkoutInfo();
@@ -226,7 +228,45 @@ export default {
                 });
             });
         },
-        postWorkoutInfo(actionType) {
+        notificationAcknowledged() {
+            if (this.notificationType === 'resetWarning') {
+                this.clearWorkoutInfo();
+            } else if (this.notificationType === 'submitWarning') {
+                this.submitWorkoutInfo(); 
+            }
+
+            this.notificationVisible = false; 
+        },
+        checkSubmit() {
+            let blankFields = this.fieldsLeftBlank; 
+            if (blankFields > 0) {
+                if (blankFields === 1) {
+                    this.notificationMessage = `It seems like ${blankFields} field was left blank. Would you still like to submit?`;
+                } else {
+                    this.notificationMessage = `It seems like ${blankFields} fields were left blank. Would you still like to submit?`;
+                }
+                this.notificationType = "submitWarning";
+                this.notificationVisible = true; 
+            } else {
+                this.submitWorkoutInfo(); 
+            }
+        },
+        checkClear() {
+            let filledFields = this.fieldsFilled; 
+            if (filledFields > 0) {
+                if (filledFields === 1) {
+                    this.notificationMessage = `It seems like you've already entered information for ${filledFields} field. Are you sure you want to reset your workout?`;
+                } else {
+                    this.notificationMessage = `It seems like you've already entered information for ${filledFields} fields. Are you sure you want to reset your workout?`;
+                }
+                
+                this.notificationType = "resetWarning"; 
+                this.notificationVisible = true; 
+            } else {
+                this.clearWorkoutInfo(); 
+            }
+        },
+        saveWorkoutInfo() {
             let tempKey = '';
             let tempValue = '';  
 
@@ -239,22 +279,57 @@ export default {
                     row.inputs.forEach((input, inputIndex) => {
                         if (input && (input.status === 'Empty' || input.status === 'Filled')) {
                             tempKey = input.code
-                            tempValue = input.value ? `${input.value}` : ''; 
-                            if (tempValue === '') {
-                                this.visible = true;
-                            }
+                            tempValue = input.value ? `${input.value}` : '';
                             workout[tempKey] = tempValue; 
                         }
                     });
                 });
             });
 
-            if (actionType === 'SAVE') {
-                workout.SaveBtn = actionType; 
-            }
-
-            WorkoutService.postWorkoutInfo(workout).then(response => {
+            WorkoutService.saveWorkoutInfo(workout).then(response => {
                 this.fetchWorkoutInfo();
+                this.notificationMessage = `Your workout was successfully saved!`;
+                this.notificationType = "save";
+                this.notificationVisible = true; 
+            });
+        },
+        submitWorkoutInfo() {
+            let tempKey = '';
+            let tempValue = '';  
+
+            let workout = {};
+            workout.userId = this.$session.get("user").id;
+            workout.WID = this.$session.get("viewingWID");
+
+            this.subworkouts.forEach((subworkout, subworkoutIndex) => {
+                subworkout.dataTableItems.forEach((row, rowIndex) => {
+                    row.inputs.forEach((input, inputIndex) => {
+                        if (input && (input.status === 'Empty' || input.status === 'Filled')) {
+                            tempKey = input.code
+                            tempValue = input.value ? `${input.value}` : '';
+                            workout[tempKey] = tempValue; 
+                        }
+                    });
+                });
+            });
+
+            WorkoutService.submitWorkoutInfo(workout).then(response => {
+                this.fetchWorkoutInfo();
+                this.notificationMessage = `Your workout was successfully submitted!`;
+                this.notificationType = "submit";
+                this.notificationVisible = true; 
+            });
+        },
+        clearWorkoutInfo() {
+            let workout = {};
+            workout.userId = this.$session.get("user").id;
+            workout.WID = this.$session.get("viewingWID");
+
+            WorkoutService.clearWorkoutInfo(workout).then(response => {
+                this.fetchWorkoutInfo();
+                this.notificationMessage = `Your workout was successfully reset!`;
+                this.notificationType = "reset";
+                this.notificationVisible = true; 
             });
         }
     },
@@ -271,8 +346,54 @@ export default {
             formattedWorkoutDates: [],
             showCalendar: true,
             showSimpleView: false,
-            visible: false
+            
+            //notifications
+            notificationType: 'warning',
+            notificationVisible: false,
+            notificationMessage: '',
         };
+    },
+    computed: {
+        fieldsLeftBlank() {
+            let fieldsCount = 0;
+            let tempValue = ''; 
+
+            this.subworkouts.forEach((subworkout, subworkoutIndex) => {
+                subworkout.dataTableItems.forEach((row, rowIndex) => {
+                    row.inputs.forEach((input, inputIndex) => {
+                        if (input && (input.status === 'Empty' || input.status === 'Filled')) {
+                            tempValue = input.value ? `${input.value}` : ''; 
+                            if (tempValue === '') {
+                                fieldsCount += 1; 
+                               
+                            }
+                        }
+                    });
+                });
+            });
+
+            return fieldsCount; 
+        },
+        fieldsFilled() {
+            let fieldsCount = 0;
+            let tempValue = ''; 
+
+            this.subworkouts.forEach((subworkout, subworkoutIndex) => {
+                subworkout.dataTableItems.forEach((row, rowIndex) => {
+                    row.inputs.forEach((input, inputIndex) => {
+                        if (input && (input.status === 'Empty' || input.status === 'Filled')) {
+                            tempValue = input.value ? `${input.value}` : ''; 
+                            if (tempValue !== '') {
+                                fieldsCount += 1; 
+                               
+                            }
+                        }
+                    });
+                });
+            });
+
+            return fieldsCount; 
+        },
     },
     watch: {
         selectedWorkoutDate: function(newDate) {
@@ -288,7 +409,7 @@ export default {
                     changeWorkoutSelect: `${workoutDate.Week}|${workoutDate.Day}`
                 }
 
-                WorkoutService.postWorkoutInfo(dateInformation).then(response => {
+                WorkoutService.saveWorkoutInfo(dateInformation).then(response => {
                     this.fetchWorkoutInfo();
                 });
             }
@@ -302,20 +423,7 @@ export default {
     @import '~@/demo-common/styles/transitions';
     @import '~@/demo-common/styles/colors';
 
-    .notification {
-        margin-left: 0px;
-
-        &.btn {
-            min-width: 70px !important;
-        }
-
-        &:hover {
-            background-color: rgba(0, 0, 0, 0.2);
-        }
-        .btn__content {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-    }
+  
 
     .as-workout-container {
         width: 90%; 
