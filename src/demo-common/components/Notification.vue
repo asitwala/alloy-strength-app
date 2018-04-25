@@ -69,22 +69,22 @@ export default {
     @import '~@/demo-common/styles/colors';
 
     .notification-container {
-        width: 60%; 
+        width: 60% !important; 
         margin: 0 auto;
     }
 
     .notification {
-        margin-left: 0px;
-        position:fixed; 
-        width: 50%; 
-        z-index: 100; 
-        border: none; 
+        margin-left: 0px !important;
+        position:fixed !important; 
+        width: 50% !important; 
+        z-index: 100 !important; 
+        border: none !important; 
         border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important; 
         border-radius: 5px !important; 
-        min-height: 60px;
+        min-height: 60px !important;
         
         span {
-            margin-right: 5px; 
+            margin-right: 5px !important; 
         }
     }
 
@@ -95,30 +95,30 @@ export default {
         }
 
         &:hover {
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: rgba(0, 0, 0, 0.2) !important;
         }
         .btn__content {
-            background-color: rgba(0, 0, 0, 0.1);
+            background-color: rgba(0, 0, 0, 0.1) !important;
         }
     }
 
-    .save {
+    .save.error {
         background-color: $blueBase !important;
         color: white !important;
 
     }
 
-    .submit {
+    .submit.error {
         background-color: $greenBase !important; 
         color: white !important;
     }
 
-    .reset {
+    .reset.error {
         background-color: $blueGreyBase !important;
         color: white !important;
     }
 
-    .warning {
+    .warning.error {
         background-color: $amberLighten3 !important; 
         color: black !important;
     }
