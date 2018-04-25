@@ -6,11 +6,8 @@ import App from './App';
 import router from './router';
 import Vuetify from 'vuetify';
 import './assets/stylus/main.styl'
-import 'babel-polyfill';
-import VuejsDialog from "vuejs-dialog"
  
 // Tell Vue to install the plugin.
-Vue.use(VuejsDialog);
 Vue.use(VueSession, {
   persist: true,
 });

@@ -77,10 +77,11 @@
 
         <div class="sterner-extended-pic-container">
           <div class="sterner-extended-pic"></div>
-          <a href="" class="instagram">
-            <v-icon small>fa-instagram</v-icon>
-            <p>alex.sterner</p>
-          </a>
+            <p>Follow Coach Sterner on Instagram: 
+              <a href="" class="instagram">
+                <v-icon small>fa-instagram</v-icon>alex.sterner
+              </a>
+            </p>
         </div>
         
       </v-card>

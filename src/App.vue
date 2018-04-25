@@ -119,11 +119,9 @@
       },
       toggleNavigation() {
         this.showNavigation = !this.showNavigation;
-        console.log('Navigation 1', this.showNavigation);
       },
       setNavigation(val) {
-        this.showNavigation = val; 
-        console.log('Navigation 2', this.showNavigation);
+        this.showNavigation = val;
       }
     },
     computed: {

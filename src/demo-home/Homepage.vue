@@ -195,11 +195,15 @@
             // this.$session.set("userId", loginResponse.data.User.id);
             this.$session.set("viewingWID", loginResponse.data.User.currentWorkoutID);
             this.closeloginModal();
-            this.$router.push({ name: 'Workout'});
+
+            // Route user accordingly
+            if (loginResponse.data.hasWorkouts) { // if workouts exist, take to workouts page 
+              this.$router.push({ name: 'Workout'});
+            } else {
+              this.$router.push({ name: 'AdminSetLevels'});
+            }
           }
         }
-        console.log("loginResponse: ", loginResponse.data);
-        // console.log("this.loginData", this.loginData);
       },
       async submitForm() {
         console.log("submitting form: ", this.formData);

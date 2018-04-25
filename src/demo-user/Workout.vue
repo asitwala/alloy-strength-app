@@ -97,12 +97,12 @@
                     <v-select
                         class="body-1"
                         :items="formattedWorkoutDates"
-                        v-model="selectedWorkoutDate"
+                        v-model="selectedDateWithWeekDay"
                         label="Select workout dates"
                         single-line
                     ></v-select>
                     <v-btn
-                        @click="getNextWorkout"
+                        @click="getSpecificWorkout"
                         class="as-workout-date-any-date-btn"
                         small
                         color="primary">
@@ -164,25 +164,30 @@ export default {
         this.fetchWorkoutInfo();
     },
     methods: {
+        getSpecificWorkout() {
+            let index = this.workoutDates.map(date => date.Date).indexOf(this.selectedDate);
+            if (index >= 0) {
+                let selectedDateInfo = this.workoutDates[index]; 
+                this.$session.set('viewingWID', selectedDateInfo.ID);
+                this.fetchWorkoutInfo();
+            }
+        },
         getNextWorkout() {
-            let index = this.formattedWorkoutDates.indexOf(this.selectedWorkoutDate) + 1;
-            if (index >=0 && index < this.workoutDates.length) {
-                this.selectedWorkoutDate = this.formattedWorkoutDates[index]; 
+            let currentWID = this.$session.get('viewingWID'); // recall that WID is 1-indexed
+            let workoutDays = this.workoutDates.length; 
+            if (currentWID > 0 && currentWID <= workoutDays) {
+                this.$session.set('viewingWID', currentWID + 1);
+                this.fetchWorkoutInfo();
             }
-            if (this.$session.get("viewingWID") < this.$session.get("user").workoutDates.length) {
-                this.$session.set("viewingWID", this.$session.get("viewingWID") + 1);          
-            }
-            this.fetchWorkoutInfo();
+
         },
         getLastWorkout() {
-            let index = this.formattedWorkoutDates.indexOf(this.selectedWorkoutDate) - 1; 
-            if (index >=0 && index < this.workoutDates.length) {
-                this.selectedWorkoutDate = this.formattedWorkoutDates[index]; 
+            let currentWID = this.$session.get('viewingWID'); // recall that WID is 1-indexed
+            let workoutDays = this.workoutDates.length; 
+            if (currentWID > 1 && currentWID <= workoutDays) {
+                this.$session.set('viewingWID', currentWID - 1);
+                this.fetchWorkoutInfo();
             }
-            if (this.$session.get("viewingWID") >= 1) {
-                this.$session.set("viewingWID", this.$session.get("viewingWID") - 1);          
-            }
-            this.fetchWorkoutInfo();
         },
         formatWorkoutDates() {
             this.workoutDates.forEach(date => {
@@ -316,10 +321,15 @@ export default {
             });
 
             WorkoutService.submitWorkoutInfo(workout).then(response => {
-                this.fetchWorkoutInfo();
-                this.notificationMessage = `Your workout was successfully submitted!`;
-                this.notificationType = "submit";
-                this.notificationVisible = true; 
+                console.log('response', response);
+                if (response.data.lastWorkout) {
+                    this.$router.push({name: 'Progress'}); // route users to progress pages
+                } else {
+                    this.fetchWorkoutInfo();
+                    this.notificationMessage = `Your workout was successfully submitted!`;
+                    this.notificationType = "submit";
+                    this.notificationVisible = true; 
+                }
             });
         },
         clearWorkoutInfo() {
@@ -337,7 +347,7 @@ export default {
     data() {
         return {
             date: '',
-            selectedWorkoutDate: '',
+            selectedDateWithWeekDay: '',
             titlePart1: '',
             titlePart1Extend: '',
             titlePart2: '',
@@ -349,12 +359,15 @@ export default {
             showSimpleView: false,
             
             //notifications
-            notificationType: 'warning',
+            notificationType: 'submitWarning',
             notificationVisible: false,
             notificationMessage: '',
         };
     },
     computed: {
+        selectedWorkoutDate() {
+            return this.selectedDateWithWeekDay.split(": ")[1]; 
+        },
         fieldsLeftBlank() {
             let fieldsCount = 0;
             let tempValue = ''; 
@@ -395,26 +408,6 @@ export default {
 
             return fieldsCount; 
         },
-    },
-    watch: {
-        selectedWorkoutDate: function(newDate) {
-            if (newDate) {
-                let index = this.formattedWorkoutDates.indexOf(newDate); 
-                let workoutDate = {};
-                if (index >= 0) {
-                    workoutDate = this.workoutDates[index];
-                }
-
-                let dateInformation = {
-                    changeWorkoutBtn: true,
-                    changeWorkoutSelect: `${workoutDate.Week}|${workoutDate.Day}`
-                }
-
-                WorkoutService.saveWorkoutInfo(dateInformation).then(response => {
-                    this.fetchWorkoutInfo();
-                });
-            }
-        }
     }
 };
 
