@@ -77,18 +77,23 @@
 
         <div class="sterner-extended-pic-container">
           <div class="sterner-extended-pic"></div>
-            <p>Follow Coach Sterner on Instagram: 
-              <a href="" class="instagram">
-                <v-icon small>fa-instagram</v-icon>alex.sterner
-              </a>
-            </p>
+            <p class="instagram-text">Follow Coach Sterner on Instagram </p>
+            <a href="https://www.instagram.com/alex.sterner/" class="instagram">
+              <v-icon small>fa-instagram</v-icon>alex.sterner
+            </a>
         </div>
         
       </v-card>
 
       <v-card v-if="bryce">
         <div class="bryce-extended">
-          <div class="bryce-extended-pic"></div>
+          <div class="bryce-extended-pic-container">
+            <div class="bryce-extended-pic"></div>
+              <p class="instagram-text">Follow Coach Bryce on Instagram </p>
+              <a href="https://www.instagram.com/arbryce/" class="instagram">
+                <v-icon small>fa-instagram</v-icon>arbryce
+              </a>
+          </div>
           <div class="bryce-extended-content">
             <h2>Alex Bryce</h2>
             <v-divider/>
@@ -229,7 +234,7 @@
   }
 
   .as-coaches-back {
-    position: absolute; 
+    position: absolute !important; 
   }
 
 
@@ -250,17 +255,17 @@
     }
 
     &-pic-container {
-      .instagram {
-        display: flex; 
-        justify-content: flex-start;
-        align-items: center;
+      text-align: center;
 
+      .instagram-text {
+        margin: 0px !important;
+        margin-top: 8px !important;
+      }
+
+      .instagram {
+        display: inline-block; 
         i {
           margin-right: 6px;
-        }
-
-        p {
-          margin: 0px !important;
         }
       }
     }
@@ -279,11 +284,6 @@
     display: flex; 
     flex-wrap: wrap;
 
-    &-title {
-      display: flex; 
-      justify-content: flex-start;
-    }
-
     &-content {
       flex: 1; 
       padding: 20px;
@@ -294,6 +294,22 @@
         margin-bottom: 10px !important;
       }
 
+    }
+
+    &-pic-container {
+      text-align: center;
+
+      .instagram-text {
+        margin: 0px !important;
+        margin-top: 8px !important;
+      }
+
+      .instagram {
+        display: inline-block; 
+        i {
+          margin-right: 6px;
+        }
+      }
     }
 
     &-pic {

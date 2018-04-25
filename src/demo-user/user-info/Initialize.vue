@@ -66,7 +66,6 @@
                 else if (this.stepper == 3) {
                     this.$refs.step3.generateWorkouts().then(response => {
                         if (response.data) {
-                            console.log("RESPONSE from generate workouts", response.data);
                             this.$router.push({name: 'Workout'});
                         }
                     });

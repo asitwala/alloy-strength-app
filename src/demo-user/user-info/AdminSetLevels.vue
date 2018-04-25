@@ -11,6 +11,17 @@
                         :label="level ? level : `Level`"
                         v-model="level"
                         single-line/>
+                    
+                    <div v-if="level >= 11">
+                        <h3>Select a Block Number</h3>
+                        <v-select 
+                            auto
+                            :items="blockNums"
+                            :label="blockNum ? blockNum : `Block Number`"
+                            v-model="blockNum"
+                            single-line/>
+                    </div>
+
                     <h3>Select a start date</h3>
                     <p style="margin-bottom: 0px !important;">Enter below or use by clicking on the calendar to the right.</p>
                     <v-form v-model="validForm">
@@ -23,6 +34,7 @@
                         />
                     </v-form>
 
+                
                     <h3 class="as-initialize-step-3-select-days">Select 3-4 days you'd like to work out on.</h3>
                     <p>3 days if Level < 6 and 4 days if Level >= 6</p>
                     
@@ -64,7 +76,9 @@
                 ],
                 validForm: false,
                 level: '',
-                levels: Array.from({length: 25}, (v, k) => k+1)
+                levels: Array.from({length: 25}, (v, k) => k+1),
+                blockNum: '0',
+                blockNums: ['1', '2']
             }
         },
         methods: {
@@ -77,7 +91,8 @@
                 let params = {
                     startDate: this.startDateCalendar,
                     daysList: daysList,
-                    newLevel: this.level
+                    newLevel: this.level,
+                    blockNum: parseInt(this.blockNum)
                 };
     
                 return UsersService.adminGenerateWorkouts(this.$session.get('user').id, params).then(()=> {

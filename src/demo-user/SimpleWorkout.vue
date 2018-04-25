@@ -71,7 +71,6 @@
         },
         methods: {
             goToVideo(video) {
-                console.log('video', video);
                 this.$router.push({name: "Videos", params: {videoFromWorkout: video}});
             }
         }
@@ -82,7 +81,7 @@
 
     table.as-workout-simple-view {
         border-collapse: collapse;
-        width: 100%;
+        table-layout: fixed !important;
         flex: 1; 
 
         td, th {

@@ -12,14 +12,14 @@
                 class="as-user-stats-meta-diagram"
             >
             <div class="as-user-stats-meta-diagram-text">
-                <p class="as-user-stats-meta-diagram-text-level"><b>Level 1</b></p>
+                <p class="as-user-stats-meta-diagram-text-level"><b>Level {{ level }}</b></p>
                 <v-divider class="as-user-stats-meta-diagram-text-divider"/>
-                <p class="as-user-stats-meta-diagram-text-percent">25% complete</p>
+                <p class="as-user-stats-meta-diagram-text-percent">{{ levelProgress }}% complete</p>
             </div>
             
             </v-progress-circular>
             <div class="as-user-stats-meta-text">
-                <p><b>Workouts Completed:</b> 3 out of 12 (25%)</p>
+                <p><b>Workouts Completed:</b> {{ completed }} out of {{ total }} ({{ levelProgress }}%)</p>
             </div>
            
         </div>
@@ -63,7 +63,10 @@ export default {
                 { text: 'Alloy Result', value: 'alloyResult' },
                 { text: 'Last Set', value: 'lastSet' }
             ],
-            exerciseTableItems: []
+            exerciseTableItems: [],
+            levelProgress: 0,
+            completed: 0,
+            total: 0
         };
     },
     mounted() {
@@ -71,9 +74,14 @@ export default {
     },
     methods: {
         fetchStatsInfo() {
+            this.userId = this.$session.get('user').id; 
+            this.level = this.$session.get('user').level; 
+
             StatsService.fetchStatsInfo(this.userId).then(response => {
-                this.level = response.data.level; 
                 this.exerciseTableItems = response.data.exerciseTableItems;
+                this.levelProgress = parseInt(response.data.percentComplete); 
+                this.completed = response.data.nWorkoutsComplete; 
+                this.total = response.data.nWorkouts; 
             });
         },
         alloyResultClasses(alloyResult) {
@@ -82,13 +90,7 @@ export default {
                 'as-alloy-result-passed': alloyResult === 'PASSED'
             }
         }
-    },
-    computed: {
-        levelProgress() {
-            return 25;
-        }
     }
-
 };
 
 </script>

@@ -2,7 +2,6 @@ import axios from 'axios';
 
 export default () => {
   return axios.create({
-    baseURL: 'http://localhost:3000' // https://obscure-citadel-34419.herokuapp.com'
+    baseURL: 'https://immense-mesa-37246.herokuapp.com' //'http://localhost:3000'
   })
 }
-

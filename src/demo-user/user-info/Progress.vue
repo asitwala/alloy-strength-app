@@ -2,11 +2,11 @@
 
 <div class="as-progress">
     <div class="as-progress-summary">
-       <h1 class="as-progress-report-header">Level {{ level }} Performance Summary</h1>
+       <h1 class="as-progress-report-header">Level {{ oldLevel }} Performance Summary</h1>
         <v-divider/>
 
         <div class="as-progress-summary-content">
-            <h1 class="as-progress-status-header">You have PASSED Level {{ level }}!</h1>
+            <h1 class="as-progress-status-header">{{ statusText }}</h1>
             <h2>Core Exercises</h2>
             <v-card class="as-progress-exercise-table">
                 <v-card-title>
@@ -50,7 +50,7 @@
             <div>
                 <h3>Your next set of workouts will be at 
                     <span class="as-progress-next-level">
-                        {{ "level 2".toUpperCase() }}
+                        {{ `level ${newLevel}`.toUpperCase() }}
                     </span>.
                 </h3>
             </div>
@@ -80,7 +80,9 @@
     export default {
         data() {
             return {
-                level: 0,
+                oldLevel: 0,
+                newLevel: 0,
+                statusText: '',
                 userId: 1,
                 coreExerciseTableHeaders: [
                     { value: 'exerciseType', text: 'Exercise Type' },
@@ -103,8 +105,13 @@
         },
         methods: {
             fetchProgressInfo() {
+                this.userId = this.$session.get('user').id; 
+
                 ProgressService.fetchProgressInfo(this.userId).then(response => {
-                    this.level = response.data.level; 
+                    this.oldLevel = response.data.oldLevel; 
+                    this.newLevel = response.data.newLevel; 
+                    this.statusText = response.data.statusText; 
+
                     this.coreExerciseTableItems = response.data.coreExerciseTableItems;
                     this.secondaryExerciseTableItems = response.data.secondaryExerciseTableItems;
                 });

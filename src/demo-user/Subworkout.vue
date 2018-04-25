@@ -101,7 +101,6 @@ export default {
     },
     methods: {
         goToVideo() {
-            console.log('this.video', this.video);
             this.$router.push({name: "Videos", params: {videoFromWorkout: this.video}});
         }
     },

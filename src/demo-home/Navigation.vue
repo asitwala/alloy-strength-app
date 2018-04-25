@@ -12,10 +12,9 @@
                     <v-list-tile-action>
                         <v-icon>account_circle</v-icon>
                     </v-list-tile-action>
-                    <v-list-tile-title>User</v-list-tile-title>
+                    <v-list-tile-title>{{ ($session.exists() && $session.has('user')) ? $session.get('user').username : '' }}</v-list-tile-title>
                 </v-list-tile>
                 <v-divider/>
-
 
                 <v-list-tile @click="routeTo('Workout')">
                     <v-list-tile-action>
@@ -24,7 +23,7 @@
                     <v-list-tile-title>Workouts</v-list-tile-title>
                 </v-list-tile>
 
-                <v-list-tile v-if="isAdmin" @click="routeTo('AdminSetLevels')">
+                <v-list-tile v-if="$session.exists() && $session.has('user') ? $session.get('user').isAdmin : false" @click="routeTo('AdminSetLevels')">
                     <v-list-tile-action>
                         <v-icon/>
                     </v-list-tile-action>
@@ -94,18 +93,10 @@
             visible: function(newVal) {
                 this.showDrawer = newVal; 
             }
-        },
-        computed: {
-            isAdmin() {
-                if (this.$session && this.$session.has('user')) {
-                    return this.$session.get('user').isAdmin || false; 
-                }
-                return false; 
-            }
         }
     }
 </script>
 
-<style>
+<style lang="scss">
 
 </style>

@@ -62,7 +62,6 @@
       },
       async getAllInfo() {
         let response = await UsersService.fetchAllInfo();
-        console.log(response);
       }
     }
   };

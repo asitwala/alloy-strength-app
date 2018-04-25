@@ -69,15 +69,15 @@
     }
 
     .as-initialize-available-package:nth-of-type(1) {
-        background-color: $amberLighten1;
+        background-color: $amberLighten1 !important;
     }
 
     .as-initialize-available-package:nth-of-type(2) {
-        background-color: $greyLighten1;
+        background-color: $greyLighten1 !important;
     }
 
     .as-initialize-available-package:nth-of-type(3) {
-        background-color: #8C7853;
+        background-color: #8C7853 !important;
     }
 
     

@@ -77,14 +77,17 @@
 
         <transition name="as-fade" v-else>
            <div class="as-simple-workout-container">
+                <div class="as-subworkout-options">
+                    <h3>{{ titlePart2 }}</h3>
+                    <p class="as-subworkout-suggested-disclaimer">Brackets [ ] indicate a recommended value, e.g. [ 7 ] in an RPE box means a target RPE of 7 for that set.</p>
+                </div>
                 <as-simple-workout :subworkouts="subworkouts"/>
             </div>
         </transition>
 
         <div class="as-date-pickers" v-if="showCalendar">
             <div class="as-date-pickers-text">
-                Select workout dates by clicking on the calendar or by 
-                using the dropdown menu and options.
+                Select workout dates by using the dropdown menu and buttons below.
             </div>
 
             <v-date-picker
@@ -165,7 +168,7 @@ export default {
     },
     methods: {
         getSpecificWorkout() {
-            let index = this.workoutDates.map(date => date.Date).indexOf(this.selectedDate);
+            let index = this.workoutDates.map(date => date.Date).indexOf(this.selectedWorkoutDate);
             if (index >= 0) {
                 let selectedDateInfo = this.workoutDates[index]; 
                 this.$session.set('viewingWID', selectedDateInfo.ID);
@@ -210,6 +213,7 @@ export default {
                     this.formatWorkoutDates(); 
                     this.subworkouts = response.data.subworkouts;
                     this.date = response.data.date;
+                    this.selectedDateWithWeekDay = ''; 
                     this.setTableHeaders(); 
                 }
             });
@@ -321,9 +325,8 @@ export default {
             });
 
             WorkoutService.submitWorkoutInfo(workout).then(response => {
-                console.log('response', response);
                 if (response.data.lastWorkout) {
-                    this.$router.push({name: 'Progress'}); // route users to progress pages
+                    this.$router.push({name: 'Progress'}); // route users to progress page
                 } else {
                     this.fetchWorkoutInfo();
                     this.notificationMessage = `Your workout was successfully submitted!`;
@@ -466,12 +469,7 @@ export default {
                 color: white;
                 &:nth-of-type(1) {
                     margin-left: 0px !important;
-                    background-color: $blueGreyBase;
-                }
-                &:nth-of-type(2) {
-                   
-                }
-                &:nth-of-type(3) {
+                    background-color: $blueGreyBase !important;
                 }
             }
         }

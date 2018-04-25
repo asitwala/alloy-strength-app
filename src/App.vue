@@ -8,7 +8,7 @@
         <v-toolbar-title class="white--text as-toolbar-title" 
         @click="goToHomePage">ALLOY STRENGTH</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-toolbar-side-icon @click="toggleNavigation"></v-toolbar-side-icon>
+        <v-toolbar-side-icon v-if="$session.has('user')"@click="toggleNavigation"></v-toolbar-side-icon>
       </v-toolbar>
 
       <as-navigation
@@ -123,12 +123,6 @@
       setNavigation(val) {
         this.showNavigation = val;
       }
-    },
-    computed: {
-      sessionExists() {
-        console.log("Should show up", this.$session.exists() && this.$session.has('user'));
-        return this.$session.exists() && this.$session.has('user'); 
-      }
     }
   }
 </script>
@@ -172,8 +166,8 @@
     background-color: $blueGreyDarken4 !important;
   }
 
-  .theme--light .btn.btn--disabled {
-    color: $shadesWhite !important;
+  .as-footer-info button.as-footer-copyright.btn.btn--disabled.btn--flat {
+    color: white !important;
   }
 
   .as-footer {
@@ -193,7 +187,7 @@
     &-copyright {
       color: $shadesWhite !important;
       text-transform: none !important;
-      font-size: 12px;
+      font-size: 12px !important;
       
       span:nth-of-type(1) {
         font-weight: bold; 
