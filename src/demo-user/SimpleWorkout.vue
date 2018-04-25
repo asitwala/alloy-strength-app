@@ -12,7 +12,8 @@
         <td>{{subworkout.type}}</td>
         <td>
         <span style="display:flex; flex:1; flex-wrap:no-wrap;">{{subworkout.name}}</span>
-        <span style="display:flex; flex-wrap:wrap; word-wrap:break-word;">{{subworkout.describer}}</span></td>
+        <span style="display:flex; flex-wrap:wrap; word-wrap:break-word;">{{subworkout.describer}}</span>
+        <a v-if="subworkout.hasVideo" @click="goToVideo(subworkout.selectedVideo)"><b>Watch Video</b></a></td>
         <td>                        
             <div v-for="Cell in subworkout.dataTableItems[0].inputs" :key="Cell.code">
                 <span v-if="Cell.status == 'Fixed'">{{Cell.value}}</span>
@@ -66,6 +67,12 @@
             subworkouts: {
                 type: Array, 
                 default: () => []
+            }
+        },
+        methods: {
+            goToVideo(video) {
+                console.log('video', video);
+                this.$router.push({name: "Videos", params: {videoFromWorkout: video}});
             }
         }
     };
