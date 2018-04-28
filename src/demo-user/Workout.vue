@@ -178,7 +178,8 @@ export default {
         getNextWorkout() {
             let currentWID = this.$session.get('viewingWID'); // recall that WID is 1-indexed
             let workoutDays = this.workoutDates.length; 
-            if (currentWID > 0 && currentWID <= workoutDays) {
+
+            if (currentWID > 0 && currentWID < workoutDays) {
                 this.$session.set('viewingWID', currentWID + 1);
                 this.fetchWorkoutInfo();
             }
@@ -187,6 +188,7 @@ export default {
         getLastWorkout() {
             let currentWID = this.$session.get('viewingWID'); // recall that WID is 1-indexed
             let workoutDays = this.workoutDates.length; 
+    
             if (currentWID > 1 && currentWID <= workoutDays) {
                 this.$session.set('viewingWID', currentWID - 1);
                 this.fetchWorkoutInfo();
