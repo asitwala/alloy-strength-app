@@ -16,6 +16,7 @@ import AdminSetLevels from '@/demo-user/user-info/AdminSetLevels.vue';
 import Initialize from '@/demo-user/user-info/Initialize'; 
 import UserStats from '@/demo-user/user-info/UserStats';
 import Progress from '@/demo-user/user-info/Progress'; 
+import Profile from '@/demo-user/user-info/Profile'; 
 
 Vue.use(Router)
 
@@ -87,6 +88,11 @@ export default new Router({
       path: '/reset-workouts',
       name: 'AdminSetLevels',
       component: AdminSetLevels
+    },
+    {
+      path: '/profile',
+      name: 'Profile', 
+      component: Profile
     },
     {
       path: '*',

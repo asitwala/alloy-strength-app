@@ -1,6 +1,6 @@
 <template>
  <div class="as-workout-container">
-
+ 
     <as-notification
         :visible="notificationVisible"
         :type="notificationType"
@@ -183,7 +183,6 @@ export default {
                 this.$session.set('viewingWID', currentWID + 1);
                 this.fetchWorkoutInfo();
             }
-
         },
         getLastWorkout() {
             let currentWID = this.$session.get('viewingWID'); // recall that WID is 1-indexed
