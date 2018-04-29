@@ -93,6 +93,8 @@
             <v-date-picker
                 width="300"
                 v-model="date"
+                :events="arrayEvents"
+                :event-color="arrayEventsColors"
             />
 
             <div class="as-workout-date-dropdown-options">
@@ -139,6 +141,7 @@
 
 <script>
 
+import moment from 'moment'; 
 let SimpleWorkout = require('./SimpleWorkout.vue').default; 
 let Subworkout = require('./Subworkout.vue').default;
 let Notification = require('../demo-common/components/Notification.vue').default; 
@@ -165,6 +168,7 @@ export default {
     },
     mounted() {
         this.fetchWorkoutInfo();
+
     },
     methods: {
         getSpecificWorkout() {
@@ -216,6 +220,28 @@ export default {
                     this.date = response.data.date;
                     this.selectedDateWithWeekDay = ''; 
                     this.setTableHeaders(); 
+                    let todayDate = moment().format('YYYY-MM-DD'); 
+                    this.arrayEvents = []; 
+                    this.arrayEventsColors = {}; 
+                    this.workoutDates.forEach(date => {
+                        let momentDate = moment(date.Date).format('YYYY-MM-DD'); 
+                        let color = ''; 
+
+                        if (momentDate < todayDate) {
+                            color = 'grey'; 
+                        } else if (momentDate > todayDate) {
+                            color = 'blue'; 
+                        } else {
+                            color = 'green'; 
+                        }
+
+                        this.arrayEvents.push(momentDate); 
+
+                        this.arrayEventsColors[momentDate] = color; 
+
+                        // console.log('dates', moment(date.Date).format('YYYY-MM-DD')); 
+
+                    });
                 }
             });
         },
@@ -366,6 +392,10 @@ export default {
             notificationType: 'submitWarning',
             notificationVisible: false,
             notificationMessage: '',
+
+            // events
+            arrayEvents: [],
+            arrayEventsColors: {},
         };
     },
     computed: {
@@ -412,6 +442,16 @@ export default {
 
             return fieldsCount; 
         },
+    }, 
+    watch: {
+        date: function(newVal) {
+            let index = this.arrayEvents.indexOf(newVal);
+            if (index >= 0) {
+                let selectedDateInfo = this.workoutDates[index]; 
+                this.$session.set('viewingWID', selectedDateInfo.ID);
+                this.fetchWorkoutInfo();
+            }
+        }
     }
 };
 
@@ -483,10 +523,17 @@ export default {
         flex-wrap: wrap;
         margin-top: 14px;
 
+        .as-subworkout-options {
+            h3 {
+                font-size: 18px; 
+            }
+        }
+
         .as-date-pickers {
             &-text {
                 text-align: justify;
                 margin-bottom: 16px;
+                margin-top: 6px;
             }
             
             .as-workout-date-dropdown-options {
@@ -534,15 +581,16 @@ export default {
             margin-bottom: 20px; 
         }
 
-        .as-subworkout-suggested-disclaimer {
-        }
-
-        .as-subworkout-options {
-        }
-
         .as-subworkout-container {
             flex: 1; 
             margin: 0 20px;
+            min-width: 400px;
+        }
+
+        .as-simple-workout-container {
+            flex: 1; 
+            margin: 0 20px;
+            margin-bottom: 25px;
             min-width: 400px;
         }
     }
