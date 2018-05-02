@@ -55,12 +55,8 @@
                 </h3>
             </div>
             
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
-                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
-                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt 
-                mollit anim id est laborum.</p>
+            <div v-html="levelUpMessage"></div>
+            <img/>
             <v-btn small color="primary" 
                 class="as-progress-next-workout-button">
                 View Unlocked Videos</v-btn>
@@ -97,7 +93,8 @@
                     { value: 'alloyResult', text: 'Alloy Result' }
                 ], 
                 coreExerciseTableItems: [],
-                secondaryExerciseTableItems: []
+                secondaryExerciseTableItems: [],
+                levelUpMessage: ''
             }
         },
         mounted() {
@@ -114,6 +111,7 @@
 
                     this.coreExerciseTableItems = response.data.coreExerciseTableItems;
                     this.secondaryExerciseTableItems = response.data.secondaryExerciseTableItems;
+                    this.levelUpMessage = response.data.levelUpMessage;
                 });
             },
             alloyResultClasses(alloyResult) {

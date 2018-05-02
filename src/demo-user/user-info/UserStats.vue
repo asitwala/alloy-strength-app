@@ -1,7 +1,7 @@
 <template>
 <div class="as-user-stats">
     <div class="as-user-stats-header">
-        <h1>Your Workout Stats for Level {{ level }}</h1>
+        <h1>Your Workout Stats for Level {{ level }} {{ blockText }}</h1>
         <div class="as-user-stats-meta">
             <v-progress-circular
                 :size="125"
@@ -88,6 +88,20 @@ export default {
             return {
                 'as-alloy-result-failed': alloyResult === 'FAILED',
                 'as-alloy-result-passed': alloyResult === 'PASSED'
+            }
+        }
+    },
+    computed: {
+        blockText() {
+            if (this.level > 10) {
+                let blockNum = this.$session.get('user').blockNum; 
+                if (blockNum === 1) {
+                    return `\u2014 Block ${blockNum}: Volume`; 
+                } else if (blockNum === 2) {
+                    return `\u2014 Block ${blockNum}: Strength/Power`; 
+                }
+            } else {
+                return ''; 
             }
         }
     }

@@ -168,19 +168,27 @@
 
         var loginResponse = await UsersService.loginUser(postBody);
         if (loginResponse.data.Found) {
-          this.$session.set("userFound", true);     
+
+          this.$session.set("userFound", true);
+
           if (loginResponse.data.Success) {
             this.$session.set("user", loginResponse.data.User);
 
             this.$session.set("viewingWID", loginResponse.data.User.currentWorkoutID);
             this.closeloginModal();
 
-            // Route user accordingly
-            if (loginResponse.data.hasWorkouts) { // if workouts exist, take to workouts page 
-              this.$router.push({ name: 'Workout'});
+            // Handle routing based on type of user 
+            let isAdmin = loginResponse.data.User.isAdmin; 
+            let hasWorkouts = loginResponse.data.hasWorkouts; 
+
+            if (isAdmin && !hasWorkouts) {
+              this.$router.push({ name: 'AdminSetLevels' }); // admin to set level 
+            } else if (!isAdmin && !hasWorkouts) {
+              this.$router.push({ name: 'BetaSetLevels' }); // beta user to set level 
             } else {
-              this.$router.push({ name: 'AdminSetLevels'}); // otherwise take them to set level 
+              this.$router.push({ name: 'Workout' }); // otherwise, take to workouts page 
             }
+
           }
         }
       },
