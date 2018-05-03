@@ -81,7 +81,9 @@
                     <h3>{{ titlePart2 }}</h3>
                     <p class="as-subworkout-suggested-disclaimer">Brackets [ ] indicate a recommended value, e.g. [ 7 ] in an RPE box means a target RPE of 7 for that set.</p>
                 </div>
-                <as-simple-workout :subworkouts="subworkouts"/>
+                <as-simple-workout 
+                    @refresh="() => fetchWorkoutInfo()"
+                    :subworkouts="subworkouts"/>
             </div>
         </transition>
 

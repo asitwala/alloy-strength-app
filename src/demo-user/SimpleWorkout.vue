@@ -10,10 +10,18 @@
                 <th>Tempo</th>
             </tr>
             <tr v-for="subworkout in subworkouts" :key="subworkout.name">
-                <td>{{subworkout.type}}</td>
+                <td>
+                    {{subworkout.type}}
+                    <input v-if="subworkout.hasButton" type="submit" 
+                    v-bind:value="subworkout.buttonDisplay" 
+                    v-bind:name="subworkout.buttonName" 
+                    @click="updateSpecial(subworkout.number, subworkout.buttonName)"
+                    style="margin-top:5px; border: 1px solid black !important;"/>
+                </td>
                 <td>
                 <span>{{subworkout.name}}</span>
                 <span>{{subworkout.describer}}</span>
+                <br>
                 <a v-if="subworkout.hasVideo" @click="goToVideo(subworkout.selectedVideo)"><b>Watch Video</b></a></td>
                 <td>                        
                     <div v-for="Cell in subworkout.dataTableItems[0].inputs" :key="Cell.code">
@@ -36,7 +44,9 @@
                 </td>
                 <td>                        
                     <div v-for="Cell in subworkout.dataTableItems[2].inputs" :key="Cell.code">
-                        <span v-if="Cell.status == 'Fixed'">{{Cell.value}}</span>
+                        <span v-if="Cell.status == 'Fixed'">{{Cell.value}}                            
+                        </span>
+                        
                         <select v-model="Cell.value" v-if="Cell.status =='Filled'" style ="webkit-appearance: menulist; border: 1px solid black;">
                             <option :value="Cell.value">{{Cell.value}}</option>
                             <option :value="option" v-for="option in subworkout.RPEOptions" :key="option">{{option}}</option>
@@ -65,6 +75,7 @@
 </template>
 
 <script>
+    import WorkoutService from '@/services/WorkoutService';
     export default {
         props: {
             subworkouts: {
@@ -75,6 +86,37 @@
         methods: {
             goToVideo(video) {
                 this.$router.push({name: "Videos", params: {videoFromWorkout: video}});
+            },
+            updateSpecial(patternNumber, buttonName) {
+                let userId = this.$session.get("user").id;
+                let vWID = this.$session.get("viewingWID");
+                let tempKey = '';
+                let tempValue = '';  
+                let body = {};
+                let splitCode = buttonName.split("|");
+                body.specialType = splitCode[1];
+                body.patternNum = splitCode[2];
+                // let type = req.body.specialType;
+                this.subworkouts.forEach((subworkout, subworkoutIndex) => {
+                    subworkout.dataTableItems.forEach((row, rowIndex) => {
+                        // if (rowIndex == patternNumber - 1 && subworkout.) {
+                        //     let RPECode
+                        // }
+                        row.inputs.forEach((input, inputIndex) => {
+                            if (input && (input.status === 'Empty' || input.status === 'Filled')) {
+                                tempKey = input.code
+                                tempValue = input.value ? `${input.value}` : '';
+                                body[tempKey] = tempValue; 
+                            }
+                        });
+                    });
+                });
+                
+                WorkoutService.updateSpecial(userId, vWID, patternNumber, body).then((response) => {
+                    if (response) {
+                        this.$emit('refresh'); 
+                    }
+                });
             }
         }
     };

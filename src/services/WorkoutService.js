@@ -12,5 +12,9 @@ export default {
     },
     clearWorkoutInfo(userId, workoutId) {
         return Api().put(`/api/users/${userId}/workouts/${workoutId}/clear`);        
+    },
+    updateSpecial(userId, workoutId, patternId, body) {
+        console.log("hitting route: ", `/api/users/${userId}/workouts/${workoutId}/pattern/${patternId}/update`);
+        return Api().put(`/api/users/${userId}/workouts/${workoutId}/pattern/${patternId}/update`, body);        
     }
 };
