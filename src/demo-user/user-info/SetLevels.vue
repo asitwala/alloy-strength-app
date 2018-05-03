@@ -1,10 +1,10 @@
 <template>
-    <div class="beta-set-levels">
+    <div class="as-set-levels">
         <div class="as-initialize-step-3">
             <div class="as-initialize-step-3-container">
                 <div class="as-initialize-step-3-left">
 
-                    <h1 class="beta-set-levels-header">You've been placed at Level {{ level }} {{ blockText }}!</h1>
+                    <h1 class="as-set-levels-header">You've been placed at Level {{ level }} {{ blockText }}!</h1>
 
                     <h3>Select a start date</h3>
                     <p style="margin-bottom: 0px !important;">Enter below or use by clicking on the calendar to the right.</p>
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="as-initialize-step-3-right beta-calendar">
+                <div class="as-initialize-step-3-right as-set-levels-calendar">
                     <v-date-picker v-model="startDateCalendar"></v-date-picker>
                 </div>
             </div>
@@ -128,16 +128,16 @@
 
 <style lang="scss">
 
-    .beta-set-levels {
+    .as-set-levels {
         padding: 20px;
         height: 100%;
     }
 
-    .beta-set-levels-header {
+    .as-set-levels-header {
         margin-bottom: 24px;
     }
 
-    .beta-calendar {
+    .as-set-levels-calendar {
         margin-bottom: 16px;
     }
 

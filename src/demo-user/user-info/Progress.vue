@@ -43,7 +43,7 @@
         </div>
     </div>
 
-    <div class="as-progress-next-workout">
+    <div class="as-progress-next-workout"> <!-- v-if="!inProgress" -->
         <h1>Next Steps</h1>
         <v-divider/>
         <div class="as-progress-next-workout-content">
@@ -58,9 +58,11 @@
             <div v-html="levelUpMessage"></div>
             <img/>
             <v-btn small color="primary" 
+                @click="routeTo('Videos')"
                 class="as-progress-next-workout-button">
                 View Unlocked Videos</v-btn>
             <v-btn small color="primary"
+                @click="routeTo('SetLevels')"
                 class="as-progress-next-workout-button">
                 Get New Workouts</v-btn>
         </div>
@@ -119,8 +121,16 @@
                     'as-alloy-result-failed': alloyResult === 'FAILED',
                     'as-alloy-result-passed': alloyResult === 'PASSED'
                 }
+            },
+            routeTo(name) {
+                this.$router.push({ name: name }); 
             }
         },
+        computed: {
+            inProgress() {
+                return this.statusText === 'Still In Progress'; 
+            }
+        }
     };  
 
 </script>
@@ -131,12 +141,13 @@
 
     .as-progress {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
         flex-wrap: wrap;
     }
 
     .as-progress-summary {
-        width: 850px; 
+        max-width: 100%; 
+        width: 850px;
         margin-bottom: 25px;
 
         .as-progress-report-header { // h1
@@ -178,7 +189,7 @@
     .as-progress-next-workout {
         background-color: $greyLighten2;
         height: auto;
-        flex: 1;
+        flex: 1; 
 
         h1 {
             margin: 15px 0 15px 25px; 

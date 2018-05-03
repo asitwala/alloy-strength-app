@@ -7,14 +7,25 @@
             <v-form>
                 <v-card class="as-user-options">
                     <v-card-title>
-                        <h2>User Options</h2>
+                        <h2>User Information</h2>
                     </v-card-title>
 
                     <v-card-text>
                         <v-text-field
+                            v-model="name"
+                            label="Name"
+                        />
+                        <v-text-field
                             v-model="email"
                             label="Email"
-                            readonly
+                        />
+                        <v-text-field
+                            v-model="height"
+                            label="Height"
+                        />
+                        <v-text-field
+                            v-model="width"
+                            label="Width"
                         />
                     </v-card-text>
                 </v-card>

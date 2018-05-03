@@ -522,6 +522,7 @@ export default {
         width: 100%;
         flex-wrap: wrap;
         margin-top: 14px;
+        overflow: auto;
 
         .as-subworkout-options {
             h3 {
@@ -584,14 +585,14 @@ export default {
         .as-subworkout-container {
             flex: 1; 
             margin: 0 20px;
-            min-width: 400px;
+            min-width: 300px;
         }
 
         .as-simple-workout-container {
             flex: 1; 
             margin: 0 20px;
             margin-bottom: 25px;
-            min-width: 400px;
+            min-width: 300px;
         }
     }
 </style>

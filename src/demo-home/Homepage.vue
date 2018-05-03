@@ -188,7 +188,6 @@
             } else {
               this.$router.push({ name: 'Workout' }); // otherwise, take to workouts page 
             }
-
           }
         }
       },
