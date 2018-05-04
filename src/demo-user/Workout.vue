@@ -335,8 +335,7 @@ export default {
         },
         submitWorkoutInfo() {
             let tempKey = '';
-            let tempValue = '';  
-
+            let tempValue = '';
             let workout = {};
             workout.userId = this.$session.get("user").id;
             workout.WID = this.$session.get("viewingWID");

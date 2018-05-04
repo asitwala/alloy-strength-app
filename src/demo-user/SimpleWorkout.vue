@@ -12,15 +12,26 @@
             <tr v-for="subworkout in subworkouts" :key="subworkout.name">
                 <td>
                     {{subworkout.type}}
+                    
+                    
+                    <span v-if="subworkout.specialDescriber && subworkout.class == 'stop'" style="color:#1976d2;">
+                    <br/><b>{{subworkout.specialDescriber}}</b></span>
+                    
+                    <span v-if="subworkout.specialDescriber && subworkout.class == 'drop'" style="color:#4caf50;">
+                    <br/><b>{{subworkout.specialDescriber}}</b></span>
+
+                    <span v-if="subworkout.specialDescriber && subworkout.class == 'alloy'" style="color:red;">
+                    <br/><b>{{subworkout.specialDescriber}} ({{subworkout.alloyReps}}+)</b></span>
+                    
+                    <span style="font-size:12px;"><br/><b>{{subworkout.describer}}</b></span>
+                </td>
+                <td>
+                <span>{{subworkout.name}}</span>
                     <input v-if="subworkout.hasButton" type="submit" 
                     v-bind:value="subworkout.buttonDisplay" 
                     v-bind:name="subworkout.buttonName" 
                     @click="updateSpecial(subworkout.number, subworkout.buttonName)"
                     style="margin-top:5px; border: 1px solid black !important;"/>
-                </td>
-                <td>
-                <span>{{subworkout.name}}</span>
-                <span>{{subworkout.describer}}</span>
                 <br>
                 <a v-if="subworkout.hasVideo" @click="goToVideo(subworkout.selectedVideo)"><b>Watch Video</b></a></td>
                 <td>                        
@@ -28,18 +39,21 @@
                         <span v-if="Cell.status == 'Fixed'">{{Cell.value}}</span>
                         <input v-if="Cell.status =='Filled'" type="text" style="border: 1px solid black;"
                         v-model="Cell.value" v-bind:name="Cell.code">
-                        <input v-if="Cell.status =='Empty'" type="text" style="border: 1px solid black;"
+                        <input v-if="Cell.status =='Empty' && (!Cell.alloy)" type="text" style="border: 1px solid black;"
                         v-model="Cell.value" placeholder="Enter Reps" v-bind:name="Cell.code">
+                        <input v-if="Cell.status =='Empty' && Cell.alloy" type="text" style="border: 1px solid black;"
+                        v-model="Cell.value" :placeholder="subworkout.alloyReps + '+'" v-bind:name="Cell.code">
+                        
                     </div>
                 </td>
                 <td>                        
                     <div v-for="Cell in subworkout.dataTableItems[1].inputs" :key="Cell.code">
                         <span v-if="Cell.status == 'Fixed'">{{Cell.value}}</span>
                         <input v-if="Cell.status =='Filled'" type="text" style="border: 1px solid black; padding-left:5px;"
-                        v-model="Cell.value" placeholder="Enter Weight" v-bind:name="Cell.code" 
+                        v-model="Cell.value" :placeholder="'Suggested: ' + Cell.suggestedWeight + ' lbs'" v-bind:name="Cell.code" 
                         defaultValue="Cell.value">
                         <input v-if="Cell.status =='Empty'" type="text" style="border: 1px solid black; padding-left:5px;"
-                        v-model="Cell.value" placeholder="Enter Weight" v-bind:name="Cell.code">
+                        v-model="Cell.value" :placeholder="'Suggested: ' + Cell.suggestedWeight + ' lbs'" v-bind:name="Cell.code">
                     </div>
                 </td>
                 <td>                        
@@ -47,14 +61,32 @@
                         <span v-if="Cell.status == 'Fixed'">{{Cell.value}}                            
                         </span>
                         
-                        <select v-model="Cell.value" v-if="Cell.status =='Filled'" style ="webkit-appearance: menulist; border: 1px solid black;">
+                        <select v-model="Cell.value" v-if="Cell.status =='Filled'" 
+                        style ="webkit-appearance: menulist; border: 1px solid black;">
                             <option :value="Cell.value">{{Cell.value}}</option>
                             <option :value="option" v-for="option in subworkout.RPEOptions" :key="option">{{option}}</option>
                         </select>
                         <select v-model="Cell.value" defaultValue="Select RPE" 
                         v-if="Cell.status =='Empty'" style ="webkit-appearance: menulist; border: 1px solid black;">
-                            <option :value="null" disabled>Select RPE</option>
-                            <option :value="option" v-for="option in subworkout.RPEOptions" :key="option">{{option}}</option>
+                            <option :value="null" disabled>Select RPE ({{Cell.suggested}})</option>
+                            <option :value="option" v-for="option in subworkout.RPEOptions" :key="option">
+                                <span v-if="
+                                option == Cell.suggested || 
+                                (Cell.suggested.split('-').length > 1 
+                                && 
+                                (parseFloat(option) >= Cell.suggested.split('-')[0]
+                                && parseFloat(option) <= Cell.suggested.split('-')[1])
+                                )
+                                ">{{option}} (suggested)</span>
+                                <span v-if="
+                                option != Cell.suggested && 
+                                !(Cell.suggested.split('-').length > 1 
+                                && 
+                                (parseFloat(option) >= Cell.suggested.split('-')[0]
+                                && parseFloat(option) <= Cell.suggested.split('-')[1])
+                                )
+                                ">{{option}}</span>
+                                </option>
                         </select>
                     </div>
                 </td>
