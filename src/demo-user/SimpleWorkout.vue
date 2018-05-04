@@ -9,7 +9,7 @@
                 <th>RPE</th>
                 <th>Tempo</th>
             </tr>
-            <tr v-for="subworkout in subworkouts" :key="subworkout.name">
+            <tr v-for="subworkout in subworkouts" :key="subworkout.number">
                 <td>
                     {{subworkout.type}}
                     
@@ -118,37 +118,6 @@
         methods: {
             goToVideo(video) {
                 this.$router.push({name: "Videos", params: {videoFromWorkout: video}});
-            },
-            updateSpecial(patternNumber, buttonName) {
-                let userId = this.$session.get("user").id;
-                let vWID = this.$session.get("viewingWID");
-                let tempKey = '';
-                let tempValue = '';  
-                let body = {};
-                let splitCode = buttonName.split("|");
-                body.specialType = splitCode[1];
-                body.patternNum = splitCode[2];
-                // let type = req.body.specialType;
-                this.subworkouts.forEach((subworkout, subworkoutIndex) => {
-                    subworkout.dataTableItems.forEach((row, rowIndex) => {
-                        // if (rowIndex == patternNumber - 1 && subworkout.) {
-                        //     let RPECode
-                        // }
-                        row.inputs.forEach((input, inputIndex) => {
-                            if (input && (input.status === 'Empty' || input.status === 'Filled')) {
-                                tempKey = input.code
-                                tempValue = input.value ? `${input.value}` : '';
-                                body[tempKey] = tempValue; 
-                            }
-                        });
-                    });
-                });
-                
-                WorkoutService.updateSpecial(userId, vWID, patternNumber, body).then((response) => {
-                    if (response) {
-                        this.$emit('refresh'); 
-                    }
-                });
             }
         }
     };

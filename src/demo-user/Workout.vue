@@ -63,13 +63,20 @@
                     <p class="as-subworkout-suggested-disclaimer">Brackets [ ] indicate a recommended value, e.g. [ 7 ] in an RPE box means a target RPE of 7 for that set.</p>
                 </div>
             
-                <as-subworkout v-for="(subworkout, subworkoutIndex) in subworkouts" :key="subworkout.name"
+                <as-subworkout 
+                    v-for="(subworkout, subworkoutIndex) in subworkouts" 
+                    @refresh="updateSpecial"
+                    :key="subworkout.name"
                     :type="subworkout.type"
                     :name="subworkout.name"
                     :describer="subworkout.describer"
                     :video="subworkout.hasVideo ? subworkout.selectedVideo : {}"
                     :RPEOptions="subworkout.RPEOptions"
                     :dataTableItems="subworkout.dataTableItems"
+                    :number="subworkout.number"
+                    :hasButton="subworkout.hasButton"
+                    :buttonDisplay="subworkout.buttonDisplay ? subworkout.buttonDisplay : ''"
+                    :buttonName="subworkout.buttonName"
                     :headers="headersList[subworkoutIndex]"
                 />
             </div>
@@ -173,6 +180,36 @@ export default {
 
     },
     methods: {
+        updateSpecial(buttonInfo) {
+            let {patternNumber, buttonName} = buttonInfo; 
+            let userId = this.$session.get("user").id;
+            let vWID = this.$session.get("viewingWID");
+            let tempKey = '';
+            let tempValue = '';  
+            let body = {};
+            let splitCode = buttonName.split("|");
+            body.specialType = splitCode[1];
+            body.patternNum = splitCode[2];
+            // let type = req.body.specialType;
+            this.subworkouts.forEach((subworkout, subworkoutIndex) => {
+                subworkout.dataTableItems.forEach((row, rowIndex) => {
+                    row.inputs.forEach((input, inputIndex) => {
+                        if (input && (input.status === 'Empty' || input.status === 'Filled')) {
+                            tempKey = input.code
+                            tempValue = input.value ? `${input.value}` : '';
+                            body[tempKey] = tempValue; 
+                        }
+                    });
+                });
+            });
+            
+            WorkoutService.updateSpecial(userId, vWID, patternNumber, body).then((response) => {
+                console.log(`update speciallll!`);
+                if (response) {
+                    this.fetchWorkoutInfo();
+                }
+            });
+        },
         getSpecificWorkout() {
             let index = this.workoutDates.map(date => date.Date).indexOf(this.selectedWorkoutDate);
             if (index >= 0) {

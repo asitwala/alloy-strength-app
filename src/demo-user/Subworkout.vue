@@ -48,7 +48,16 @@
 
                         </template>
                     </v-data-table>
+
+                    <v-card-actions>
+                        <div class="get-next-set" v-if="hasButton">
+                            <v-btn class="get-next-set-button" 
+                                @click="getNextSet"
+                                color=primary small>{{ buttonDisplay }}</v-btn>
+                        </div>
+                    </v-card-actions>
                 </v-card>
+
             </v-expansion-panel-content>
         </v-expansion-panel>
     </div>
@@ -94,6 +103,18 @@ export default {
             type: Array,
             required: true
         },
+        number: {
+            type: Number
+        },
+        hasButton: {
+            type: Boolean
+        },
+        buttonName: {
+            type: String
+        },
+        buttonDisplay: {
+            type: String,
+        },
         headers: {
             type: Array,
             required: true
@@ -102,7 +123,10 @@ export default {
     methods: {
         goToVideo() {
             this.$router.push({name: "Videos", params: {videoFromWorkout: this.video}});
-        }
+        },
+        getNextSet() {
+            this.$emit('refresh', {patternNumber: this.number, buttonName: this.buttonName});
+        }   
     },
     computed: {
         hasVideo() {
@@ -181,6 +205,13 @@ export default {
 
         .small-dialog {
             display: block !important; 
+        }
+    }
+
+    .get-next-set {
+        width: 100%; 
+        .get-next-set-button {
+            float: right;
         }
     }
 
