@@ -10,6 +10,9 @@
                             {{ type.toUpperCase() }}
                         </v-chip>
                         <h3 class="as-subworkout-name">{{ name }}</h3>
+                        <h4 class="as-subworkout-special-set-name" 
+                            :class="dynamicColorClasses"
+                            v-if="specialDescriber">{{ specialDescriber }}</h4>
                         <v-tooltip bottom v-if="hasVideo">
                             <v-icon 
                                 class="video-icon" 
@@ -23,6 +26,9 @@
                     </div>
                     <div class="header-exercise-description">
                         <p>{{ describer }}</p>
+                        <div class="suggested-weight-string" v-if="suggestedWeightString">
+                            <p> | {{ suggestedWeightString }} </p>
+                        </div>
                     </div>
                 </div>
                 <v-card>
@@ -91,6 +97,15 @@ export default {
             type: String,
             required: true
         },
+        suggestedWeightString: {
+            type: String
+        },
+        specialClass: {
+            type: String
+        },
+        specialDescriber: {
+            type: String
+        },
         video: {
             type: Object, 
             required: false
@@ -131,6 +146,13 @@ export default {
     computed: {
         hasVideo() {
             return Object.keys(this.video).length > 0; 
+        },
+        dynamicColorClasses() {
+            return {
+                'as-strength-stop': (this.specialClass === 'stop'),
+                'as-strength-drop': (this.specialClass === 'drop'),
+                'as-alloy': (this.specialClass === 'alloy')
+            };
         }
     }
 };
@@ -196,6 +218,12 @@ export default {
                 margin-bottom: 0px !important;
                 padding-left: 12px;
                 padding-top: 12px;
+                display: flex;
+                align-items: center;
+
+                .suggested-weight-string {
+                    margin-left: 4px;
+                }
             }
         }
 
@@ -213,6 +241,18 @@ export default {
         .get-next-set-button {
             float: right;
         }
+    }
+
+    .as-strength-stop {
+        color: #1976d2 !important;
+    }
+
+    .as-strength-drop {
+        color: #4caf50 !important;
+    }
+
+    .as-alloy {
+        color: red !important;
     }
 
 

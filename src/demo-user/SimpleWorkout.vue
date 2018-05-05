@@ -27,12 +27,16 @@
                 </td>
                 <td>
                 <span>{{subworkout.name}}</span>
-                    <input v-if="subworkout.hasButton" type="submit" 
-                    v-bind:value="subworkout.buttonDisplay" 
-                    v-bind:name="subworkout.buttonName" 
-                    @click="updateSpecial(subworkout.number, subworkout.buttonName)"
-                    style="margin-top:5px; border: 1px solid black !important;"/>
-                <br>
+                    <p v-if="subworkout.simpleWeightString" style="margin-bottom: 0px !important">
+                        <b>{{ subworkout.simpleWeightString }}</b>
+                    </p>
+
+                    <v-btn v-if="subworkout.hasButton"
+                        small
+                        color="primary"
+                        @click="updateSpecial(subworkout.number, subworkout.buttonName)"
+                    >{{ subworkout.buttonDisplay }}</v-btn>
+
                 <a v-if="subworkout.hasVideo" @click="goToVideo(subworkout.selectedVideo)"><b>Watch Video</b></a></td>
                 <td>                        
                     <div v-for="Cell in subworkout.dataTableItems[0].inputs" :key="Cell.code">
@@ -67,7 +71,7 @@
                             <option :value="option" v-for="option in subworkout.RPEOptions" :key="option">{{option}}</option>
                         </select>
                         <select v-model="Cell.value" defaultValue="Select RPE" 
-                        v-if="Cell.status =='Empty'" style ="webkit-appearance: menulist; border: 1px solid black;">
+                            v-if="Cell.status =='Empty'" style ="webkit-appearance: menulist; border: 1px solid black;">
                             <option :value="null" disabled>Select RPE ({{Cell.suggested}})</option>
                             <option :value="option" v-for="option in subworkout.RPEOptions" :key="option">
                                 <span v-if="Cell.suggested ? formatRPESelectSuggested(option, Cell.suggested) : false">{{option}} (suggested)</span>
@@ -110,6 +114,8 @@
                     let case3 = parseFloat(option) >= split[0];
                     let case4 = parseFloat(option) <= split[1];
 
+                    console.log(`Testing RPE`, option === (case1 || case2 && case3 && case4));
+
                     return option === (case1 || case2 && case3 && case4);
                 }
             },
@@ -125,12 +131,8 @@
                 let splitCode = buttonName.split("|");
                 body.specialType = splitCode[1];
                 body.patternNum = splitCode[2];
-                // let type = req.body.specialType;
                 this.subworkouts.forEach((subworkout, subworkoutIndex) => {
                     subworkout.dataTableItems.forEach((row, rowIndex) => {
-                        // if (rowIndex == patternNumber - 1 && subworkout.) {
-                        //     let RPECode
-                        // }
                         row.inputs.forEach((input, inputIndex) => {
                             if (input && (input.status === 'Empty' || input.status === 'Filled')) {
                                 tempKey = input.code
@@ -171,6 +173,7 @@
             min-width: 100px;
             overflow: auto;
             padding: 0 1px;
+            text-align: center;
 
             input:not(:first-child), select:not(:first-child), div:not(:first-child), span:not(:first-child) {
                 margin-top: 1px;
