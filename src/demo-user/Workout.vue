@@ -56,8 +56,18 @@
     </div>
 
     <div class="as-workout">
-        <transition name="as-fade" v-if="!showSimpleView">
-            <div class="as-subworkout-container">
+
+        <transition name="as-fade" mode="out-in">
+
+            <div class="as-no-workout" v-if="contentView === 1">
+                <h3>{{ noWorkoutMessage }}</h3>
+            </div>
+
+            <div class="as-no-workout" v-if="contentView === 2">
+                <h3>{{ hiddenWorkoutMessage }}</h3>
+            </div>
+
+            <div class="as-subworkout-container" v-if="contentView === 3">
                 <div class="as-subworkout-options">
                     <h3>{{ titlePart2 }}</h3>
                     <p class="as-subworkout-suggested-disclaimer">Brackets [ ] indicate a recommended value, e.g. [ 7 ] in an RPE box means a target RPE of 7 for that set.</p>
@@ -80,10 +90,8 @@
                     :headers="headersList[subworkoutIndex]"
                 />
             </div>
-        </transition>
 
-        <transition name="as-fade" v-else>
-           <div class="as-simple-workout-container">
+            <div class="as-simple-workout-container" v-if="contentView === 4">
                 <div class="as-subworkout-options">
                     <h3>{{ titlePart2 }}</h3>
                     <p class="as-subworkout-suggested-disclaimer">Brackets [ ] indicate a recommended value, e.g. [ 7 ] in an RPE box means a target RPE of 7 for that set.</p>
@@ -93,7 +101,7 @@
                     :subworkouts="subworkouts"/>
             </div>
         </transition>
-
+        
         <div class="as-date-pickers" v-if="showCalendar">
             <div class="as-date-pickers-text">
                 Select workout dates by using the dropdown menu and buttons below.
@@ -204,7 +212,6 @@ export default {
             });
             
             WorkoutService.updateSpecial(userId, vWID, patternNumber, body).then((response) => {
-                console.log(`update speciallll!`);
                 if (response) {
                     this.fetchWorkoutInfo();
                 }
@@ -248,39 +255,44 @@ export default {
 
             WorkoutService.fetchWorkoutInfo(UserId, workoutId).then(response => {
                 if (typeof response === 'object') {
-                    let title = response.data.describer.split(' - '); 
-                    let title1 = title[0].split(', '); 
-                    this.titlePart1 = title1[0];
-                    this.titlePart1Extend = title1[1];
-                    this.titlePart2 = title[1];
-                    this.workoutDates = response.data.workoutDates; 
-                    this.formatWorkoutDates(); 
-                    this.subworkouts = response.data.subworkouts;
-                    this.date = response.data.date;
-                    this.selectedDateWithWeekDay = ''; 
-                    this.setTableHeaders(); 
-                    let todayDate = moment().format('YYYY-MM-DD'); 
-                    this.arrayEvents = []; 
-                    this.arrayEventsColors = {}; 
-                    this.workoutDates.forEach(date => {
-                        let momentDate = moment(date.Date).format('YYYY-MM-DD'); 
-                        let color = ''; 
+                    if (response.data.hidden) {
+                        this.hiddenWorkout = true;
+                        this.hiddenWorkoutMessage = response.data.hiddenText;
+                    } else {
+                        let title = response.data.describer.split(' - '); 
+                        let title1 = title[0].split(', '); 
+                        this.titlePart1 = title1[0];
+                        this.titlePart1Extend = title1[1];
+                        this.titlePart2 = title[1];
+                        this.workoutDates = response.data.workoutDates; 
+                        this.formatWorkoutDates(); 
+                        this.subworkouts = response.data.subworkouts;
+                        this.date = response.data.date;
+                        this.selectedDateWithWeekDay = ''; 
+                        this.setTableHeaders(); 
+                        this.hiddenWorkout = '';
+                        this.hiddenWorkoutMessage = '';
+                        let todayDate = moment().format('YYYY-MM-DD'); 
+                        this.arrayEvents = []; 
+                        this.arrayEventsColors = {}; 
+                        this.workoutDates.forEach(date => {
+                            let momentDate = moment(date.Date).format('YYYY-MM-DD'); 
+                            let color = ''; 
 
-                        if (momentDate < todayDate) {
-                            color = 'grey'; 
-                        } else if (momentDate > todayDate) {
-                            color = 'blue'; 
-                        } else {
-                            color = 'green'; 
-                        }
+                            if (momentDate < todayDate) {
+                                color = 'grey'; 
+                            } else if (momentDate > todayDate) {
+                                color = 'blue'; 
+                            } else {
+                                color = 'green'; 
+                            }
 
-                        this.arrayEvents.push(momentDate); 
+                            this.arrayEvents.push(momentDate); 
 
-                        this.arrayEventsColors[momentDate] = color; 
+                            this.arrayEventsColors[momentDate] = color; 
 
-                        // console.log('dates', moment(date.Date).format('YYYY-MM-DD')); 
-
-                    });
+                        });
+                    }
                 }
             });
         },
@@ -426,7 +438,7 @@ export default {
             showCalendar: true,
             showSimpleView: false,
             
-            //notifications
+            // notifications
             notificationType: 'submitWarning',
             notificationVisible: false,
             notificationMessage: '',
@@ -434,9 +446,30 @@ export default {
             // events
             arrayEvents: [],
             arrayEventsColors: {},
+
+            // messages
+            noWorkoutToday: false,
+            noWorkoutMessage: 'There is no workout scheduled for today. Get some rest!',
+
+            // hidden
+            hiddenWorkout: false,
+            hiddenWorkoutMessage: ''
         };
     },
     computed: {
+        contentView() {
+            if (this.noWorkoutToday) {
+                return 1; 
+            } else if (this.hiddenWorkout && !this.noWorkoutToday) {
+                return 2;
+            } else if (!this.hiddenWorkout && !this.noWorkoutToday && !this.showSimpleView) {
+                return 3;
+            } else if (!this.hiddenWorkout && !this.noWorkoutToday && this.showSimpleView) {
+                return 4; 
+            } else {
+                return 0; 
+            }
+        },
         selectedWorkoutDate() {
             return this.selectedDateWithWeekDay.split(": ")[1]; 
         },
@@ -488,6 +521,9 @@ export default {
                 let selectedDateInfo = this.workoutDates[index]; 
                 this.$session.set('viewingWID', selectedDateInfo.ID);
                 this.fetchWorkoutInfo();
+                this.noWorkoutToday = false;
+            } else {
+                this.noWorkoutToday = true;
             }
         }
     }
@@ -633,4 +669,12 @@ export default {
             min-width: 300px;
         }
     }
+
+    .as-no-workout {
+        display: flex; 
+        flex: 1; 
+        justify-content: center;
+        align-items: center;
+    }
+
 </style>

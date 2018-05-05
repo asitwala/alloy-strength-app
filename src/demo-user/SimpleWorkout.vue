@@ -70,22 +70,8 @@
                         v-if="Cell.status =='Empty'" style ="webkit-appearance: menulist; border: 1px solid black;">
                             <option :value="null" disabled>Select RPE ({{Cell.suggested}})</option>
                             <option :value="option" v-for="option in subworkout.RPEOptions" :key="option">
-                                <span v-if="
-                                option == Cell.suggested || 
-                                (Cell.suggested.split('-').length > 1 
-                                && 
-                                (parseFloat(option) >= Cell.suggested.split('-')[0]
-                                && parseFloat(option) <= Cell.suggested.split('-')[1])
-                                )
-                                ">{{option}} (suggested)</span>
-                                <span v-if="
-                                option != Cell.suggested && 
-                                !(Cell.suggested.split('-').length > 1 
-                                && 
-                                (parseFloat(option) >= Cell.suggested.split('-')[0]
-                                && parseFloat(option) <= Cell.suggested.split('-')[1])
-                                )
-                                ">{{option}}</span>
+                                <span v-if="Cell.suggested ? formatRPESelectSuggested(option, Cell.suggested) : false">{{option}} (suggested)</span>
+                                <span v-else>{{option}}</span>
                                 </option>
                         </select>
                     </div>
@@ -116,8 +102,50 @@
             }
         },
         methods: {
+            formatRPESelectSuggested(option, suggested) {
+                if (suggested) {
+                    let case1 = suggested; 
+                    let split = suggested.split('-');
+                    let case2 = split.length > 1; 
+                    let case3 = parseFloat(option) >= split[0];
+                    let case4 = parseFloat(option) <= split[1];
+
+                    return option === (case1 || case2 && case3 && case4);
+                }
+            },
             goToVideo(video) {
                 this.$router.push({name: "Videos", params: {videoFromWorkout: video}});
+            },
+            updateSpecial(patternNumber, buttonName) {
+                let userId = this.$session.get("user").id;
+                let vWID = this.$session.get("viewingWID");
+                let tempKey = '';
+                let tempValue = '';  
+                let body = {};
+                let splitCode = buttonName.split("|");
+                body.specialType = splitCode[1];
+                body.patternNum = splitCode[2];
+                // let type = req.body.specialType;
+                this.subworkouts.forEach((subworkout, subworkoutIndex) => {
+                    subworkout.dataTableItems.forEach((row, rowIndex) => {
+                        // if (rowIndex == patternNumber - 1 && subworkout.) {
+                        //     let RPECode
+                        // }
+                        row.inputs.forEach((input, inputIndex) => {
+                            if (input && (input.status === 'Empty' || input.status === 'Filled')) {
+                                tempKey = input.code
+                                tempValue = input.value ? `${input.value}` : '';
+                                body[tempKey] = tempValue; 
+                            }
+                        });
+                    });
+                });
+                
+                WorkoutService.updateSpecial(userId, vWID, patternNumber, body).then((response) => {
+                    if (response) {
+                        this.$emit('refresh'); 
+                    }
+                });
             }
         }
     };

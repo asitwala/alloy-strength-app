@@ -21,5 +21,11 @@ export default {
   },
   adminGenerateWorkouts(userId, params) {
     return Api().post(`/api/users/${userId}/admin/generate-workouts`, params);
+  },
+  getLastWorkout(userId) {
+    return Api().get(`api/users/${userId}/last-workout/vue`);
+  },
+  getProfileInfo(userId) {
+    return Api().get(`api/users/${userId}/profile-info`);
   }
 }

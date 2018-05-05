@@ -18,29 +18,10 @@
                                     label="Name"
                                 />
                                 <v-text-field
-                                    v-model="email"
-                                    label="Email"
-                                />
-                                <v-text-field
-                                    v-model="height"
-                                    label="Height"
-                                    suffix="inches"
-                                />
-                                <v-text-field
-                                    v-model="weight"
-                                    label="Weight"
-                                    suffix="pounds"
+                                    v-model="username"
+                                    label="Username"
                                 />
                             </v-card-text>
-                            <v-card-actions>
-                                <div class="as-profile-card-actions">
-                                    <v-btn 
-                                        color="primary"
-                                        @click=""
-                                        class="as-change-user-settings">Change
-                                    </v-btn>
-                                </div>
-                            </v-card-actions>
                         </v-card>
                     </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -81,38 +62,91 @@
         </div>
 
         <div class="as-profile-static">
-            <v-tabs
-                v-model="active"
-                color="primary"
-                dark
-                >
-                <v-tab
-                    v-for="n in 3"
-                    :key="n"
-                    ripple
-                    >
-                    Header {{ n }}
-                </v-tab>
-            </v-tabs>
+            <h2 class="as-profile-level-info">Level {{ level }} {{ blockText }} </h2>
+            <v-divider/>
+
+            <div class="as-profile-level-progress">
+                <v-progress-linear v-model="levelProgress" class="as-profile-level-progress-bar"/>
+                <p>{{ progressText}}</p>
+            </div>
+
+            <div class="as-no-last-workout" v-if="!lastWorkoutCompleted">
+                <h3>{{ noWorkoutMessage }}</h3>
+            </div>
+            <div class="as-last-workout" v-else>
+                <as-last-workout :subworkouts="subworkouts">
+                </as-last-workout>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 
+import SimpleWorkout from '@/demo-user/SimpleWorkout'; 
+import UsersService from '@/services/UsersService'; 
+
 export default {
+    components: {
+        'as-last-workout': SimpleWorkout
+    },
     data() {
         return {
-            newPassword: "",
+            subworkouts: [],
+            newPassword: '',
             oldPassword: "test",
-            name: "",
-            email: "asitwala17@gmail.com",
-            height: "",
-            weight: "",
+            name: '',
+            username: '',
             active: null,
             sections: [
                 'Last Workout Summary', 
-            ]
+            ],
+            level: 0,
+            blockNum: 0,
+            levelProgress: 0,
+            progressText: '',
+            username: '',
+
+            lastWorkoutCompleted: false,
+            noWorkoutMessage: 'You have no completed workouts!'
+        }
+    },
+    mounted() {
+        this.level = this.$session.get('user').level; 
+        this.fetchLastWorkout();
+        this.fetchProfileInfo();
+    },
+    methods: {
+        fetchLastWorkout() {
+            UsersService.getLastWorkout(this.userId).then((response) => {
+                this.subworkouts = response.data.subworkouts;
+                this.lastWorkoutCompleted = response.data.completed; 
+            });
+        },
+        fetchProfileInfo() {
+            UsersService.getProfileInfo(this.userId).then((response) => {
+                this.level = response.data.level;
+                this.blockNum = response.data.blockNum; 
+                this.levelProgress = parseFloat(response.data.percentComplete);
+                this.progressText = response.data.progressText; 
+                this.username = response.data.username; 
+            });
+        }
+    },
+    computed: {
+        userId() {
+            return this.$session.get('user').id;
+        },
+        blockText() {
+            if (this.level > 10) {
+                if (this.blockNum === 1) {
+                    return `\u2014 Block ${this.blockNum}: Volume`; 
+                } else if (this.blockNum === 2) {
+                    return `\u2014 Block ${this.blockNum}: Strength/Power`; 
+                }
+            } else {
+                return ''; 
+            }
         }
     }
 }
@@ -125,6 +159,7 @@ export default {
     .as-profile {
         display: flex; 
         flex-wrap: wrap; 
+        height: 100%;
 
         .expansion-panel__header {
             background-color: $greyLighten3;
@@ -162,14 +197,32 @@ export default {
         }
 
         .as-profile-static {
+            padding: 20px 16px;
             flex: 1;
             border-left: 1px solid $greyLighten3; 
+
+            .as-profile-level-info {
+                margin-bottom: 7px;
+            }
+
+            .as-profile-level-progress {
+                display: flex;
+                align-items: center;
+                
+                p {
+                    margin: 14px;
+                }
+
+                &-bar {
+                    flex: 1; 
+                }
+            }
         }
 
         .as-profile-card-actions  {
             width: 100%; 
 
-            .as-change-user-settings, .as-change-password {
+            .as-change-password {
                 float: right !important;
             }
         }
@@ -177,6 +230,14 @@ export default {
         .as-user-panel {
             margin-bottom: 16px;
         }
+    }
+
+    .as-no-last-workout {
+        display: flex; 
+        flex: 1; 
+        height: 100%;
+        justify-content: center;
+        align-items: center; 
     }
 
 </style>
