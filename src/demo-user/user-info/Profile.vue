@@ -34,23 +34,37 @@
 
                         <v-card class="as-password-options">
                             <v-card-text>
-                                <v-text-field
-                                    v-model="oldPassword"
-                                    label="Old Password"
-                                    type="password"
-                                />
+                                <v-form 
+                                    lazy-validation
+                                    ref="passwordForm"
+                                    v-model="validPasswordForm">
+                                    <v-text-field
+                                        v-model="oldPassword"
+                                        :rules="oldPasswordRules"
+                                        label="Old Password"
+                                        type="password"
+                                    />
 
-                                <v-text-field
-                                    v-model="newPassword"
-                                    label="New Password"
-                                />
+                                    <v-text-field
+                                        v-model="newPassword"
+                                        label="New Password"
+                                        :rules="newPasswordRules"
+                                    />
+
+                                    <v-text-field
+                                        v-model="newPasswordAgain"
+                                        :rules="newPasswordAgainRules"
+                                        label="Confirm New Password"
+                                    />
+                                </v-form>
                             </v-card-text>
 
                             <v-card-actions>
                                 <div class="as-profile-card-actions">
-                                    <v-btn 
+                                    <v-btn
+                                        :disabled="!validPasswordForm"
                                         color="primary"
-                                        @click=""
+                                        @click="changeUserPassword"
                                         class="as-change-password">Change
                                     </v-btn>
                                 </div>
@@ -92,9 +106,21 @@ export default {
     },
     data() {
         return {
+            validPasswordForm: false,
             subworkouts: [],
+            newPasswordAgain: '',
+            newPasswordAgainRules: [
+                v => !!v || 'You must retype your new password to confirm your change.',
+                v => v === this.newPassword || 'The new passwords must match.'
+            ],
             newPassword: '',
-            oldPassword: "test",
+            newPasswordRules: [
+                v => !!v || 'A new password is required.'
+            ],
+            oldPassword: '',
+            oldPasswordRules: [
+                v => !!v || 'Your old password is required.'
+            ],
             name: '',
             username: '',
             active: null,
@@ -131,9 +157,25 @@ export default {
                 this.progressText = response.data.progressText; 
                 this.username = response.data.username; 
             });
+        },
+        changeUserPassword() {
+
+            console.log(this.validForm);
+        
+            let params = {
+                oldPassword: this.oldPassword,
+                newPassword: this.newPassword
+            };
+
+            UsersService.changePassword(this.userId, params).then((response) => {
+                console.log(response);
+            });
         }
     },
     computed: {
+        validForm() {
+            return this.$refs.passwordForm.validate();
+        },
         userId() {
             return this.$session.get('user').id;
         },

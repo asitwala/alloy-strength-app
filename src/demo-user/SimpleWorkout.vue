@@ -31,7 +31,7 @@
                         <b>{{ subworkout.simpleWeightString }}</b>
                     </p>
 
-                    <v-btn v-if="subworkout.hasButton"
+                    <v-btn v-if="subworkout.hasButton && !notEditable"
                         small
                         color="primary"
                         @click="updateSpecial(subworkout.number, subworkout.buttonName)"
@@ -100,6 +100,9 @@
     import WorkoutService from '@/services/WorkoutService';
     export default {
         props: {
+            notEditable: {
+                type: Boolean
+            },
             subworkouts: {
                 type: Array, 
                 default: () => []

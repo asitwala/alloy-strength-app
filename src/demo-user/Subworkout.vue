@@ -56,7 +56,7 @@
                     </v-data-table>
 
                     <v-card-actions>
-                        <div class="get-next-set" v-if="hasButton">
+                        <div class="get-next-set" v-if="hasButton && !notEditable">
                             <v-btn class="get-next-set-button" 
                                 @click="getNextSet"
                                 color=primary small>{{ buttonDisplay }}</v-btn>
@@ -88,6 +88,9 @@ export default {
         type: {
             type: String,
             required: true
+        },
+        notEditable: {
+            type: Boolean
         },
         name: {
             type: String,

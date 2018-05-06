@@ -1,7 +1,13 @@
 <template>
   <div class="as-homepage">
-    <v-btn color="primary" @click.stop="openModal">Sign Up</v-btn
-    ><v-btn color="primary" @click.stop="openloginModal">Log In</v-btn>
+
+    <v-tooltip bottom>
+      <v-btn color="primary" 
+        slot="activator"
+        @click.stop="">Sign Up</v-btn
+      >
+        <span>The ability to sign up is not available in the beta version.</span>
+    </v-tooltip><v-btn color="primary" @click.stop="openloginModal">Log In</v-btn>
     <v-dialog
       v-model="showloginModal"
       max-width="750px"
@@ -136,7 +142,7 @@
         loginData: [],
         showModal: false,
         showloginModal: false,
-        loginVisibility: false,
+        loginVisibility: true,
         signUpVisibility1: false,
         signUpVisibility2: false
       };
@@ -184,7 +190,7 @@
             if (isAdmin && !hasWorkouts) {
               this.$router.push({ name: 'AdminSetLevels' }); // admin to set level 
             } else if (!isAdmin && !hasWorkouts) {
-              this.$router.push({ name: 'BetaSetLevels' }); // beta user to set level 
+              this.$router.push({ name: 'SetLevels' }); // beta user to set level 
             } else {
               this.$router.push({ name: 'Workout' }); // otherwise, take to workouts page 
             }

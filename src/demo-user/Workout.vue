@@ -35,17 +35,20 @@
                     v-model="showCalendar"
                 >
                 </v-checkbox>
-                <v-btn
+                <v-btn 
+                    v-if="!notEditable"
                     class="as-subworkout-button"
                     @click="checkClear()">
                     Reset
                 </v-btn>
                 <v-btn color="primary"
+                    v-if="!notEditable"
                     class="as-subworkout-button"
                     @click="saveWorkoutInfo()">
                     Save
                 </v-btn>
                 <v-btn color="green" 
+                    v-if="!notEditable"
                     class="as-subworkout-button"
                     @click="checkSubmit()">
                     Submit
@@ -76,6 +79,7 @@
                 <as-subworkout 
                     v-for="(subworkout, subworkoutIndex) in subworkouts" 
                     @refresh="updateSpecial"
+                    :not-editable="notEditable"
                     :key="subworkout.name"
                     :type="subworkout.type"
                     :name="subworkout.name"
@@ -101,6 +105,7 @@
                 </div>
                 <as-simple-workout 
                     @refresh="() => fetchWorkoutInfo()"
+                    :not-editable="notEditable"
                     :subworkouts="subworkouts"/>
             </div>
         </transition>
@@ -262,6 +267,7 @@ export default {
                         this.hiddenWorkout = true;
                         this.hiddenWorkoutMessage = response.data.hiddenText;
                     } else {
+
                         let title = response.data.describer.split(' - '); 
                         let title1 = title[0].split(', '); 
                         this.titlePart1 = title1[0];
@@ -275,7 +281,14 @@ export default {
                         this.setTableHeaders(); 
                         this.hiddenWorkout = '';
                         this.hiddenWorkoutMessage = '';
-                        let todayDate = moment().format('YYYY-MM-DD'); 
+                        let todayDate = moment().local().format('YYYY-MM-DD'); 
+                        let accessible = (todayDate === this.date);
+                        if (response.data.completed || (!accessible)) {
+                            this.notEditable = true; 
+                        } else {
+                            this.notEditable = false; 
+                        }
+
                         this.arrayEvents = []; 
                         this.arrayEventsColors = {}; 
                         this.workoutDates.forEach(date => {
@@ -456,7 +469,10 @@ export default {
 
             // hidden
             hiddenWorkout: false,
-            hiddenWorkoutMessage: ''
+            hiddenWorkoutMessage: '',
+
+            // no edits
+            notEditable: false
         };
     },
     computed: {

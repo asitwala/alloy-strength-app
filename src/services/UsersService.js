@@ -27,5 +27,8 @@ export default {
   },
   getProfileInfo(userId) {
     return Api().get(`api/users/${userId}/profile-info`);
+  },
+  changePassword(userId, params) {
+    return Api().put(`/api/users/${userId}/change-password`, params);
   }
 }

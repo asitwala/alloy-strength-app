@@ -78,6 +78,7 @@
                 };
     
                 return UsersService.adminGenerateWorkouts(this.$session.get('user').id, params).then(()=> {
+                    this.$session.set("viewingWID", 1);
                     this.$router.push({name: 'Workout'});
                 });
             },
