@@ -46,7 +46,7 @@
     <div class="as-progress-next-workout"> <!-- v-if="!inProgress" -->
         <h1>Next Steps</h1>
         <v-divider/>
-        <div class="as-progress-next-workout-content">
+        <div class="as-progress-next-workout-content" v-if="$session.get('user').isAdmin || !inProgress">
             <div>
                 <h3>Your next set of workouts will be at 
                     <span class="as-progress-next-level">
@@ -67,6 +67,10 @@
                 @click="routeTo('SetLevels')"
                 class="as-progress-next-workout-button">
                 Get New Workouts</v-btn>
+        </div>
+
+        <div class="as-progress-next-workout-content2" v-else>
+            <h3>Next steps will be generated once you complete all workouts for your level.</h3>
         </div>
     </div>
 </div>
@@ -198,6 +202,15 @@
         }
 
         &-content {
+            width: 100%;
+            padding: 0 25px 25px 25px;
+
+            h3 {
+                margin: 15px 0 5px;
+            }
+        }
+
+        &-content2 {
             width: 100%;
             padding: 0 25px 25px 25px;
 
