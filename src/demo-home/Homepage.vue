@@ -31,17 +31,22 @@
             </span>
         </v-card-title>
         <v-card-text>
-          <v-form>
-            <div v-for="(field, index) in loginData">
+          <v-form ref="loginForm" v-model="validLoginForm" lazy-validation>
               <v-text-field
-                v-model="field.content"
-                :label="field.text"
-                :append-icon="(index === 1) ? (loginVisibility ? 'visibility' : 'visibility_off') : ''"
-                :append-icon-cb="() => (loginVisibility = !loginVisibility)"
-                :type="loginVisibility && index === 1 ? 'password' : 'text'"
+                v-model="username"
+                label="Username"
+                type="text"
+                :rules="usernameRules"
               />
-            </div>
 
+              <v-text-field
+                v-model="password"
+                label="Password"
+                :append-icon="loginVisibility ? 'visibility' : 'visibility_off'"
+                :append-icon-cb="() => (loginVisibility = !loginVisibility)"
+                :type="loginVisibility ? 'password' : 'text'"
+                :rules="passwordRules"
+              />
           </v-form>
         </v-card-text>
 
@@ -144,7 +149,24 @@
         showloginModal: false,
         loginVisibility: true,
         signUpVisibility1: false,
-        signUpVisibility2: false
+        signUpVisibility2: false,
+        username: '',
+        password: '',
+        usernameNeeded: false,
+        passwordNeeded: false,
+        validLoginForm: true,
+        invalidUser: false,
+        invalidPassword: false,
+
+        // rules
+        usernameRules: [
+          v => !this.usernameNeeded || !!v || 'Username is required',
+          v => !this.invalidUser || 'User could not be found'
+        ],
+        passwordRules: [
+          v => !this.passwordNeeded || !!v || 'Password is required',
+          v => !this.invalidPassword || 'Password is invalid'
+        ]
       };
     },
     methods: {
@@ -169,30 +191,43 @@
       },
       async loginSubmit() {
         var postBody = {};
-        postBody.username = this.loginData[0].content;
-        postBody.password = this.loginData[1].content;
+        postBody.username = this.username;
+        postBody.password = this.password;
 
-        var loginResponse = await UsersService.loginUser(postBody);
-        if (loginResponse.data.Found) {
+        this.usernameNeeded = this.username === ""; 
+        this.passwordNeeded = this.password === ""; 
 
-          this.$session.set("userFound", true);
+        if (this.usernameNeeded || this.passwordNeeded) {
+          this.$refs.loginForm.validate();
+        } else {
+          var loginResponse = await UsersService.loginUser(postBody);
+          if (loginResponse.data.Found && !loginResponse.data.Success) { // invalid password
+            this.invalidPassword = true;
+            this.$refs.loginForm.validate();
+          } else if (!loginResponse.data.Found && !loginResponse.data.Success) { // invalid user
+            this.invalidUser = true; 
+            this.$refs.loginForm.validate();
+          } else if (loginResponse.data.Found) {
+            this.invalidPassword = false; 
+            this.$session.set("userFound", true);
 
-          if (loginResponse.data.Success) {
-            this.$session.set("user", loginResponse.data.User);
+            if (loginResponse.data.Success) {
+              this.$session.set("user", loginResponse.data.User);
 
-            this.$session.set("viewingWID", loginResponse.data.User.currentWorkoutID);
-            this.closeloginModal();
+              this.$session.set("viewingWID", loginResponse.data.User.currentWorkoutID);
+              this.closeloginModal();
 
-            // Handle routing based on type of user 
-            let isAdmin = loginResponse.data.User.isAdmin; 
-            let hasWorkouts = loginResponse.data.hasWorkouts; 
+              // Handle routing based on type of user 
+              let isAdmin = loginResponse.data.User.isAdmin; 
+              let hasWorkouts = loginResponse.data.hasWorkouts; 
 
-            if (isAdmin && !hasWorkouts) {
-              this.$router.push({ name: 'AdminSetLevels' }); // admin to set level 
-            } else if (!isAdmin && !hasWorkouts) {
-              this.$router.push({ name: 'SetLevels' }); // beta user to set level 
-            } else {
-              this.$router.push({ name: 'Workout' }); // otherwise, take to workouts page 
+              if (isAdmin && !hasWorkouts) {
+                this.$router.push({ name: 'AdminSetLevels' }); // admin to set level 
+              } else if (!isAdmin && !hasWorkouts) {
+                this.$router.push({ name: 'SetLevels' }); // beta user to set level 
+              } else {
+                this.$router.push({ name: 'Workout' }); // otherwise, take to workouts page 
+              }
             }
           }
         }
@@ -228,10 +263,26 @@
         this.showModal = true; 
       },
       openloginModal() {
+        this.username = '';
+        this.password = ''; 
         this.showloginModal = true;
       },
       closeloginModal() {
         this.showloginModal = false;
+      }
+    },
+    watch: {
+      password: function() {
+        if (this.invalidPassword) {
+          this.invalidPassword = false; 
+          this.$refs.loginForm.validate();
+        }
+      },
+      username: function() {
+        if (this.invalidUser) {
+          this.invalidUser = false;
+          this.$refs.loginForm.validate();
+        }
       }
     }
   };

@@ -101,7 +101,6 @@
             <div class="as-simple-workout-container" v-if="contentView === 4">
                 <div class="as-subworkout-options">
                     <h3>{{ titlePart2 }}</h3>
-                    <p class="as-subworkout-suggested-disclaimer">Brackets [ ] indicate a recommended value, e.g. [ 7 ] in an RPE box means a target RPE of 7 for that set.</p>
                 </div>
                 <as-simple-workout 
                     @refresh="() => fetchWorkoutInfo()"
@@ -553,8 +552,6 @@ export default {
 <style lang="scss">
     @import '~@/demo-common/styles/transitions';
     @import '~@/demo-common/styles/colors';
-
-  
 
     .as-workout-container {
         width: 90%; 

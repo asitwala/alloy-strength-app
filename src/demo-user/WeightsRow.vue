@@ -12,7 +12,7 @@
                 :return-value="weightRow.inputs[index].value"
             >{{ weightRow.inputs[index].value ? weightRow.inputs[index].value : '\u2014' }} 
                 <span v-if="weightRow.inputs[index].status === 'Empty'" style="text-align:right">
-                    {{ weightRow.inputs[index].suggestedWeight ? `\t[${weightRow.inputs[index].suggestedWeight} lbs]` : ''}}
+                    {{ weightRow.inputs[index].suggestedWeight && weightRow.inputs[index].suggestedWeight !== '--' ? `\t[${weightRow.inputs[index].suggestedWeight} lbs]` : ''}}
                 </span>
                 <v-text-field
                 slot="input"

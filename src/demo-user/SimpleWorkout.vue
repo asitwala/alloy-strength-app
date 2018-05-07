@@ -37,7 +37,8 @@
                         @click="updateSpecial(subworkout.number, subworkout.buttonName)"
                     >{{ subworkout.buttonDisplay }}</v-btn>
 
-                <a v-if="subworkout.hasVideo" @click="goToVideo(subworkout.selectedVideo)"><b>Watch Video</b></a></td>
+                    <p><a v-if="subworkout.hasVideo" @click="goToVideo(subworkout.selectedVideo)"><b>Watch Video</b></a></p>
+                </td>
                 <td>                        
                     <div v-for="Cell in subworkout.dataTableItems[0].inputs" :key="Cell.code">
                         <span v-if="Cell.status == 'Fixed'">{{Cell.value}}</span>
@@ -47,7 +48,6 @@
                         v-model="Cell.value" placeholder="Enter Reps" v-bind:name="Cell.code">
                         <input v-if="Cell.status =='Empty' && Cell.alloy" type="text" style="border: 1px solid black;"
                         v-model="Cell.value" :placeholder="subworkout.alloyReps + '+'" v-bind:name="Cell.code">
-                        
                     </div>
                 </td>
                 <td>                        
@@ -163,6 +163,7 @@
     .as-workout-simple-view-container {
         flex: 1;
         min-width: 400px;
+        margin-top: 16px;
     }
 
     table.as-workout-simple-view {

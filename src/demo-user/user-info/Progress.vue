@@ -56,7 +56,9 @@
             </div>
             
             <div v-html="levelUpMessage"></div>
-            <img/>
+            <div v-if="newLevel === 11" class="as-level-11"></div>
+            <div v-else-if="newLevel === 16" class="as-level-16"></div>
+
             <v-btn small color="primary" 
                 @click="routeTo('Videos')"
                 class="as-progress-next-workout-button">
@@ -218,6 +220,24 @@
         &-button:nth-of-type(2) {
             margin-left: 0px;
         }
+    }
+
+    .as-level-11 {
+        margin: 0 0 16px; 
+        width: 350px; 
+        height: 97px; 
+        min-width: 300px;
+        background: url("../../../static/level11.png") no-repeat center;
+        background-size: cover; 
+    }
+
+    .as-level-16 {
+        margin: 0 0 16px;  
+        width: 350px; 
+        height: 97px; 
+        min-width: 300px;
+        background: url("../../../static/level16.jpg") no-repeat center;
+        background-size: cover; 
     }
 
 </style>
