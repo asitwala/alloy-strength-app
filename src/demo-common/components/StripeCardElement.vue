@@ -6,7 +6,7 @@
       :options='stripeOptions'
       @change='complete = $event.complete'
     />
-    <button class='pay-with-stripe' @click='pay' :disabled='!complete'>Pay with credit card</button>
+    <v-btn color="primary" style="margin-left: 0px !important; margin-top: 8px;" class='pay-with-stripe' @click='pay' :disabled='!complete'>Pay with credit card</v-btn>
   </div>
 </template>
  
@@ -39,12 +39,39 @@ export default {
 }
 </script> 
  
-<style>
+<style lang="scss">
+
+@import '~@/demo-common/styles/colors';
+
 .stripe-card {
-  width: 300px;
+  min-width: 280px;
+  width: 500px;
   border: 1px solid grey;
 }
 .stripe-card.complete {
-  border-color: green;
+  border-color: $blueBase;
+}
+
+.stripe-card {
+  background-color: white;
+  height: 40px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+  -webkit-transition: box-shadow 150ms ease;
+  transition: box-shadow 150ms ease;
+}
+
+.stripe-card--focus {
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.stripe-card--invalid {
+  border-color: #fa755a;
+}
+
+.stripe-card--webkit-autofill {
+  background-color: #fefde5 !important;
 }
 </style>

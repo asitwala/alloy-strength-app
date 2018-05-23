@@ -31,6 +31,7 @@
             <v-card class="as-initialize-step-1-stripe-container">
                 <v-card-text>
                     <h2><span style="margin-right: 12px"><v-icon>fa-shopping-cart</v-icon></span>Checkout</h2>
+                    <p style="margin-top: 12px; margin-bottom: 4px">Please enter your payment information below</p>
                     <div class="as-initialize-step-1-stripe-component">
                         <as-stripe></as-stripe>
                         
@@ -55,13 +56,13 @@
                 asPackages: [
                     {
                         name: "Gold",
-                        description: "MONTHLY",
-                        price: "$25.00"
+                        description: "6 MONTHS",
+                        price: "$90.00 ($15/Month)"
                     },
                     {
                         name: "Silver",
-                        description: "6 MONTHS",
-                        price: "$90.00 ($15/Month)"
+                        description: "MONTHLY",
+                        price: "$25.00"
                     }
                 ], 
                 selectedPackage: {},
@@ -167,7 +168,7 @@
         &-component {
             display: flex;
             align-items: center;
-            justify-content: center;
+            //justify-content: center;
 
         }
     }
