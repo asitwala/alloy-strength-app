@@ -7429,6 +7429,10 @@ vue-session@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/vue-session/-/vue-session-1.0.0.tgz#ca642c751f569a48f8dd66f356f1727fbe081f7c"
 
+vue-stripe-elements@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/vue-stripe-elements/-/vue-stripe-elements-0.2.3.tgz#bae6b867c842e11871b01c7e479dedca9de2bd31"
+
 vue-style-loader@^3.0.0, vue-style-loader@^3.0.1:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-3.1.2.tgz#6b66ad34998fc9520c2f1e4d5fa4091641c1597a"

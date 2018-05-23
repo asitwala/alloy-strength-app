@@ -23,7 +23,7 @@
                     </v-stepper-content>
 
                     <v-stepper-content step="3" class="as-initialize-stepper-content">
-                        <as-initialize-step-3 ref="step3"/>
+                        <!--<as-initialize-step-3 ref="step3"/>-->
                     </v-stepper-content> 
 
                     <v-btn @click="incrementStepper" 
