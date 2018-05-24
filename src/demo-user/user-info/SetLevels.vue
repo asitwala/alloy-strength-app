@@ -171,6 +171,7 @@
     }
 
     .as-initialize-step-3-select-days {
+        margin-bottom: 8px;
     }
 
     .as-initialize-step-3-days {

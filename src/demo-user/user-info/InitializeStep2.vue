@@ -1,17 +1,7 @@
 <template>
     <div class="as-initialize-step-2">
-        <div class="as-initialize-step-2-system">
-            <h3>Please select your measurement system.</h3>
-            <v-select
-                auto
-                :items="system.options"
-                v-model="system.value"
-                single-line>
-            </v-select>
-        </div>
-        
         <transition name="as-fade">
-            <div v-show="extend" class="as-initialize-step-2-info">
+            <div class="as-initialize-step-2-info">
                 <div class="as-initialize-step-2-left">
                     <v-card class="as-initialize-step-2-experience">
                         <v-card-title>
@@ -115,6 +105,11 @@
                 </v-card>
             </div>
         </transition>
+
+        <v-btn 
+            @click="submitStep2"
+            color="primary" 
+            class="as-initialize-step-2-submit">Submit</v-btn>
     </div>
 
 </template>
@@ -125,17 +120,11 @@
     export default {
         data() {
             return {
-                extend: false,
-
                 // physical stats
                 units: {
-                    weight: '',
-                    height1: '',
-                    height2: '',
-                }, 
-                system: {
-                    value: '',
-                    options: ['Metric System', 'Imperial System (United States)']
+                    weight: 'pounds',
+                    height1: 'feet',
+                    height2: 'inches',
                 },
                 squat: '',
                 benchPress: '',
@@ -169,23 +158,9 @@
                     this.$session.set('user', response.data.user); 
                     this.$session.set('viewingWID', response.data.viewingWID);
                 });
-            }
-        },
-        watch: {
-            "system.value" (newVal) {
-                if (newVal === this.system.options[0]) { // Metric 
-                    this.units.weight = 'kilograms'; 
-                    this.units.height1 = 'meters'; 
-                    this.units.height2 = 'centimeters'; 
-                    this.extend = true; 
-                } else if (newVal === this.system.options[1]) {
-                    this.units.weight = 'pounds';
-                    this.units.height1 = 'feet'; 
-                    this.units.height2 = 'inches'; 
-                    this.extend = true;
-                } else {
-                    this.extend = false; 
-                }
+            },
+            submitStep2() {
+                this.$emit('submit'); 
             }
         }
     };
@@ -245,6 +220,12 @@
             padding-top: 8px;
             padding-bottom: 8px;
         }
+    }
+
+    .as-initialize-step-2-submit {
+        float: right;
+        margin-top: 16px !important;
+        margin-right: 0px !important;
     }
 
 </style>

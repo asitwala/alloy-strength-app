@@ -7,9 +7,9 @@
             </p>
             <v-card v-for="asPackage in asPackages" :key="asPackage.name"
                 class="as-initialize-available-package"
-                :class="[{'selected': asPackage.name === selectedPackage.name}]">
+                :class="[{'selected': selectedPackage && asPackage.name === selectedPackage.name}]">
                 <div class="as-package-overlay"></div>
-                <div class="as-selected-package-icon" v-if="asPackage.name === selectedPackage.name"><v-icon right>check_circle</v-icon></div>
+                <div class="as-selected-package-icon" v-if="selectedPackage && asPackage.name === selectedPackage.name"><v-icon right>check_circle</v-icon></div>
                 <v-card-title @click="selectPackage(asPackage)">
                     <div>
                         <div class="as-initialize-available-package-title">
@@ -26,14 +26,27 @@
         </div>
 
         <div class="as-initialize-step-1-stripe">
-        
-            <h4 class="as-package-message">{{ selectedPackageMessage }}</h4>
+    
+            <h4 class="as-package-message" v-if="!selectedPackage">
+                You have not selected a package.
+            </h4>
+
+            <h4 class="as-package-message" v-else>
+                You have selected the 
+                <v-chip label :class="selectedPackageColorClasses"
+                    small
+                    text-color="white"
+                    style="font-weight:bold; margin: 0 4px;">
+                    {{ selectedPackage ? selectedPackage.name: '' }}
+                </v-chip>
+                package.
+            </h4>
             <v-card class="as-initialize-step-1-stripe-container">
                 <v-card-text>
                     <h2><span style="margin-right: 12px"><v-icon>fa-shopping-cart</v-icon></span>Checkout</h2>
                     <p style="margin-top: 12px; margin-bottom: 4px">Please enter your payment information below</p>
                     <div class="as-initialize-step-1-stripe-component">
-                        <as-stripe></as-stripe>
+                        <as-stripe @created-token="submitStep1"></as-stripe>
                         
                     </div>
                 </v-card-text>
@@ -57,26 +70,31 @@
                     {
                         name: "Gold",
                         description: "6 MONTHS",
-                        price: "$90.00 ($15/Month)"
+                        price: "$90.00 ($15.00/Month)"
                     },
                     {
                         name: "Silver",
                         description: "MONTHLY",
-                        price: "$25.00"
+                        price: "$25.00/Month"
                     }
                 ], 
-                selectedPackage: {},
+                selectedPackage: null,
             }
         },
         methods: {
             selectPackage(asPackage) {
                 this.selectedPackage = asPackage; 
+            },
+            submitStep1() {
+                this.$emit('submit'); 
             }
         },
         computed: {
-            selectedPackageMessage() {
-                return (_.isEmpty(this.selectedPackage) ? `You have not selected a package.` : 
-                    `You have selected the ${this.selectedPackage.name} package.`);
+            selectedPackageColorClasses() {
+                return {
+                    'as-selected-package-gold': this.selectedPackage ? this.selectedPackage.name === 'Gold' : false,
+                    'as-selected-package-silver': this.selectedPackage ? this.selectedPackage.name === 'Silver' : false
+                };
             }
         }
     };
@@ -152,13 +170,24 @@
     }
 
 
+    .as-selected-package-gold {
+        background-color: $amberLighten1 !important;
+    }
+
+    .as-selected-package-silver {
+        background-color: $greyLighten1 !important;
+    }
+
     .as-initialize-step-1-stripe {
         min-width: 280px; 
         flex: 1; 
 
         .as-package-message {
-            margin-top: 64px;
-            margin-bottom: 16px;
+            margin-top: 47px;
+            margin-bottom: 8px;
+            height: 38px;
+            display: flex; 
+            align-items: center;
         }
 
         &-container {

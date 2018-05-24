@@ -6,7 +6,7 @@
       :options='stripeOptions'
       @change='complete = $event.complete'
     />
-    <v-btn color="primary" style="margin-left: 0px !important; margin-top: 8px;" class='pay-with-stripe' @click='pay' :disabled='!complete'>Pay with credit card</v-btn>
+    <v-btn color="primary" style="margin-left: 0px !important; margin-top: 8px;" class='as-pay-with-stripe' @click='pay' :disabled='!complete'>Submit Payment</v-btn>
   </div>
 </template>
  
@@ -34,6 +34,7 @@ export default {
       // See https://stripe.com/docs/api#errors for the error object.
       // More general https://stripe.com/docs/stripe.js#stripe-create-token.
       createToken().then(data => console.log(data.token))
+      this.$emit('created-token');
     }
   }
 }
@@ -43,24 +44,31 @@ export default {
 
 @import '~@/demo-common/styles/colors';
 
-.stripe-card {
-  min-width: 280px;
-  width: 500px;
-  border: 1px solid grey;
+.as-stripe-card-element {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1; 
 }
-.stripe-card.complete {
-  border-color: $blueBase;
+
+.as-pay-with-stripe {
+  
 }
 
 .stripe-card {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  margin-bottom: 8px;
+
   background-color: white;
-  height: 40px;
   padding: 10px 12px;
   border-radius: 4px;
-  border: 1px solid transparent;
   box-shadow: 0 1px 3px 0 #e6ebf1;
   -webkit-transition: box-shadow 150ms ease;
   transition: box-shadow 150ms ease;
+}
+
+.stripe-card.complete {
+  border-color: $blueBase;
 }
 
 .stripe-card--focus {
@@ -74,4 +82,7 @@ export default {
 .stripe-card--webkit-autofill {
   background-color: #fefde5 !important;
 }
+
+
+
 </style>
