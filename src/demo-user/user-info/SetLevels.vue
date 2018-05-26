@@ -4,7 +4,7 @@
             <div class="as-initialize-step-3-container">
                 <div class="as-initialize-step-3-left">
 
-                    <h1 class="as-set-levels-header">You've been placed at Level {{ level }} {{ blockText }}!</h1>
+                    <h1 class="as-set-levels-header">{{ title }}</h1>
 
                     <h3>Select a start date</h3>
                     <p style="margin-bottom: 0px !important;">Enter below or use by clicking on the calendar to the right.</p>
@@ -43,7 +43,7 @@
             <v-btn 
                 color="primary" 
                 class="submit-button"
-                @click="generateWorkouts()">Submit</v-btn>
+                @click="postWorkouts()">Submit</v-btn>
         </div>
     </div>
 
@@ -53,6 +53,16 @@
     import UsersService from '@/services/UsersService'; 
     import moment from 'moment'; 
     export default {
+        props: {
+            givenTitle: {
+                type: String,
+                default: ''
+            },
+            reschedule: {
+                type: Boolean,
+                default: false
+            }
+        },
         data() {
             return {
                 days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
@@ -71,7 +81,7 @@
             this.level = this.$session.get('user').level; 
         },
         methods: {
-            generateWorkouts() {
+            postWorkouts() {
                 if (this.selectedDaysLength !== this.numWorkoutDays) {
                     this.validSelectedDays = false; 
                 } else {
@@ -83,15 +93,29 @@
                     this.selectedDays.forEach(day => {
                         daysList.push(this.days.indexOf(day));
                     })
-                    let params = {
-                        startDate: this.startDateCalendar,
-                        daysList: daysList
-                    };
-        
-                    return UsersService.adminGenerateWorkouts(this.$session.get('user').id, params).then(()=> {
-                        this.$session.set("viewingWID", 1);
-                        this.$router.push({name: 'Workout'});
-                    });
+
+                    // If we want to rescheule
+                    if (this.reschedule) {
+                        let params = {
+                            restartDate: this.startDateCalendar,
+                            DoW: daysList
+                        }
+
+                        return UsersService.rescheduleWorkouts(this.$session.get('user').id, params).then(() => {
+                            console.log('Rescheduled workouts'); 
+                        });
+                    } else {
+                        let params = {
+                            startDate: this.startDateCalendar,
+                            daysList: daysList
+                        };
+            
+                        return UsersService.adminGenerateWorkouts(this.$session.get('user').id, params).then(()=> {
+                            this.$session.set("viewingWID", 1);
+                            this.$router.push({name: 'Workout'});
+                        });
+                    }
+                    
                 }
             },
             supportCalendar(textValue) {
@@ -142,6 +166,9 @@
                 } else {
                     return ''; 
                 }
+            },
+            title() {
+                return this.givenTitle ? this.givenTitle : `You've been placed at Level ${this.level} ${this.blockText}!`;
             }
         }
     };

@@ -22,6 +22,12 @@ export default {
   adminGenerateWorkouts(userId, params) {
     return Api().post(`/api/users/${userId}/admin/generate-workouts`, params);
   },
+  getPreviousWorkouts(userId) {
+    return Api().get(`/api/users/${userId}/reschedule-workouts`);
+  },
+  rescheduleWorkouts(userId, params) {
+    return Api().post(`/api/users/${userId}/reschedule-workouts`, params); // params: { restartDate: Date, DoW: days of week (indexed with 0 as Sunday and so on...)}
+  },
   getLastWorkout(userId) {
     return Api().get(`api/users/${userId}/last-workout/vue`);
   },

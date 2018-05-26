@@ -14,6 +14,7 @@ import Videos from '@/demo-user/Videos';
 import Logout from '@/demo-user/Logout';
 import AdminSetLevels from '@/demo-user/user-info/AdminSetLevels.vue';
 import SetLevels from '@/demo-user/user-info/SetLevels.vue';
+import RescheduleWorkouts from '@/demo-user/user-info/RescheduleWorkouts.vue'; 
 import Initialize from '@/demo-user/user-info/Initialize'; 
 import UserStats from '@/demo-user/user-info/UserStats';
 import Progress from '@/demo-user/user-info/Progress'; 
@@ -99,6 +100,11 @@ export default new Router({
       path: '/profile',
       name: 'Profile', 
       component: Profile
+    },
+    {
+      path: '/reschedule-workouts',
+      name: 'RescheduleWorkouts',
+      component: RescheduleWorkouts
     },
     {
       path: '*',
