@@ -6,7 +6,7 @@
                 training system.
             </p>
             <v-radio-group v-model="selectedRadio">
-                <v-card v-for="(asPackage, index) in asPackages" :key="asPackage.name"
+                <v-card v-for="asPackage in asPackages" :key="asPackage.name"
                     class="as-initialize-available-package"
                     :class="[{'selected': selectedPackage && asPackage.name === selectedPackage.name}]">
                     <div class="as-package-overlay"></div>
@@ -24,7 +24,7 @@
                             </div>
 
                             <div class="as-package-right">
-                                <v-radio color="primary" :value="`radio-${index}`"></v-radio>
+                                <v-radio color="primary" :value="asPackage.radioLabel"></v-radio>
                             </div>
                         </div>
                     </v-card-title>

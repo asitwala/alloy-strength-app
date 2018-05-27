@@ -15,7 +15,7 @@
                 
                 <v-divider/>
                 <v-form>
-                    <p class="as-profile-desc">Here's where you can view and update your personal information, change your password, and view some of your workout stats.</p>
+                    <p class="as-profile-desc">Here's where you can manage your account and view some of your workout stats.</p>
                     <v-expansion-panel class="as-user-panel">
                         <v-expansion-panel-content>
                             <div slot="header" class="as-user-options-header">
@@ -90,6 +90,59 @@
                             </v-card>
                         </v-expansion-panel-content>
                     </v-expansion-panel>
+
+                    <v-expansion-panel class="as-user-panel">
+                        <v-expansion-panel-content>
+                            <div slot="header" class="as-user-options-header">
+                                <h2>Change Subscription</h2>
+                            </div>
+                            <v-card class="as-user-options">
+
+                                <v-card-text>
+                                    <h4>
+                                        Your current subscription package is 
+                                        <v-chip label :class="oldPackageColorClasses"
+                                            small
+                                            text-color="white"
+                                            style="font-weight:bold; margin: 0 4px;">
+                                            {{ oldPackage ? oldPackage.name: '' }}
+                                        </v-chip>
+                                        <span class="font-size: 14px !important; font-weight: normal !important">($15/Month for 6 Months)</span>
+                                    </h4>
+
+                                    <p style="font-size: 12px; margin-top: 4px;">Your subscription will expire on ${Date}</p>
+
+                                    <div class="as-divider">
+                                        <v-divider/>
+                                    </div>
+                                    
+                                    <h4 style="margin-top: 12px">Switch Package</h4>
+                                    <p style="font-size: 12px; margin-top: 4px; margin-bottom: 0px;">Use this section to switch to another subscription package</p>
+
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <h4>
+                                            <v-chip label :class="newPackageColorClasses"
+                                                small
+                                                text-color="white"
+                                                style="font-weight:bold; margin: 0px; margin-right: 4px;">
+                                                {{ newPackage ? newPackage.name: '' }}
+                                            </v-chip>
+                                            ($25/Month)
+                                        </h4> 
+                                        <v-btn @click="confirmSwitch"
+                                            small color="primary" style="float: right; margin-top: 8px; margin-bottom: 16px; margin-right: 0px !important;">Switch Subscription</v-btn>
+                                    </div>
+                                
+                                        
+                                    <v-divider style="clear: both"/>
+
+                                    <v-btn @click="confirmCancel"
+                                        small color="red" style="color: white !important; clear: both; float: right; margin-top: 16px; margin-bottom: 16px; margin-right: 0px !important;">Cancel Subscription</v-btn>
+                            
+                                </v-card-text>
+                            </v-card>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
                 </v-form>
             </div>
 
@@ -111,6 +164,17 @@
                 </div>
             </div>
         </div>
+
+        <v-dialog v-model="showDialog" max-width="290" persistent>
+            <v-card>
+            <v-card-text>{{ dialogText }}</v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" flat="flat" @click.native="showDialog = false">No</v-btn>
+                <v-btn color="primary" flat="flat" @click.native="showDialog = false">Yes</v-btn>
+            </v-card-actions>
+            </v-card>
+        </v-dialog>
     
     </div>
     
@@ -169,7 +233,40 @@ export default {
             noWorkoutMessage: 'You have no completed workouts!',
 
             notificationVisible: false,
-            notificationMessage: `You have successfully changed your password!`
+            notificationMessage: `You have successfully changed your password!`,
+
+            oldPackage: {
+                name: "Gold",
+                description: "6 MONTHS",
+                price: "$90.00 ($15.00/Month)",
+                radioLabel: 'radio-0'
+            },
+
+            newPackage: {
+                name: "Silver",
+                description: "MONTHLY",
+                price: "$25.00/Month",
+                radioLabel: 'radio-1'
+            },
+
+            asPackages: [
+                {
+                    name: "Gold",
+                    description: "6 MONTHS",
+                    price: "$90.00 ($15.00/Month)",
+                    radioLabel: 'radio-0'
+                },
+                {
+                    name: "Silver",
+                    description: "MONTHLY",
+                    price: "$25.00/Month",
+                    radioLabel: 'radio-1'
+                }
+            ],
+
+            showDialog: false,
+            dialogText: ''
+
         }
     },
     mounted() {
@@ -222,6 +319,14 @@ export default {
                     this.$refs.passwordForm.validate();
                 });
             }
+        },
+        confirmCancel() {
+            this.dialogText = 'Are you sure you want to cancel your subscription to Alloy Strength Training?'; 
+            this.showDialog = true; 
+        },
+        confirmSwitch() {
+            this.dialogText = `Are you sure you want to switch your subscription to ${this.newPackage.name}?`; 
+            this.showDialog = true; 
         }
     },
     computed: {
@@ -238,6 +343,18 @@ export default {
             } else {
                 return ''; 
             }
+        },
+        oldPackageColorClasses() {
+            return {
+                'as-selected-package-gold': this.oldPackage ? this.oldPackage.name === 'Gold' : false,
+                'as-selected-package-silver': this.oldPackage ? this.oldPackage.name === 'Silver' : false
+            };
+        },
+        newPackageColorClasses() {
+            return {
+                'as-selected-package-gold': this.newPackage ? this.newPackage.name === 'Gold' : false,
+                'as-selected-package-silver': this.newPackage ? this.newPackage.name === 'Silver' : false
+            };
         }
     },
     watch: {
@@ -340,9 +457,17 @@ export default {
             }
         }
 
-        .as-user-panel {
+        .as-user-panel, .as-password-panel {
             margin-bottom: 16px;
         }
+    }
+
+    .as-selected-package-gold {
+        background-color: $amberLighten1 !important;
+    }
+
+    .as-selected-package-silver {
+        background-color: $greyLighten1 !important;
     }
 
     .as-no-last-workout {
@@ -352,5 +477,6 @@ export default {
         justify-content: center;
         align-items: center; 
     }
+
 
 </style>
