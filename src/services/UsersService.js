@@ -10,6 +10,9 @@ export default {
   signupUser(params) {
     return Api().post('/api/users', params);
   },
+  subscribe(userId, params) {
+    return Api().post(`/api/users/${userId}/subscribe`, params); // params: { plan: 1 or 2, token: stripe token}
+  },
   loginUser(params) {
     return Api().post(`/api/users/${params.username}/login`, params);
   },

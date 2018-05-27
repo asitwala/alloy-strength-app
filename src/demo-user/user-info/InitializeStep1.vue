@@ -5,24 +5,31 @@
             <p>Please select one of the packages below to get started with Alloy Strength's
                 training system.
             </p>
-            <v-card v-for="asPackage in asPackages" :key="asPackage.name"
-                class="as-initialize-available-package"
-                :class="[{'selected': selectedPackage && asPackage.name === selectedPackage.name}]">
-                <div class="as-package-overlay"></div>
-                <div class="as-selected-package-icon" v-if="selectedPackage && asPackage.name === selectedPackage.name"><v-icon right>check_circle</v-icon></div>
-                <v-card-title @click="selectPackage(asPackage)">
-                    <div>
-                        <div class="as-initialize-available-package-title">
-                            <h2>{{ asPackage.name }}</h2>
-                            <div class="as-initialize-title-divider"></div> 
-                            <h4>{{ asPackage.description }}</h4>
+            <v-radio-group v-model="selectedRadio">
+                <v-card v-for="(asPackage, index) in asPackages" :key="asPackage.name"
+                    class="as-initialize-available-package"
+                    :class="[{'selected': selectedPackage && asPackage.name === selectedPackage.name}]">
+                    <div class="as-package-overlay"></div>
+                    <v-card-title @click="selectPackage(asPackage)">
+                        <div class="as-package-content">
+                            <div class="as-package-left">
+                                <div class="as-initialize-available-package-title">
+                                    <h2>{{ asPackage.name }}</h2>
+                                    <div class="as-initialize-title-divider"></div> 
+                                    <h4>{{ asPackage.description }}</h4>
+                                </div>
+                                <div class="as-initialize-available-package-desc">
+                                    <h4 style="margin-top: 4px;"> {{ asPackage.price }}</h4>
+                                </div>
+                            </div>
+
+                            <div class="as-package-right">
+                                <v-radio color="primary" :value="`radio-${index}`"></v-radio>
+                            </div>
                         </div>
-                        <div class="as-initialize-available-package-desc">
-                            <h4 style="margin-top: 4px;"> {{ asPackage.price }}</h4>
-                        </div>
-                    </div>
-                </v-card-title>
-            </v-card>
+                    </v-card-title>
+                </v-card>
+            </v-radio-group>
         </div>
 
         <div class="as-initialize-step-1-stripe">
@@ -56,7 +63,8 @@
 </template>
 
 <script>
-    import _ from 'lodash'; 
+
+    import UsersServices from '@/services/UsersService'; 
 
     import StripeCardElement from '@/demo-common/components/StripeCardElement'; 
 
@@ -70,23 +78,50 @@
                     {
                         name: "Gold",
                         description: "6 MONTHS",
-                        price: "$90.00 ($15.00/Month)"
+                        price: "$90.00 ($15.00/Month)",
+                        radioLabel: 'radio-0'
                     },
                     {
                         name: "Silver",
                         description: "MONTHLY",
-                        price: "$25.00/Month"
+                        price: "$25.00/Month",
+                        radioLabel: 'radio-1'
                     }
                 ], 
                 selectedPackage: null,
+                selectedRadio: null
             }
+        },
+        mounted() {
+            let defaultPackage = this.asPackages[0]; // set default package to Gold 
+            this.selectPackage(defaultPackage);
         },
         methods: {
             selectPackage(asPackage) {
-                this.selectedPackage = asPackage; 
+                this.selectedPackage = asPackage;
+                this.selectedRadio = this.selectedPackage.radioLabel; // use to populate the radio input 
             },
-            submitStep1() {
-                this.$emit('submit'); 
+            submitStep1(stripeToken) {
+                // { plan: 1 or 2, token: stripe token}
+
+                // let selectedPlan = null; 
+
+                // if (this.selectedPackage.name === 'Gold') {
+                //     selectedPlan = 1; 
+                // } else if (this.selectedPackage.name === 'Silvers') {
+                //     selectedPlan = 2; 
+                // }
+
+                // let params = {
+                //     plan: selectedPlan,
+                //     token: stripeToken
+                // };
+
+                // UsersService.subscribe(userId, params).then(() => {
+                //     this.$emit('submit'); 
+                // });
+
+                this.$emit('submit');
             }
         },
         computed: {
@@ -138,11 +173,11 @@
         }
 
         &.selected {
-            border: 1px solid rgba(0, 0, 0, 0.1); // rgba(33, 150, 243, 0.5); 
+            border: 1px solid rgba(0, 0, 0, 0.1); // rgba(33, 150, 243, 0.5);
         }
 
         .as-selected-package-icon {
-            position: absolute; 
+            position: absolute;
             right: 25px;
             top: 30px;
         }
@@ -167,6 +202,13 @@
         background-image: linear-gradient(to bottom, black 50%, transparent 50%);
         background-repeat: repeat-y; 
         margin: 0 12px;
+    }
+
+    .as-package-content {
+        width: 100%;
+        display: flex; 
+        justify-content: space-between;
+        align-items: center;
     }
 
 
