@@ -102,19 +102,19 @@
                 this.selectedRadio = this.selectedPackage.radioLabel; // use to populate the radio input 
             },
             submitStep1(stripeToken) {
-                // { plan: 1 or 2, token: stripe token}
+                // { plan: 'AS_Gold' or 'AS_Silver', stripeToken: stripe token}
 
                 // let selectedPlan = null; 
 
                 // if (this.selectedPackage.name === 'Gold') {
-                //     selectedPlan = 1; 
-                // } else if (this.selectedPackage.name === 'Silvers') {
-                //     selectedPlan = 2; 
+                //     selectedPlan = 'AS_Gold'; 
+                // } else if (this.selectedPackage.name === 'Silver') {
+                //     selectedPlan = 'AS_Silver'; 
                 // }
 
                 // let params = {
                 //     plan: selectedPlan,
-                //     token: stripeToken
+                //     stripeToken: stripeToken
                 // };
 
                 // UsersService.subscribe(userId, params).then(() => {

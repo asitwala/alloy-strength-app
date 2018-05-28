@@ -13,6 +13,12 @@ export default {
   subscribe(userId, params) {
     return Api().post(`/api/users/${userId}/subscribe`, params); // params: { plan: 1 or 2, token: stripe token}
   },
+  changeSubscription(userId, params) { // params: { newPlanID: 'AS_Gold' or 'AS_Silver', cancel: true or false }
+    return Api().put(`/api/users/${userId}/change-subscription`, params);
+  },
+  getSubscriptionInfo(userId) {
+    return Api().get(`/api/users/${userId}/subscription-info`); 
+  },
   loginUser(params) {
     return Api().post(`/api/users/${params.username}/login`, params);
   },

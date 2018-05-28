@@ -99,7 +99,8 @@
                             <v-card class="as-user-options">
 
                                 <v-card-text>
-                                    <h4>
+
+                                    <h3>
                                         Your current subscription package is 
                                         <v-chip label :class="oldPackageColorClasses"
                                             small
@@ -107,38 +108,46 @@
                                             style="font-weight:bold; margin: 0 4px;">
                                             {{ oldPackage ? oldPackage.name: '' }}
                                         </v-chip>
-                                        <span class="font-size: 14px !important; font-weight: normal !important">($15/Month for 6 Months)</span>
-                                    </h4>
+                                        <span class="font-size: 14px !important; font-weight: normal !important">{{ oldPackage ? oldPackage.price : '' }}</span>
+                                    </h3>
 
-                                    <p style="font-size: 12px; margin-top: 4px;">Your subscription will expire on ${Date}</p>
+                                    <p style="font-size: 14px; margin-top: 4px;"
+                                        v-if="oldPackage && subscriptionInfo.endDateString" v-html="`Your subscription will expire on <strong>${subscriptionInfo.endDateString}</strong>. 
+                                        ${subscriptionInfo.secondLine}`"></p>
 
                                     <div class="as-divider">
                                         <v-divider/>
                                     </div>
                                     
-                                    <h4 style="margin-top: 12px">Switch Package</h4>
-                                    <p style="font-size: 12px; margin-top: 4px; margin-bottom: 0px;">Use this section to switch to another subscription package</p>
+                                    <h3 style="margin-top: 12px">Switch Subscription</h3>
+                                    <p style="font-size: 14px; margin-top: 4px; margin-bottom: 0px;">If you <strong>switch</strong> your subscription package, changes will become effective AFTER your current
+                                    subscription expires. </p>
 
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <h4>
-                                            <v-chip label :class="newPackageColorClasses"
-                                                small
-                                                text-color="white"
-                                                style="font-weight:bold; margin: 0px; margin-right: 4px;">
-                                                {{ newPackage ? newPackage.name: '' }}
-                                            </v-chip>
-                                            ($25/Month)
-                                        </h4> 
+                                        <v-select
+                                            auto
+                                            label="Select a Package"
+                                            :items="asPackagesSelect"
+                                            v-model="newPackageSelect"
+                                            single-line
+                                        />
                                         <v-btn @click="confirmSwitch"
+                                            :disabled="!newPackageSelect"
                                             small color="primary" style="float: right; margin-top: 8px; margin-bottom: 16px; margin-right: 0px !important;">Switch Subscription</v-btn>
                                     </div>
                                 
                                         
                                     <v-divider style="clear: both"/>
 
-                                    <v-btn @click="confirmCancel"
+                                    <div>
+                                        <h3 style="margin-top: 12px;">Cancel Subscription</h3>
+                                        <p style="font-size: 14px; margin-top: 4px; margin-bottom: 0px;">After you <strong>cancel</strong> your subscription, you will still have access to Alloy Strength until your subscription's expiration date.</p>
+                                        
+                                        <v-btn @click="confirmCancel"
                                         small color="red" style="color: white !important; clear: both; float: right; margin-top: 16px; margin-bottom: 16px; margin-right: 0px !important;">Cancel Subscription</v-btn>
-                            
+                                    </div>
+                                    
+                    
                                 </v-card-text>
                             </v-card>
                         </v-expansion-panel-content>
@@ -171,7 +180,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" flat="flat" @click.native="showDialog = false">No</v-btn>
-                <v-btn color="primary" flat="flat" @click.native="showDialog = false">Yes</v-btn>
+                <v-btn color="primary" flat="flat" @click.native="handleDialogYes">Yes</v-btn>
             </v-card-actions>
             </v-card>
         </v-dialog>
@@ -185,6 +194,21 @@
 import Notification from '@/demo-common/components/Notification'; 
 import SimpleWorkout from '@/demo-user/SimpleWorkout'; 
 import UsersService from '@/services/UsersService'; 
+
+let defaultPackages = [
+    {text: 'Gold ($15/Month for 6 Months)', disabled: false},
+    {text: 'Silver ($25/Month)', disabled: false}
+];
+
+let packageMappings = {
+    'Silver': ['Gold ($15/Month for 6 Months)'],
+    'Gold': ['Silver ($25/Month)']
+};
+
+let packagePrices = {
+    'Gold': '($15/Month for 6 Months)',
+    'Silver': '($25/Month)'
+};
 
 export default {
     components: {
@@ -235,37 +259,15 @@ export default {
             notificationVisible: false,
             notificationMessage: `You have successfully changed your password!`,
 
-            oldPackage: {
-                name: "Gold",
-                description: "6 MONTHS",
-                price: "$90.00 ($15.00/Month)",
-                radioLabel: 'radio-0'
-            },
-
-            newPackage: {
-                name: "Silver",
-                description: "MONTHLY",
-                price: "$25.00/Month",
-                radioLabel: 'radio-1'
-            },
-
-            asPackages: [
-                {
-                    name: "Gold",
-                    description: "6 MONTHS",
-                    price: "$90.00 ($15.00/Month)",
-                    radioLabel: 'radio-0'
-                },
-                {
-                    name: "Silver",
-                    description: "MONTHLY",
-                    price: "$25.00/Month",
-                    radioLabel: 'radio-1'
-                }
-            ],
+            subscriptionInfo: {},
+            oldPackage: {},
+            newPackage: '',
+            asPackagesSelect: [],
+            newPackageSelect: null,
 
             showDialog: false,
-            dialogText: ''
+            dialogText: '',
+            dialogState: '' // cancel or switch 
 
         }
     },
@@ -273,25 +275,56 @@ export default {
         this.level = this.$session.get('user').level; 
         this.fetchLastWorkout();
         this.fetchProfileInfo();
+        this.fetchSubscriptionInfo();
     },
     methods: {
         notificationAcknowledged() {
             
         },
         fetchLastWorkout() {
-            UsersService.getLastWorkout(this.userId).then((response) => {
+            return UsersService.getLastWorkout(this.userId).then((response) => {
                 this.subworkouts = response.data.subworkouts;
                 this.lastWorkoutCompleted = response.data.completed; 
             });
         },
         fetchProfileInfo() {
-            UsersService.getProfileInfo(this.userId).then((response) => {
+            return UsersService.getProfileInfo(this.userId).then((response) => {
                 this.level = response.data.level;
                 this.blockNum = response.data.blockNum; 
                 this.levelProgress = parseFloat(response.data.percentComplete);
                 this.progressText = response.data.progressText; 
                 this.username = response.data.username; 
             });
+        },
+        fetchSubscriptionInfo() {
+            return UsersService.getSubscriptionInfo(this.userId).then((response) => {
+                this.subscriptionInfo = response.data; 
+                this.populatePackages(this.subscriptionInfo.currentPlan); 
+            });
+        },
+        populatePackages(packageName) {
+            this.asPackagesSelect = [];
+
+            this.oldPackage = {
+                name: packageName,
+                price: packagePrices[packageName]
+            }
+
+            if (this.subscriptionInfo.cancelled && !this.subscriptionInfo.nextPlan) {
+                this.asPackagesSelect = defaultPackages; 
+            } else if (this.subscriptionInfo.nextPlan) {
+                packageMappings[this.subscriptionInfo.nextPlan].forEach(plan => {
+                    this.asPackagesSelect.push({ text: plan, disabled: false});
+                });
+
+                this.asPackagesSelect.push({ text: `${this.subscriptionInfo.nextPlan} ${packagePrices[this.subscriptionInfo.nextPlan]}`, disabled: true});
+            } else {
+                packageMappings[this.oldPackage.name].forEach(plan => {
+                    this.asPackagesSelect.push({text: plan, disabled: false});
+                });
+
+                this.asPackagesSelect.push({text: `${this.oldPackage.name} ${packagePrices[this.oldPackage.name]}`, disabled: true});
+            }
         },
         changeUserPassword() {
             this.oldPasswordNeeded = this.oldPassword === '';
@@ -308,11 +341,10 @@ export default {
                     newPassword: this.newPassword
                 };
 
-                UsersService.changePassword(this.userId, params).then((response) => {
+               return UsersService.changePassword(this.userId, params).then((response) => {
                     if (response.data.error && response.status && response.data.status === 'Wrong Password') {
                         this.wrongOldPassword = true; 
                     } else {
-                        console.log('i get here');
                         this.notificationVisible = true; 
                     }
 
@@ -322,11 +354,44 @@ export default {
         },
         confirmCancel() {
             this.dialogText = 'Are you sure you want to cancel your subscription to Alloy Strength Training?'; 
+            this.dialogState = 'Cancel'; 
             this.showDialog = true; 
         },
         confirmSwitch() {
-            this.dialogText = `Are you sure you want to switch your subscription to ${this.newPackage.name}?`; 
+            this.dialogText = `Are you sure you want to switch your subscription to ${this.newPackage}?`; 
+            this.dialogState = 'Switch'; 
             this.showDialog = true; 
+        },
+        handleDialogYes() {
+            this.showDialog = false; 
+
+            let params = {};
+
+            if (this.dialogState === 'Cancel') {
+                params = {
+                    cancel: true
+                };
+            } else if (this.dialogState === 'Switch') {
+                let planId = ''; 
+
+                if (this.newPackage === 'Silver') {
+                    planId = 'AS_Silver'; 
+                } else if (this.newPackage === 'Gold') {
+                    planId = 'AS_Gold'; 
+                }
+
+                params = {
+                    cancel: false,
+                    newPlanID: planId
+                }
+            }
+
+            return UsersService.changeSubscription(this.userId, params).then(() => {
+                this.fetchSubscriptionInfo().finally(() => {
+                    this.notificationVisible = true; 
+                    this.notificationMessage = `You have successfully changed your subscription!`;
+                });
+            }); 
         }
     },
     computed: {
@@ -349,12 +414,6 @@ export default {
                 'as-selected-package-gold': this.oldPackage ? this.oldPackage.name === 'Gold' : false,
                 'as-selected-package-silver': this.oldPackage ? this.oldPackage.name === 'Silver' : false
             };
-        },
-        newPackageColorClasses() {
-            return {
-                'as-selected-package-gold': this.newPackage ? this.newPackage.name === 'Gold' : false,
-                'as-selected-package-silver': this.newPackage ? this.newPackage.name === 'Silver' : false
-            };
         }
     },
     watch: {
@@ -374,6 +433,13 @@ export default {
             if (!this.passwordsMatch) {
                 this.passwordsMatch = true; 
                 this.$refs.passwordForm.validate();
+            }
+        },
+        newPackageSelect: function(newVal) {
+            if (newVal.text.indexOf('Silver') >= 0) {
+                this.newPackage = 'Silver'; 
+            } else if (newVal.text.indexOf('Gold') >= 0) {
+                this.newPackage = 'Gold'; 
             }
         }
     }
