@@ -11,7 +11,10 @@ export default {
     return Api().post('/api/users', params);
   },
   subscribe(userId, params) {
-    return Api().post(`/api/users/${userId}/subscribe`, params); // params: { plan: 1 or 2, token: stripe token}
+    return Api().post(`/api/users/${userId}/subscribe`, params); // params: { planID: 1 or 2, token: stripe token}
+  },
+  renewSubscription(userId, params) {
+    return Api().post(`/api/users/${userId}/renew-subscription`, params); 
   },
   changeSubscription(userId, params) { // params: { newPlanID: 'AS_Gold' or 'AS_Silver', cancel: true or false }
     return Api().put(`/api/users/${userId}/change-subscription`, params);

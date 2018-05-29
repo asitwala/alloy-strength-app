@@ -58,6 +58,8 @@
         <v-divider/>
     </div>
 
+    <as-workout-prompt></as-workout-prompt>
+
     <div class="as-workout">
 
         <transition name="as-fade" mode="out-in">
@@ -169,7 +171,10 @@ import moment from 'moment';
 let SimpleWorkout = require('./SimpleWorkout.vue').default; 
 let Subworkout = require('./Subworkout.vue').default;
 let Notification = require('../demo-common/components/Notification.vue').default; 
+
+import WorkoutPrompt from '@/demo-user/user-info/WorkoutPrompt';
 import WorkoutService from '@/services/WorkoutService';
+
 
 const headerMap = {
     0: "1st",
@@ -188,7 +193,8 @@ export default {
     components: {
         'as-subworkout': Subworkout,
         'as-simple-workout': SimpleWorkout,
-        'as-notification': Notification
+        'as-notification': Notification,
+        'as-workout-prompt': WorkoutPrompt
     },
     mounted() {
         this.fetchWorkoutInfo();

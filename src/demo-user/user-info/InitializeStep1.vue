@@ -1,10 +1,8 @@
 <template>
     <div class="as-initialize-step-1">
         <div class="as-initialize-step-1-packages">
-            <h1>Available Packages</h1>
-            <p>Please select one of the packages below to get started with Alloy Strength's
-                training system.
-            </p>
+            <h1>{{ title }}</h1>
+            <p>{{ description }}</p>
             <v-radio-group v-model="selectedRadio">
                 <v-card v-for="asPackage in asPackages" :key="asPackage.name"
                     class="as-initialize-available-package"
@@ -64,13 +62,27 @@
 
 <script>
 
-    import UsersServices from '@/services/UsersService'; 
-
+    import UsersService from '@/services/UsersService'; 
     import StripeCardElement from '@/demo-common/components/StripeCardElement'; 
 
     export default {
         components: {
             'as-stripe': StripeCardElement
+        },
+        props: {
+            renew: {
+                type: Boolean,
+                default: false
+            },
+            title: {
+                type: String,
+                default: 'Available Packages'
+            }, 
+            description: {
+                type: String, 
+                default: `Please select one of the packages below to get started with Alloy Strength's
+                training system.`
+            }
         },
         data() {
             return {
@@ -102,26 +114,31 @@
                 this.selectedRadio = this.selectedPackage.radioLabel; // use to populate the radio input 
             },
             submitStep1(stripeToken) {
-                // { plan: 'AS_Gold' or 'AS_Silver', stripeToken: stripe token}
+                //{ plan: 'AS_Gold' or 'AS_Silver', stripeToken: stripe token}
 
-                // let selectedPlan = null; 
+                let selectedPlan = null; 
 
-                // if (this.selectedPackage.name === 'Gold') {
-                //     selectedPlan = 'AS_Gold'; 
-                // } else if (this.selectedPackage.name === 'Silver') {
-                //     selectedPlan = 'AS_Silver'; 
-                // }
+                if (this.selectedPackage.name === 'Gold') {
+                    selectedPlan = 'AS_Gold'; 
+                } else if (this.selectedPackage.name === 'Silver') {
+                    selectedPlan = 'AS_Silver'; 
+                }
 
-                // let params = {
-                //     plan: selectedPlan,
-                //     stripeToken: stripeToken
-                // };
-
-                // UsersService.subscribe(userId, params).then(() => {
-                //     this.$emit('submit'); 
-                // });
-
-                this.$emit('submit');
+                let params = {
+                    planID: selectedPlan,
+                    stripeToken: stripeToken.id
+                };
+                
+                if (this.renew) {
+                    // renewing subscription
+                    UsersService.renewSubscription(this.userId, params).then(() => {
+                        this.$emit('submit'); 
+                    });
+                } else {
+                    UsersService.subscribe(this.userId, params).then(() => {
+                        this.$emit('submit'); 
+                    });
+                }
             }
         },
         computed: {
@@ -130,6 +147,9 @@
                     'as-selected-package-gold': this.selectedPackage ? this.selectedPackage.name === 'Gold' : false,
                     'as-selected-package-silver': this.selectedPackage ? this.selectedPackage.name === 'Silver' : false
                 };
+            },
+            userId() {
+                return this.$session.get('user').id; 
             }
         }
     };

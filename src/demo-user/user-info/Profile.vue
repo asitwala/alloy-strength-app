@@ -97,9 +97,7 @@
                                 <h2>Change Subscription</h2>
                             </div>
                             <v-card class="as-user-options">
-
                                 <v-card-text>
-
                                     <h3>
                                         Your current subscription package is 
                                         <v-chip label :class="oldPackageColorClasses"
