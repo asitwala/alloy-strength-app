@@ -296,12 +296,16 @@
 </script>
 
 
-
 <style lang="scss">
 
 @import '~@/demo-common/styles/colors';
 
 .as-glossary {
+
+    ol, ul {
+        list-style-position: inside; 
+    }
+
     display: flex; 
 
     &-left-menu {
@@ -342,8 +346,9 @@
             margin-bottom: 5px;
             color: $indigoBase;
         }
-
     }
+
+
 }
 
 </style>
