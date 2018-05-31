@@ -112,7 +112,7 @@ export default {
     },
     methods: {
         fetchVideoInfo() {
-            VideoService.fetchVideoInfo().then(response => {
+            VideoService.fetchVideoInfo(this.$session.get('user').id).then(response => {
                 if (typeof response === 'object') {
                     this.selectedVideo = response.data.selectedVideo; 
                     this.subVideoInformation = response.data.videoList;

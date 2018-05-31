@@ -1,9 +1,11 @@
 <template>
-    <div class="as-workout-prompt">
-        <h2 class="as-header">Your Subscription Has Expired</h2>
-        <div class="as-renew">
-            <p style="margin-bottom: 0px">Please renew your subscription to continue using Alloy Strength's training system.</p>
-            <v-btn color="red" style="color: white !important;">Renew Subscription</v-btn>
+    <div class="as-workout-prompt" v-if="showPrompt">
+        <h2 class="as-header">{{ copy.headerText }}</h2>
+        <div>
+            <p>
+                Click <router-link 
+                    class="as-link" :to="{ name: copy.pathName }">here</router-link> {{ copy.descriptionText }}.
+            </p>
         </div> 
         <v-divider/>
     </div>
@@ -14,15 +16,16 @@
 <script>
 
 
-
 export default {
-    data() {
-        return {
-            showPrompt: true
-        };
-    },
-    mounted() {
-
+    props: {
+        showPrompt: {
+            type: Boolean,
+            default: false
+        },
+        copy: {
+            type: Object,
+            default: () => {}
+        }
     }
 };
 
@@ -43,13 +46,9 @@ export default {
 
     margin-top: 12px;
 
-    .as-renew {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 12px;
+    .as-link {
+        color: $redBase;
     }
-
 }
 
 

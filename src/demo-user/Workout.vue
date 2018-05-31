@@ -58,7 +58,7 @@
         <v-divider/>
     </div>
 
-    <as-workout-prompt></as-workout-prompt>
+    <as-workout-prompt :copy="copy" :show-prompt="showPrompt"></as-workout-prompt>
 
     <div class="as-workout">
 
@@ -175,6 +175,7 @@ let Notification = require('../demo-common/components/Notification.vue').default
 import WorkoutPrompt from '@/demo-user/user-info/WorkoutPrompt';
 import WorkoutService from '@/services/WorkoutService';
 
+import SetAccessInfo from '@/demo-common/mixins/SetAccessInfo'; 
 
 const headerMap = {
     0: "1st",
@@ -190,6 +191,7 @@ const headerMap = {
 };
 
 export default {
+    mixins: [SetAccessInfo],
     components: {
         'as-subworkout': Subworkout,
         'as-simple-workout': SimpleWorkout,
@@ -198,7 +200,6 @@ export default {
     },
     mounted() {
         this.fetchWorkoutInfo();
-
     },
     methods: {
         updateSpecial(buttonInfo) {
@@ -268,11 +269,37 @@ export default {
 
             WorkoutService.fetchWorkoutInfo(UserId, workoutId).then(response => {
                 if (typeof response === 'object') {
-                    if (response.data.hidden) {
+
+                    if (response.data.accessLevel) {
+                        this.handleAccessLevelGM(response.data.accessLevel);
+
+                        // 4 -> Progress (no new workouts yet)
+                        // 5 -> Missed Workouts
+                        if (response.data.accessLevel === 4) {
+                            this.copy = {
+                                headerText: `You Have No Upcoming Workouts`,
+                                descriptionText: `to see your last progress report 
+                                and generate a new set of workouts`,
+                                pathName: 'Progress'
+                            }
+
+                            this.showPrompt = true;
+
+                        } else if (response.data.accessLevel === 5) {
+                            this.copy = {
+                                headerText: `You Have Incomplete Workouts`,
+                                descriptionText: `to reschedule your workouts`,
+                                pathName: 'RescheduleWorkouts'
+                            }; 
+
+                            this.showPrompt = true;
+                        }
+                    }
+
+                    if (response.data.hidden && !this.$session.get('user').isAdmin) {
                         this.hiddenWorkout = true;
                         this.hiddenWorkoutMessage = response.data.hiddenText;
                     } else {
-
                         let title = response.data.describer.split(' - '); 
                         let title1 = title[0].split(', '); 
                         this.titlePart1 = title1[0];
@@ -288,7 +315,8 @@ export default {
                         this.hiddenWorkoutMessage = '';
                         let todayDate = moment().local().format('YYYY-MM-DD'); 
                         let accessible = (todayDate === this.date);
-                        if (response.data.completed || (!accessible)) {
+
+                        if ((response.data.noedits || (!accessible)) && !this.$session.get('user').isAdmin) {
                             this.notEditable = true; 
                         } else {
                             this.notEditable = false; 
@@ -477,7 +505,11 @@ export default {
             hiddenWorkoutMessage: '',
 
             // no edits
-            notEditable: false
+            notEditable: false,
+
+            // workout prompt
+            copy: {},
+            showPrompt: false
         };
     },
     computed: {

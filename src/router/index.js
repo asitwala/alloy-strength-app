@@ -3,7 +3,6 @@ import Router from 'vue-router';
 
 import Homepage from '@/demo-home/Homepage';
 import Glossary from '@/demo-home/Glossary';
-import Users from '@/components/Users';
 
 import About from '@/demo-common/components/About';
 import Contact from '@/demo-common/components/Contact';
@@ -23,100 +22,123 @@ import Profile from '@/demo-user/user-info/Profile';
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
       path: '/',
       name: 'Homepage',
-      component: Homepage
-    },
-    {
-      path: '/users',
-      name: 'Users',
-      component: Users
+      component: Homepage,
+      meta: {requireAuth: false}
     },
     { 
       path: '/about',
       name: 'About',
-      component: About
+      component: About,
+      meta: {requireAuth: false}
     },
     { 
       path: '/contact',
       name: 'Contact',
-      component: Contact
+      component: Contact,
+      meta: {requireAuth: false}
     },
     { 
       path: '/terms',
       name: 'Terms',
-      component: Terms
+      component: Terms,
+      meta: {requireAuth: false}
     },
     {
       path: '/workout',
       name: 'Workout',
-      component: Workout
+      component: Workout,
+      meta: {requireAuth: true}
     }, 
     {
       path: '/videos',
       name: 'Videos',
       component: Videos,
-      props: true
+      props: true,
+      meta: {requireAuth: true}
     },
     {
       path: '/glossary',
       name: 'Glossary',
-      component: Glossary
+      component: Glossary,
+      meta: {requireAuth: true}
     },
     {
       path: '/user-stats',
       name: 'UserStats',
-      component: UserStats
+      component: UserStats,
+      meta: {requireAuth: true}
     },
     {
       path: '/progress',
       name: 'Progress',
-      component: Progress
+      component: Progress,
+      meta: {requireAuth: true}
     },
     {
       path: '/initialize',
       name: 'Initialize',
-      component: Initialize
+      component: Initialize,
+      props: true,
+      meta: {requireAuth: true}
     },
     {
       path: '/logout',
       name: 'Logout',
-      component: Logout
+      component: Logout,
+      meta: {requireAuth: true}
     },
     {
       path: '/reset-workouts',
       name: 'AdminSetLevels',
-      component: AdminSetLevels
+      component: AdminSetLevels,
+      meta: {requireAuth: true}
     },
     {
       path: '/set-workouts',
       name: 'SetLevels',
-      component: SetLevels
+      component: SetLevels,
+      meta: {requireAuth: true}
     },
     {
       path: '/profile',
       name: 'Profile', 
-      component: Profile
+      component: Profile,
+      meta: {requireAuth: true}
     },
     {
       path: '/reschedule-workouts',
       name: 'RescheduleWorkouts',
-      component: RescheduleWorkouts
+      component: RescheduleWorkouts,
+      meta: {requireAuth: true}
     },
     {
       path: '/renew-subscription', 
       name: 'RenewSubscription',
-      component: RenewSubscription
+      component: RenewSubscription,
+      meta: {requireAuth: true}
     },
     {
       path: '*',
       component: {
-        template: '<div>404!</div>'
+        template: '<div>404!</div>',
+        meta: {requireAuth: false}
       }
     }
   ]
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(routeRecord => routeRecord.meta.requiresAuth)) {
+    console.log(`Route requires auth`); 
+  }
+
+  next(); 
+});
+
+export default router;

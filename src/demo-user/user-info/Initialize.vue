@@ -43,23 +43,19 @@
             'as-initialize-step-2': InitializeStep2,
             'as-initialize-step-3': InitializeStep3
         },
+        props: {
+            givenStep: {
+                type: Number,
+                default: 1
+            }
+        },
         data() {
             return {
-                stepper: 1
+                stepper: this.givenStep
             }
         }, 
         methods: {
             next() {
-                // if (this.stepper === 2) {
-                //     this.$refs.step2.postInfoAndGetLevel();
-                // }
-                // else if (this.stepper == 3) {
-                //     this.$refs.step3.generateWorkouts().then(response => {
-                //         if (response.data) {
-                //             this.$router.push({name: 'Workout'});
-                //         }
-                //     });
-                // }
                 this.stepper += 1; 
             }
         }

@@ -54,7 +54,7 @@
         methods: {
             getPreviousWorkouts() {
                 UsersService.getPreviousWorkouts(this.$session.get("user").id).then(response => {
-                    response.data.forEach(workout => {
+                    response.data.workouts.forEach(workout => {
                         let previousWorkout = {};
                         previousWorkout.value = false; 
                         previousWorkout.date = moment(workout.Date).format('MMM DD, YYYY');
