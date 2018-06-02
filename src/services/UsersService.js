@@ -16,6 +16,9 @@ export default {
   getEmailConfirmation(userId, confString) {
     return Api().get(`/api/users/${userId}/confirm/${confString}`);
   },
+  forgotPassword(userId) {
+    return Api().post(`/api/users/${userId}/forgot-password`);
+  },
   subscribe(userId, params) {
     return Api().post(`/api/users/${userId}/subscribe`, params); // params: { planID: 1 or 2, token: stripe token}
   },
