@@ -1,6 +1,5 @@
 <template>
  <div class="as-workout-container">
- 
     <as-notification
         :visible="notificationVisible"
         :type="notificationType"
@@ -115,6 +114,7 @@
             <div class="as-date-pickers-text">
                 Select workout dates by using the dropdown menu and buttons below.
             </div>
+        
 
             <v-date-picker
                 width="300"
@@ -122,6 +122,8 @@
                 :events="arrayEvents"
                 :event-color="arrayEventsColors"
             />
+            
+            <as-workout-legend></as-workout-legend>
 
             <div class="as-workout-date-dropdown-options">
                 <div class="as-workout-date-any-date">
@@ -172,6 +174,8 @@ let SimpleWorkout = require('./SimpleWorkout.vue').default;
 let Subworkout = require('./Subworkout.vue').default;
 let Notification = require('../demo-common/components/Notification.vue').default; 
 
+import WorkoutLegend from '@/demo-common/components/WorkoutLegend'; 
+
 import WorkoutPrompt from '@/demo-user/user-info/WorkoutPrompt';
 import WorkoutService from '@/services/WorkoutService';
 
@@ -190,6 +194,7 @@ const headerMap = {
 
 export default {
     components: {
+        'as-workout-legend': WorkoutLegend,
         'as-subworkout': Subworkout,
         'as-simple-workout': SimpleWorkout,
         'as-notification': Notification,
