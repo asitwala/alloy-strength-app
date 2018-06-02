@@ -8,7 +8,13 @@ export default {
     return Api().get('/users');
   },
   signupUser(params) {
-    return Api().post('/api/users', params);
+    return Api().post('/api/users', params); // P1, P2, username, name (to be added)
+  },
+  sendEmailConfirmation(userId) {
+    return Api().post(`/api/users/${userId}/confirmation-email`);
+  },
+  getEmailConfirmation(userId, confString) {
+    return Api().get(`/api/users/${userId}/confirm/${confString}`);
   },
   subscribe(userId, params) {
     return Api().post(`/api/users/${userId}/subscribe`, params); // params: { planID: 1 or 2, token: stripe token}

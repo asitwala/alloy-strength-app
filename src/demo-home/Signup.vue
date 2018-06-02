@@ -45,13 +45,14 @@
                 </template>
             </as-modal-card>
         </v-dialog>
-        
     </div>
 
 </template>
 
 
 <script>
+
+    import UsersService from '@/services/UsersService'; 
 
     import AuthCard from '@/demo-common/components/AuthCard'; 
 
@@ -89,7 +90,19 @@
                 this.showSignupModal = false;
             },
             signupSubmit() {
-                
+                let params = {
+                    P1: this.password,
+                    P2: this.password,
+                    username: this.email
+                };
+
+                UsersService.signupUser(params).then(response => {
+                   let userId = response.data.newUser.id;
+
+                   UsersService.sendEmailConfirmation(userId).then(response => {
+                       console.log('SUCCESS', response);
+                   });
+                });
             }
         }
     };

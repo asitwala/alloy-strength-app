@@ -28,6 +28,7 @@
                             :type="loginVisibility ? 'password' : 'text'"
                             :rules="passwordRules"
                         />
+                        <p class="as-forgot-password" @click="forgotPassword()">Forgot Password?</p>
                     </v-form>
                 </template>
                 <template slot="card-footer">
@@ -73,6 +74,9 @@
             };
         }, 
         methods: {
+            forgotPassword() {
+
+            },
             openLoginModal() {
                 this.username = '';
                 this.password = ''; 
@@ -146,7 +150,17 @@
 
 <style lang="scss">
 
-  @import '~@/demo-common/styles/transitions';
+    @import '~@/demo-common/styles/colors';
+    @import '~@/demo-common/styles/transitions';
+
+    .as-forgot-password {
+        color: $blueDarken1;
+        margin-bottom: 0px;
+        cursor: pointer;
+        display: inline-block;
+    }
+
+
 
 
 </style>

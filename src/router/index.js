@@ -20,6 +20,9 @@ import UserStats from '@/demo-user/user-info/UserStats';
 import Progress from '@/demo-user/user-info/Progress'; 
 import Profile from '@/demo-user/user-info/Profile'; 
 
+
+import EmailConfirmation from '@/demo-user/EmailConfirmation'; 
+
 Vue.use(Router)
 
 const router = new Router({
@@ -122,6 +125,11 @@ const router = new Router({
       name: 'RenewSubscription',
       component: RenewSubscription,
       meta: {requireAuth: true}
+    },
+    {
+      path: '/confirm/:id/:confString',
+      name: 'EmailConfirmation',
+      component: EmailConfirmation
     },
     {
       path: '*',
