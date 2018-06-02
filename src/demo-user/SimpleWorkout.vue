@@ -9,7 +9,7 @@
                 <th>RPE</th>
                 <th>Tempo</th>
             </tr>
-            <tr v-for="subworkout in subworkouts" :key="subworkout.name">
+            <tr v-for="subworkout in subworkouts" :key="subworkout.number">
                 <td>
                     {{subworkout.type}}
                     
