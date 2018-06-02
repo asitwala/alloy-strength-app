@@ -15,8 +15,11 @@
         :visible="showNavigation"
         @update-visibility="setNavigation"/>
 
-      <router-view/>
-
+      <div class="as-main-body" style="height: 100%">
+        <router-view/>
+      </div>
+      
+     
       <v-footer class="as-footer">
         <div class="as-footer-extra-formatting">
           <div class="as-footer-info">
@@ -78,6 +81,9 @@
     components: {
       'as-navigation': Navigation
     },
+    created() {
+      this.$session.start();
+    },
     data: () => ({
       showNavigation: false,
       currentYear: (new Date()).getFullYear(),
@@ -130,6 +136,7 @@
 <style lang="scss">
   @import '~@/demo-common/styles/transitions';
   @import '~@/demo-common/styles/colors';
+
 
   .as-main-toolbar {
     .toolbar__content > .btn:first-child {

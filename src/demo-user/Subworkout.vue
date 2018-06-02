@@ -3,26 +3,37 @@
         <v-expansion-panel>
             <v-expansion-panel-content>
                 <div slot="header" class="as-subworkout-header">
-                    <div class="header-container">
-                        <v-chip label color="blue darken-4" 
-                            text-color="white"
-                            style="font-weight:bold;margin-left: 0px">
-                            {{ type.toUpperCase() }}
-                        </v-chip>
-                        <h3 class="as-subworkout-name">{{ name }}</h3>
-                        <v-tooltip bottom v-if="hasVideo">
-                            <v-icon 
-                                class="video-icon" 
-                                small
-                                slot="activator"
-                                @click.stop="goToVideo()"
-                                >fa-video-camera
-                            </v-icon>
-                            <span>Watch Video</span>
-                        </v-tooltip>
+                    <div class="header-container-block" style="display:block">
+                        <div class="header-container">
+                            <v-chip label color="blue darken-4" 
+                                text-color="white"
+                                style="font-weight:bold;margin-left: 0px; margin-right:12px;margin-bottom: 12px;">
+                                {{ type.toUpperCase() }}
+                            </v-chip>
+                            <h3 class="as-subworkout-name" style="line-height:20px !important;margin-left: 0px !important; margin-bottom:12px;">{{ name }}</h3>
+                            <h4 class="as-subworkout-special-set-name" 
+                                style="margin-bottom: 12px; margin-top: 2px"
+                                :class="dynamicColorClasses"
+                                v-if="specialDescriber">{{ specialDescriber }}</h4>
+                            <v-tooltip bottom v-if="hasVideo">
+                                <v-icon 
+                                    class="video-icon" 
+                                    small
+                                    slot="activator"
+                                    @click.stop="goToVideo()"
+                                    >fa-video-camera
+                                </v-icon>
+                                <span>Watch Video</span>
+                            </v-tooltip>
+                        </div>
                     </div>
-                    <div class="header-exercise-description">
-                        <p>{{ describer }}</p>
+                    <div class="header-description-block" style="display:block">
+                        <div class="header-exercise-description">
+                            <p style="padding-right: 12px; border-right: 1px solid #aaa">{{ describer }}</p>
+                            <div class="suggested-weight-string" v-if="suggestedWeightString">
+                                <p style="padding-left: 8px;">{{ suggestedWeightString }} </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <v-card>
@@ -48,7 +59,16 @@
 
                         </template>
                     </v-data-table>
+
+                    <v-card-actions>
+                        <div class="get-next-set" v-if="hasButton && !notEditable">
+                            <v-btn class="get-next-set-button" 
+                                @click="getNextSet"
+                                color=primary small>{{ buttonDisplay }}</v-btn>
+                        </div>
+                    </v-card-actions>
                 </v-card>
+
             </v-expansion-panel-content>
         </v-expansion-panel>
     </div>
@@ -74,6 +94,9 @@ export default {
             type: String,
             required: true
         },
+        notEditable: {
+            type: Boolean
+        },
         name: {
             type: String,
             required: true
@@ -81,6 +104,15 @@ export default {
         describer: {
             type: String,
             required: true
+        },
+        suggestedWeightString: {
+            type: String
+        },
+        specialClass: {
+            type: String
+        },
+        specialDescriber: {
+            type: String
         },
         video: {
             type: Object, 
@@ -94,6 +126,18 @@ export default {
             type: Array,
             required: true
         },
+        number: {
+            type: Number
+        },
+        hasButton: {
+            type: Boolean
+        },
+        buttonName: {
+            type: String
+        },
+        buttonDisplay: {
+            type: String,
+        },
         headers: {
             type: Array,
             required: true
@@ -102,11 +146,21 @@ export default {
     methods: {
         goToVideo() {
             this.$router.push({name: "Videos", params: {videoFromWorkout: this.video}});
-        }
+        },
+        getNextSet() {
+            this.$emit('refresh', {patternNumber: this.number, buttonName: this.buttonName});
+        }   
     },
     computed: {
         hasVideo() {
             return Object.keys(this.video).length > 0; 
+        },
+        dynamicColorClasses() {
+            return {
+                'as-strength-stop': (this.specialClass === 'stop'),
+                'as-strength-drop': (this.specialClass === 'drop'),
+                'as-alloy': (this.specialClass === 'alloy')
+            };
         }
     }
 };
@@ -155,7 +209,7 @@ export default {
         &-header {
             .header-container {
                 display: flex;
-                height: 30px;
+                flex-wrap: wrap;
                 align-items: center;
 
                 .video-icon {
@@ -170,8 +224,12 @@ export default {
 
             .header-exercise-description {
                 margin-bottom: 0px !important;
-                padding-left: 12px;
-                padding-top: 12px;
+                display: flex;
+                align-items: center;
+
+                .suggested-weight-string {
+                    margin-left: 4px;
+                }
             }
         }
 
@@ -182,6 +240,25 @@ export default {
         .small-dialog {
             display: block !important; 
         }
+    }
+
+    .get-next-set {
+        width: 100%; 
+        .get-next-set-button {
+            float: right;
+        }
+    }
+
+    .as-strength-stop {
+        color: #1976d2 !important;
+    }
+
+    .as-strength-drop {
+        color: #4caf50 !important;
+    }
+
+    .as-alloy {
+        color: red !important;
     }
 
 

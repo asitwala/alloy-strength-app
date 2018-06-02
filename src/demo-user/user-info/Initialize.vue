@@ -15,26 +15,16 @@
                 
                 <v-stepper-items class="as-initialize-stepper-content-container">
                     <v-stepper-content step="1" class="as-initialize-stepper-content">
-                        <as-initialize-step-1 ref="step1"/>
+                        <as-initialize-step-1 ref="step1" @submit="next"/>
                     </v-stepper-content>
 
                     <v-stepper-content step="2" class="as-initialize-stepper-content">
-                        <as-initialize-step-2 ref="step2"/>
+                        <as-initialize-step-2 ref="step2" @submit="next"/>
                     </v-stepper-content>
 
                     <v-stepper-content step="3" class="as-initialize-stepper-content">
                         <as-initialize-step-3 ref="step3"/>
                     </v-stepper-content> 
-
-                    <v-btn @click="incrementStepper" 
-                        class="as-initialize-increment-button">
-                        Next
-                    </v-btn>
-                    <v-btn v-if="stepper > 1"
-                        @click="decrementStepper" 
-                        class="as-initialize-increment-button">
-                        Back
-                    </v-btn>
                 </v-stepper-items>
             </v-stepper>
         </div>
@@ -43,9 +33,11 @@
 
 <script>
 
+    import UsersService from '@/services/UsersService'; 
+
     let InitializeStep1 = require('./InitializeStep1').default;
     let InitializeStep2 = require('./InitializeStep2').default;
-    let InitializeStep3 = require('./InitializeStep3').default;
+    let InitializeStep3 = require('./SetLevels').default;
 
     export default {
         components: {
@@ -53,27 +45,35 @@
             'as-initialize-step-2': InitializeStep2,
             'as-initialize-step-3': InitializeStep3
         },
+        props: {
+            givenStep: {
+                type: Number,
+                default: 1
+            }
+        },
+        mounted() {
+            UsersService.getAccessInfo(this.$session.get('user').id).then(response => {
+                if (response.data.accessLevel) {
+                    console.log('this.stepper', this.handleAccessLevelStepperGM(1));
+                    this.stepper = this.handleAccessLevelStepperGM(1);
+                }
+            });
+        },
         data() {
             return {
-                stepper: 1
+                stepper: this.givenStep
             }
         }, 
         methods: {
-            incrementStepper() {
-                if (this.stepper === 2) {
-                    this.$refs.step2.postInfoAndGetLevel();
-                }
-                else if (this.stepper == 3) {
-                    this.$refs.step3.generateWorkouts().then(response => {
-                        if (response.data) {
-                            this.$router.push({name: 'Workout'});
-                        }
-                    });
-                }
+            next() {
                 this.stepper += 1; 
-            },
-            decrementStepper() {
-                this.stepper -= 1; 
+            }
+        },
+        watch: {
+            officialStepGM: function(newVal) {
+                if (this.stepper !== newVal) {
+                    this.stepper = newVal;
+                }
             }
         }
     };

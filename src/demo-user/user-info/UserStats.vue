@@ -56,6 +56,7 @@ export default {
         return {
             userId: 1,
             level: 0,
+            blockNum: 0,
             exerciseTableHeaders: [
                 { text: 'Exercise Type', value: 'exerciseType' },
                 { text: 'Exercise Name', value: 'exerciseName' },
@@ -75,11 +76,15 @@ export default {
     methods: {
         fetchStatsInfo() {
             this.userId = this.$session.get('user').id; 
-            this.level = this.$session.get('user').level; 
 
             StatsService.fetchStatsInfo(this.userId).then(response => {
+                if (response.data.accessLevel) {
+                    this.handleAccessLevelGM(1);
+                }
+                this.level = response.data.level; 
+                this.blockNum = response.data.blockNum;
                 this.exerciseTableItems = response.data.exerciseTableItems;
-                this.levelProgress = parseInt(response.data.percentComplete); 
+                this.levelProgress = parseFloat(response.data.percentComplete); 
                 this.completed = response.data.nWorkoutsComplete; 
                 this.total = response.data.nWorkouts; 
             });
@@ -94,11 +99,10 @@ export default {
     computed: {
         blockText() {
             if (this.level > 10) {
-                let blockNum = this.$session.get('user').blockNum; 
-                if (blockNum === 1) {
-                    return `\u2014 Block ${blockNum}: Volume`; 
-                } else if (blockNum === 2) {
-                    return `\u2014 Block ${blockNum}: Strength/Power`; 
+                if (this.blockNum === 1) {
+                    return `\u2014 Block ${this.blockNum}: Volume`; 
+                } else if (this.blockNum === 2) {
+                    return `\u2014 Block ${this.blockNum}: Strength/Power`; 
                 }
             } else {
                 return ''; 

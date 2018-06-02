@@ -236,7 +236,16 @@
 
 
 <script>
+    import UsersService from '@/services/UsersService'; 
+
     export default {
+        mounted() {
+            UsersService.getAccessInfo(this.$session.get('user').id).then(response => {
+                if (response.data.accessLevel) {
+                    this.handleAccessLevelGM(response.data.accessLevel);
+                }
+            });
+        },
         data() {
             return {
                 leftMenuItems: [
@@ -296,12 +305,16 @@
 </script>
 
 
-
 <style lang="scss">
 
 @import '~@/demo-common/styles/colors';
 
 .as-glossary {
+
+    ol, ul {
+        list-style-position: inside; 
+    }
+
     display: flex; 
 
     &-left-menu {
@@ -342,8 +355,9 @@
             margin-bottom: 5px;
             color: $indigoBase;
         }
-
     }
+
+
 }
 
 </style>

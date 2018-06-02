@@ -1,5 +1,5 @@
 <template>
-    <div class="notification-container"> 
+    <div class="notification-container" v-if="visible"> 
         <v-alert 
             class="notification"
             :class="[typeClasses]"
@@ -69,7 +69,7 @@ export default {
     @import '~@/demo-common/styles/colors';
 
     .notification-container {
-        width: 60% !important; 
+        width: 55% !important; 
         margin: 0 auto;
     }
 

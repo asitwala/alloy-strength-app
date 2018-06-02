@@ -27,13 +27,18 @@
                 </td>
                 <td>
                 <span>{{subworkout.name}}</span>
-                    <input v-if="subworkout.hasButton" type="submit" 
-                    v-bind:value="subworkout.buttonDisplay" 
-                    v-bind:name="subworkout.buttonName" 
-                    @click="updateSpecial(subworkout.number, subworkout.buttonName)"
-                    style="margin-top:5px; border: 1px solid black !important;"/>
-                <br>
-                <a v-if="subworkout.hasVideo" @click="goToVideo(subworkout.selectedVideo)"><b>Watch Video</b></a></td>
+                    <p v-if="subworkout.simpleWeightString" style="margin-bottom: 0px !important">
+                        <b>{{ subworkout.simpleWeightString }}</b>
+                    </p>
+
+                    <v-btn v-if="subworkout.hasButton && !notEditable"
+                        small
+                        color="primary"
+                        @click="updateSpecial(subworkout.number, subworkout.buttonName)"
+                    >{{ subworkout.buttonDisplay }}</v-btn>
+
+                    <p><a v-if="subworkout.hasVideo" @click="goToVideo(subworkout.selectedVideo)"><b>Watch Video</b></a></p>
+                </td>
                 <td>                        
                     <div v-for="Cell in subworkout.dataTableItems[0].inputs" :key="Cell.code">
                         <span v-if="Cell.status == 'Fixed'">{{Cell.value}}</span>
@@ -43,7 +48,6 @@
                         v-model="Cell.value" placeholder="Enter Reps" v-bind:name="Cell.code">
                         <input v-if="Cell.status =='Empty' && Cell.alloy" type="text" style="border: 1px solid black;"
                         v-model="Cell.value" :placeholder="subworkout.alloyReps + '+'" v-bind:name="Cell.code">
-                        
                     </div>
                 </td>
                 <td>                        
@@ -67,25 +71,11 @@
                             <option :value="option" v-for="option in subworkout.RPEOptions" :key="option">{{option}}</option>
                         </select>
                         <select v-model="Cell.value" defaultValue="Select RPE" 
-                        v-if="Cell.status =='Empty'" style ="webkit-appearance: menulist; border: 1px solid black;">
+                            v-if="Cell.status =='Empty'" style ="webkit-appearance: menulist; border: 1px solid black;">
                             <option :value="null" disabled>Select RPE ({{Cell.suggested}})</option>
                             <option :value="option" v-for="option in subworkout.RPEOptions" :key="option">
-                                <span v-if="
-                                option == Cell.suggested || 
-                                (Cell.suggested.split('-').length > 1 
-                                && 
-                                (parseFloat(option) >= Cell.suggested.split('-')[0]
-                                && parseFloat(option) <= Cell.suggested.split('-')[1])
-                                )
-                                ">{{option}} (suggested)</span>
-                                <span v-if="
-                                option != Cell.suggested && 
-                                !(Cell.suggested.split('-').length > 1 
-                                && 
-                                (parseFloat(option) >= Cell.suggested.split('-')[0]
-                                && parseFloat(option) <= Cell.suggested.split('-')[1])
-                                )
-                                ">{{option}}</span>
+                                <span v-if="Cell.suggested ? formatRPESelectSuggested(option, Cell.suggested) : false">{{option}} (suggested)</span>
+                                <span v-else>{{option}}</span>
                                 </option>
                         </select>
                     </div>
@@ -110,12 +100,28 @@
     import WorkoutService from '@/services/WorkoutService';
     export default {
         props: {
+            notEditable: {
+                type: Boolean
+            },
             subworkouts: {
                 type: Array, 
                 default: () => []
             }
         },
         methods: {
+            formatRPESelectSuggested(option, suggested) {
+                if (suggested) {
+                    let case1 = suggested; 
+                    let split = suggested.split('-');
+                    let case2 = split.length > 1; 
+                    let case3 = parseFloat(option) >= split[0];
+                    let case4 = parseFloat(option) <= split[1];
+
+                    console.log(`Testing RPE`, option === (case1 || case2 && case3 && case4));
+
+                    return option === (case1 || case2 && case3 && case4);
+                }
+            },
             goToVideo(video) {
                 this.$router.push({name: "Videos", params: {videoFromWorkout: video}});
             },
@@ -128,12 +134,8 @@
                 let splitCode = buttonName.split("|");
                 body.specialType = splitCode[1];
                 body.patternNum = splitCode[2];
-                // let type = req.body.specialType;
                 this.subworkouts.forEach((subworkout, subworkoutIndex) => {
                     subworkout.dataTableItems.forEach((row, rowIndex) => {
-                        // if (rowIndex == patternNumber - 1 && subworkout.) {
-                        //     let RPECode
-                        // }
                         row.inputs.forEach((input, inputIndex) => {
                             if (input && (input.status === 'Empty' || input.status === 'Filled')) {
                                 tempKey = input.code
@@ -161,6 +163,7 @@
     .as-workout-simple-view-container {
         flex: 1;
         min-width: 400px;
+        margin-top: 16px;
     }
 
     table.as-workout-simple-view {
@@ -174,6 +177,7 @@
             min-width: 100px;
             overflow: auto;
             padding: 0 1px;
+            text-align: center;
 
             input:not(:first-child), select:not(:first-child), div:not(:first-child), span:not(:first-child) {
                 margin-top: 1px;

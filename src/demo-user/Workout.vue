@@ -1,6 +1,5 @@
 <template>
  <div class="as-workout-container">
- 
     <as-notification
         :visible="notificationVisible"
         :type="notificationType"
@@ -35,17 +34,20 @@
                     v-model="showCalendar"
                 >
                 </v-checkbox>
-                <v-btn
+                <v-btn 
+                    v-if="!notEditable"
                     class="as-subworkout-button"
                     @click="checkClear()">
                     Reset
                 </v-btn>
                 <v-btn color="primary"
+                    v-if="!notEditable"
                     class="as-subworkout-button"
                     @click="saveWorkoutInfo()">
                     Save
                 </v-btn>
                 <v-btn color="green" 
+                    v-if="!notEditable"
                     class="as-subworkout-button"
                     @click="checkSubmit()">
                     Submit
@@ -55,42 +57,64 @@
         <v-divider/>
     </div>
 
+    <as-workout-prompt :copy="copy" :show-prompt="showPrompt"></as-workout-prompt>
+
     <div class="as-workout">
-        <transition name="as-fade" v-if="!showSimpleView">
-            <div class="as-subworkout-container">
+
+        <transition name="as-fade" mode="out-in">
+
+            <div class="as-no-workout" v-if="contentView === 1">
+                <h3>{{ noWorkoutMessage }}</h3>
+            </div>
+
+            <div class="as-no-workout" v-if="contentView === 2">
+                <h3>{{ hiddenWorkoutMessage }}</h3>
+            </div>
+
+            <div class="as-subworkout-container" v-if="contentView === 3">
                 <div class="as-subworkout-options">
                     <h3>{{ titlePart2 }}</h3>
                     <p class="as-subworkout-suggested-disclaimer">Brackets [ ] indicate a recommended value, e.g. [ 7 ] in an RPE box means a target RPE of 7 for that set.</p>
                 </div>
             
-                <as-subworkout v-for="(subworkout, subworkoutIndex) in subworkouts" :key="subworkout.name"
+                <as-subworkout 
+                    v-for="(subworkout, subworkoutIndex) in subworkouts" 
+                    @refresh="updateSpecial"
+                    :not-editable="notEditable"
+                    :key="subworkout.name"
                     :type="subworkout.type"
                     :name="subworkout.name"
+                    :suggested-weight-string="subworkout.suggestedWeightString"
+                    :special-class="subworkout.class"
+                    :special-describer="subworkout.specialDescriber"
                     :describer="subworkout.describer"
                     :video="subworkout.hasVideo ? subworkout.selectedVideo : {}"
                     :RPEOptions="subworkout.RPEOptions"
                     :dataTableItems="subworkout.dataTableItems"
+                    :number="subworkout.number"
+                    :hasButton="subworkout.hasButton"
+                    :buttonDisplay="subworkout.buttonDisplay ? subworkout.buttonDisplay : ''"
+                    :buttonName="subworkout.buttonName"
                     :headers="headersList[subworkoutIndex]"
                 />
             </div>
-        </transition>
 
-        <transition name="as-fade" v-else>
-           <div class="as-simple-workout-container">
+            <div class="as-simple-workout-container" v-if="contentView === 4">
                 <div class="as-subworkout-options">
                     <h3>{{ titlePart2 }}</h3>
-                    <p class="as-subworkout-suggested-disclaimer">Brackets [ ] indicate a recommended value, e.g. [ 7 ] in an RPE box means a target RPE of 7 for that set.</p>
                 </div>
                 <as-simple-workout 
                     @refresh="() => fetchWorkoutInfo()"
+                    :not-editable="notEditable"
                     :subworkouts="subworkouts"/>
             </div>
         </transition>
-
+        
         <div class="as-date-pickers" v-if="showCalendar">
             <div class="as-date-pickers-text">
                 Select workout dates by using the dropdown menu and buttons below.
             </div>
+        
 
             <v-date-picker
                 width="300"
@@ -98,6 +122,8 @@
                 :events="arrayEvents"
                 :event-color="arrayEventsColors"
             />
+            
+            <as-workout-legend></as-workout-legend>
 
             <div class="as-workout-date-dropdown-options">
                 <div class="as-workout-date-any-date">
@@ -147,6 +173,10 @@ import moment from 'moment';
 let SimpleWorkout = require('./SimpleWorkout.vue').default; 
 let Subworkout = require('./Subworkout.vue').default;
 let Notification = require('../demo-common/components/Notification.vue').default; 
+
+import WorkoutLegend from '@/demo-common/components/WorkoutLegend'; 
+
+import WorkoutPrompt from '@/demo-user/user-info/WorkoutPrompt';
 import WorkoutService from '@/services/WorkoutService';
 
 const headerMap = {
@@ -164,15 +194,45 @@ const headerMap = {
 
 export default {
     components: {
+        'as-workout-legend': WorkoutLegend,
         'as-subworkout': Subworkout,
         'as-simple-workout': SimpleWorkout,
-        'as-notification': Notification
+        'as-notification': Notification,
+        'as-workout-prompt': WorkoutPrompt
     },
     mounted() {
         this.fetchWorkoutInfo();
-
     },
     methods: {
+        updateSpecial(buttonInfo) {
+            let {patternNumber, buttonName} = buttonInfo; 
+            let userId = this.$session.get("user").id;
+            let vWID = this.$session.get("viewingWID");
+            let tempKey = '';
+            let tempValue = '';  
+            let body = {};
+            let splitCode = buttonName.split("|");
+            body.specialType = splitCode[1];
+            body.patternNum = splitCode[2];
+            // let type = req.body.specialType;
+            this.subworkouts.forEach((subworkout, subworkoutIndex) => {
+                subworkout.dataTableItems.forEach((row, rowIndex) => {
+                    row.inputs.forEach((input, inputIndex) => {
+                        if (input && (input.status === 'Empty' || input.status === 'Filled')) {
+                            tempKey = input.code
+                            tempValue = input.value ? `${input.value}` : '';
+                            body[tempKey] = tempValue; 
+                        }
+                    });
+                });
+            });
+            
+            WorkoutService.updateSpecial(userId, vWID, patternNumber, body).then((response) => {
+                if (response) {
+                    this.fetchWorkoutInfo();
+                }
+            });
+        },
         getSpecificWorkout() {
             let index = this.workoutDates.map(date => date.Date).indexOf(this.selectedWorkoutDate);
             if (index >= 0) {
@@ -211,39 +271,79 @@ export default {
 
             WorkoutService.fetchWorkoutInfo(UserId, workoutId).then(response => {
                 if (typeof response === 'object') {
-                    let title = response.data.describer.split(' - '); 
-                    let title1 = title[0].split(', '); 
-                    this.titlePart1 = title1[0];
-                    this.titlePart1Extend = title1[1];
-                    this.titlePart2 = title[1];
-                    this.workoutDates = response.data.workoutDates; 
-                    this.formatWorkoutDates(); 
-                    this.subworkouts = response.data.subworkouts;
-                    this.date = response.data.date;
-                    this.selectedDateWithWeekDay = ''; 
-                    this.setTableHeaders(); 
-                    let todayDate = moment().format('YYYY-MM-DD'); 
-                    this.arrayEvents = []; 
-                    this.arrayEventsColors = {}; 
-                    this.workoutDates.forEach(date => {
-                        let momentDate = moment(date.Date).format('YYYY-MM-DD'); 
-                        let color = ''; 
 
-                        if (momentDate < todayDate) {
-                            color = 'grey'; 
-                        } else if (momentDate > todayDate) {
-                            color = 'blue'; 
+                    if (response.data.accessLevel) {
+                        this.handleAccessLevelGM(response.data.accessLevel);
+
+                        // 4 -> Progress (no new workouts yet)
+                        // 5 -> Missed Workouts
+                        if (response.data.accessLevel === 4) {
+                            this.copy = {
+                                headerText: `You Have No Upcoming Workouts`,
+                                descriptionText: `to see your last progress report 
+                                and generate a new set of workouts`,
+                                pathName: 'Progress'
+                            }
+
+                            this.showPrompt = true;
+
+                        } else if (response.data.accessLevel === 5) {
+                            this.copy = {
+                                headerText: `You Have Incomplete Workouts`,
+                                descriptionText: `to reschedule your workouts`,
+                                pathName: 'RescheduleWorkouts'
+                            }; 
+
+                            this.showPrompt = true;
+                        }
+                    }
+
+                    if (response.data.hidden && !this.$session.get('user').isAdmin) {
+                        this.hiddenWorkout = true;
+                        this.hiddenWorkoutMessage = response.data.hiddenText;
+                    } else {
+                        let title = response.data.describer.split(' - '); 
+                        let title1 = title[0].split(', '); 
+                        this.titlePart1 = title1[0];
+                        this.titlePart1Extend = title1[1];
+                        this.titlePart2 = title[1];
+                        this.workoutDates = response.data.workoutDates; 
+                        this.formatWorkoutDates(); 
+                        this.subworkouts = response.data.subworkouts;
+                        this.date = response.data.date;
+                        this.selectedDateWithWeekDay = ''; 
+                        this.setTableHeaders(); 
+                        this.hiddenWorkout = '';
+                        this.hiddenWorkoutMessage = '';
+                        let todayDate = moment().local().format('YYYY-MM-DD'); 
+                        let accessible = (todayDate === this.date);
+
+                        if ((response.data.noedits || (!accessible)) && !this.$session.get('user').isAdmin) {
+                            this.notEditable = true; 
                         } else {
-                            color = 'green'; 
+                            this.notEditable = false; 
                         }
 
-                        this.arrayEvents.push(momentDate); 
+                        this.arrayEvents = []; 
+                        this.arrayEventsColors = {}; 
+                        this.workoutDates.forEach(date => {
+                            let momentDate = moment(date.Date).format('YYYY-MM-DD'); 
+                            let color = ''; 
 
-                        this.arrayEventsColors[momentDate] = color; 
+                            if (momentDate < todayDate) {
+                                color = 'grey'; 
+                            } else if (momentDate > todayDate) {
+                                color = 'blue'; 
+                            } else {
+                                color = 'green'; 
+                            }
 
-                        // console.log('dates', moment(date.Date).format('YYYY-MM-DD')); 
+                            this.arrayEvents.push(momentDate); 
 
-                    });
+                            this.arrayEventsColors[momentDate] = color; 
+
+                        });
+                    }
                 }
             });
         },
@@ -389,7 +489,7 @@ export default {
             showCalendar: true,
             showSimpleView: false,
             
-            //notifications
+            // notifications
             notificationType: 'submitWarning',
             notificationVisible: false,
             notificationMessage: '',
@@ -397,9 +497,37 @@ export default {
             // events
             arrayEvents: [],
             arrayEventsColors: {},
+
+            // messages
+            noWorkoutToday: false,
+            noWorkoutMessage: 'There is no workout scheduled for today. Get some rest!',
+
+            // hidden
+            hiddenWorkout: false,
+            hiddenWorkoutMessage: '',
+
+            // no edits
+            notEditable: false,
+
+            // workout prompt
+            copy: {},
+            showPrompt: false
         };
     },
     computed: {
+        contentView() {
+            if (this.noWorkoutToday) {
+                return 1; 
+            } else if (this.hiddenWorkout && !this.noWorkoutToday) {
+                return 2;
+            } else if (!this.hiddenWorkout && !this.noWorkoutToday && !this.showSimpleView) {
+                return 3;
+            } else if (!this.hiddenWorkout && !this.noWorkoutToday && this.showSimpleView) {
+                return 4; 
+            } else {
+                return 0; 
+            }
+        },
         selectedWorkoutDate() {
             return this.selectedDateWithWeekDay.split(": ")[1]; 
         },
@@ -451,6 +579,9 @@ export default {
                 let selectedDateInfo = this.workoutDates[index]; 
                 this.$session.set('viewingWID', selectedDateInfo.ID);
                 this.fetchWorkoutInfo();
+                this.noWorkoutToday = false;
+            } else {
+                this.noWorkoutToday = true;
             }
         }
     }
@@ -461,8 +592,6 @@ export default {
 <style lang="scss">
     @import '~@/demo-common/styles/transitions';
     @import '~@/demo-common/styles/colors';
-
-  
 
     .as-workout-container {
         width: 90%; 
@@ -596,4 +725,12 @@ export default {
             min-width: 300px;
         }
     }
+
+    .as-no-workout {
+        display: flex; 
+        flex: 1; 
+        justify-content: center;
+        align-items: center;
+    }
+
 </style>

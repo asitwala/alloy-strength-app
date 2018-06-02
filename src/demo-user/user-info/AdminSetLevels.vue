@@ -47,6 +47,9 @@
                             </v-checkbox>
                         </div>
                     </div>
+                    <p class="as-select-days-error" v-if="!validSelectedDays">
+                        You have selected {{ selectedDaysLength }} workout days. Please select <strong>{{ numWorkoutDays }}</strong>.
+                    </p>
                 </div>
                 <div class="as-initialize-step-3-right">
                     <v-date-picker v-model="startDateCalendar"></v-date-picker>
@@ -75,6 +78,7 @@
                     v => moment(v, 'MM/DD/YYYY', true).isValid() || 'Please use a valid date format.'
                 ],
                 validForm: false,
+                validSelectedDays: true,
                 level: '',
                 levels: Array.from({length: 25}, (v, k) => k+1),
                 blockNum: '0',
@@ -84,20 +88,29 @@
         methods: {
             generateWorkouts() {
 
-                let daysList = []; 
-                this.selectedDays.forEach(day => {
-                    daysList.push(this.days.indexOf(day));
-                })
-                let params = {
-                    startDate: this.startDateCalendar,
-                    daysList: daysList,
-                    newLevel: this.level,
-                    blockNum: parseInt(this.blockNum)
-                };
-    
-                return UsersService.adminGenerateWorkouts(this.$session.get('user').id, params).then(()=> {
-                    this.$router.push({name: 'Workout'});
-                });
+                if (this.selectedDaysLength !== this.numWorkoutDays) {
+                    this.validSelectedDays = false; 
+                } else {
+                    this.validSelectedDays = true;
+                }
+
+                if (this.validSelectedDays) {
+                    let daysList = []; 
+                    this.selectedDays.forEach(day => {
+                        daysList.push(this.days.indexOf(day));
+                    })
+                    let params = {
+                        startDate: this.startDateCalendar,
+                        daysList: daysList,
+                        newLevel: this.level,
+                        blockNum: parseInt(this.blockNum)
+                    };
+        
+                    return UsersService.adminGenerateWorkouts(this.$session.get('user').id, params).then(()=> {
+                        this.$session.set("viewingWID", 1);
+                        this.$router.push({name: 'Workout'});
+                    });
+                }              
             },
             supportCalendar(textValue) {
                 let dateKeys = textValue.split('/');  // YYYY, MM, DD
@@ -131,12 +144,17 @@
         computed: {
             numWorkoutDays() {
                 return this.level < 6 ? 3 : 4; 
+            }, 
+            selectedDaysLength() {
+                return this.selectedDays.length; 
             }
         }
     };
 </script>
 
 <style lang="scss">
+
+    @import "~@/demo-common/styles/colors";
 
     .admin-set-levels {
         padding: 20px;
@@ -179,6 +197,10 @@
 
     .submit-button {
         float: right;
+    }
+
+    .as-select-days-error {
+        color: $redBase !important;
     }
 
 </style>
