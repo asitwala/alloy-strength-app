@@ -113,6 +113,10 @@
                 this.userId = this.$session.get('user').id; 
 
                 ProgressService.fetchProgressInfo(this.userId).then(response => {
+                    if (response.data.accessLevel) {
+                        this.handleAccessLevelGM(response.data.accessLevel);
+                    }
+                    
                     this.oldLevel = response.data.oldLevel; 
                     this.newLevel = response.data.newLevel; 
                     this.statusText = response.data.statusText; 

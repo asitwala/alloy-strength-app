@@ -236,7 +236,16 @@
 
 
 <script>
+    import UsersService from '@/services/UsersService'; 
+
     export default {
+        mounted() {
+            UsersService.getAccessInfo(this.$session.get('user').id).then(response => {
+                if (response.data.accessLevel) {
+                    this.handleAccessLevelGM(response.data.accessLevel);
+                }
+            });
+        },
         data() {
             return {
                 leftMenuItems: [

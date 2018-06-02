@@ -33,6 +33,8 @@
 
 <script>
 
+    import UsersService from '@/services/UsersService'; 
+
     let InitializeStep1 = require('./InitializeStep1').default;
     let InitializeStep2 = require('./InitializeStep2').default;
     let InitializeStep3 = require('./SetLevels').default;
@@ -49,6 +51,14 @@
                 default: 1
             }
         },
+        mounted() {
+            UsersService.getAccessInfo(this.$session.get('user').id).then(response => {
+                if (response.data.accessLevel) {
+                    console.log('this.stepper', this.handleAccessLevelStepperGM(1));
+                    this.stepper = this.handleAccessLevelStepperGM(1);
+                }
+            });
+        },
         data() {
             return {
                 stepper: this.givenStep
@@ -57,6 +67,13 @@
         methods: {
             next() {
                 this.stepper += 1; 
+            }
+        },
+        watch: {
+            officialStepGM: function(newVal) {
+                if (this.stepper !== newVal) {
+                    this.stepper = newVal;
+                }
             }
         }
     };

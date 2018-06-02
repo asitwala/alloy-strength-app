@@ -4,7 +4,9 @@
 export default {
     data() {
         return {
-            accessLevelGM: null
+            accessLevelGM: null,
+            stepGM: null,
+            officialStepGM: null
         }
     },
     methods: {
@@ -18,17 +20,37 @@ export default {
             this.setAccessLevelGM(accessLevel);
             this.handleRoutingGM();
         },
-        routeToStepperGM(stepNum) {
-            if (this.$route.name !== 'Initialize') {
-                this.$router.push({name: 'Initialize', params: { givenStep: stepNum }});
+        handleAccessLevelStepperGM(accessLevel) {
+            this.setAccessLevelGM(accessLevel);
+
+            if (this.$route.name === 'Initialize') {
+                let returnValue = 0;
+                if (accessLevel === 0) {
+                    returnValue = 1;
+                } else if (accessLevel === 1) {
+                    returnValue = 2; 
+                } else if (accessLevel === 2) {
+                    returnValue = 3; 
+                }
+                
+                console.log('Return value', returnValue);
+                this.officialStepGM = returnValue;
+                return returnValue;
+            } else {
+                this.handleRoutingGM();
             }
-            this.resetAccessLevelGM();
+        },
+        routeToStepperGM(stepNum) {
+            const notInStepper = this.$route.name !== 'Initialize';
+
+            if (notInStepper) {    
+                this.$router.push({name: `Initialize`, params: { givenStep: stepNum }});
+            } 
         },
         routeElsewhereGM(name) {
             if (this.$route.name !== name) {
                 this.$router.push({name: name});
             }
-            this.resetAccessLevelGM();
         },
         handleRoutingGM() {
             switch (this.accessLevelGM) {

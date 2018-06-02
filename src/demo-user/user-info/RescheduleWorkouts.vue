@@ -54,6 +54,10 @@
         methods: {
             getPreviousWorkouts() {
                 UsersService.getPreviousWorkouts(this.$session.get("user").id).then(response => {
+                    if (response.data.accessLevel) {
+                        this.handleAccessLevelGM(response.data.accessLevel);
+                    }
+                    
                     response.data.workouts.forEach(workout => {
                         let previousWorkout = {};
                         previousWorkout.value = false; 

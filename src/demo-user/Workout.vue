@@ -175,8 +175,6 @@ let Notification = require('../demo-common/components/Notification.vue').default
 import WorkoutPrompt from '@/demo-user/user-info/WorkoutPrompt';
 import WorkoutService from '@/services/WorkoutService';
 
-import SetAccessInfo from '@/demo-common/mixins/SetAccessInfo'; 
-
 const headerMap = {
     0: "1st",
     1: "2nd",
@@ -191,7 +189,6 @@ const headerMap = {
 };
 
 export default {
-    mixins: [SetAccessInfo],
     components: {
         'as-subworkout': Subworkout,
         'as-simple-workout': SimpleWorkout,

@@ -81,6 +81,9 @@
     components: {
       'as-navigation': Navigation
     },
+    created() {
+      this.$session.start();
+    },
     data: () => ({
       showNavigation: false,
       currentYear: (new Date()).getFullYear(),

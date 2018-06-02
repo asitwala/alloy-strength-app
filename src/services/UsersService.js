@@ -48,5 +48,8 @@ export default {
   },
   changePassword(userId, params) {
     return Api().put(`/api/users/${userId}/change-password`, params);
+  },
+  getAccessInfo(userId) {
+    return Api().get(`api/users/${userId}/access-info`);
   }
 }

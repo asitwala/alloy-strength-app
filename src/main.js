@@ -7,7 +7,7 @@ import App from './App';
 import router from './router';
 import Vuetify from 'vuetify';
 import './assets/stylus/main.styl'
-import SetAccessInfo from './demo-common/mixins/SetAccessInfo'; 
+import ManageAccess from './demo-common/mixins/ManageAccess'; 
  
 // Tell Vue to install the plugin.
 Vue.use(VueSession, {
@@ -16,7 +16,7 @@ Vue.use(VueSession, {
 
 Vue.use(Vuex);
 
-Vue.mixin(SetAccessInfo);
+Vue.mixin(ManageAccess);
 
 Vue.use(Vuetify);
 

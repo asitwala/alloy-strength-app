@@ -287,6 +287,9 @@ export default {
         },
         fetchProfileInfo() {
             return UsersService.getProfileInfo(this.userId).then((response) => {
+                if (response.data.accessLevel) {
+                    this.handleAccessLevelGM(response.data.accessLevel);
+                }
                 this.level = response.data.level;
                 this.blockNum = response.data.blockNum; 
                 this.levelProgress = parseFloat(response.data.percentComplete);

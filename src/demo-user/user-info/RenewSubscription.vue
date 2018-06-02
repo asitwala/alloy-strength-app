@@ -11,9 +11,17 @@
 
 <script>
 
+import UsersService from '@/services/UsersService'; 
 import InitializeStep1 from '@/demo-user/user-info/InitializeStep1'; 
 
 export default {
+    mounted() {
+        UsersService.getAccessInfo(this.$session.get('user').id).then(response => {
+            if (response.data.accessLevel) {
+                this.handleAccessLevelGM(response.data.accessLevel);
+            }
+        });
+    },
     components: {
         'as-renew-subscription': InitializeStep1
     }
