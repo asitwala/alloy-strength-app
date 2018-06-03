@@ -45,6 +45,13 @@
                 </template>
             </as-modal-card>
         </v-dialog>
+
+        <transition name="as-fade" mode="out-in">
+            <as-confirmation v-if="signupSuccess">
+            </as-confirmation>
+        </transition>
+
+
     </div>
 
 </template>
@@ -55,10 +62,12 @@
     import UsersService from '@/services/UsersService'; 
 
     import AuthCard from '@/demo-common/components/AuthCard'; 
+    import SignupConfirmation from '@/demo-user/SignupConfirmation';
 
     export default {
         components: {
-            'as-modal-card': AuthCard
+            'as-modal-card': AuthCard,
+            'as-confirmation': SignupConfirmation
         },
         data() {
             return {
@@ -73,13 +82,18 @@
 
                 // visibility
                 signupVisibility1: true,
-                signupVisibility2: true
+                signupVisibility2: true,
+
+                signupSuccess: false,
+
+
 
                 // rules
             };
         }, 
         methods: {
             openSignupModal() {
+                this.signupSuccess = false; 
                 this.name = '';
                 this.email = '';
                 this.password = '';
@@ -96,13 +110,19 @@
                     username: this.email
                 };
 
-                UsersService.signupUser(params).then(response => {
-                   let userId = response.data.newUser.id;
+                this.closeSignupModal();
+                this.signupSuccess = true;
 
-                   UsersService.sendEmailConfirmation(userId).then(response => {
-                       console.log('SUCCESS', response);
-                   });
-                });
+                //this.$refs.confirmation.openSignupModal();
+
+
+                // UsersService.signupUser(params).then(response => {
+                //    let userId = response.data.newUser.id;
+
+                //    UsersService.sendEmailConfirmation(userId).then(response => {
+                //        console.log('SUCCESS', response);
+                //    });
+                // });
             }
         }
     };

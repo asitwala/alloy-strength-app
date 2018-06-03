@@ -4,13 +4,11 @@
             <h1>Look for an Email from Us</h1>
             <p>Thanks for signing up! Please check your inbox for a confirmation email to activate your account.</p>
         </div>
-     
     </div>
 </template>
 
 
 <script>
-
 
 </script>
 
@@ -23,6 +21,5 @@
         display: flex;
         align-items: center;
         justify-content: center;
-
     }   
 </style>
