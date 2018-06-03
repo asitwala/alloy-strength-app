@@ -8,7 +8,15 @@
         <v-toolbar-title class="white--text as-toolbar-title" 
         @click="goToHomePage">ALLOY STRENGTH</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-toolbar-side-icon v-if="$session.has('user')"@click="toggleNavigation"></v-toolbar-side-icon>
+        <div class="as-main-toolbar-right">
+          <v-toolbar-items>
+            <v-btn flat class="as-main-toolbar-link" @click="openBlog">Blog</v-btn>
+            <v-btn flat class="as-main-toolbar-link">Why Alloy Strength</v-btn>
+            <v-btn flat class="as-main-toolbar-link" @click="routeTo('FAQ')">FAQ</v-btn>
+          </v-toolbar-items>
+          <v-toolbar-side-icon v-if="$session.has('user')"@click="toggleNavigation"></v-toolbar-side-icon>
+        </div>
+
       </v-toolbar>
 
       <as-navigation
@@ -18,7 +26,6 @@
       <div class="as-main-body" style="height: 100%">
         <router-view/>
       </div>
-      
      
       <v-footer class="as-footer">
         <div class="as-footer-extra-formatting">
@@ -45,7 +52,7 @@
               <v-tooltip v-if="footerIcon.tooltipText" top>
                 <v-btn 
                 slot="activator"
-                :href="footerIcon.src"
+                @click="openFooterLinkNewTab(footerIcon.src)"
                 icon
                 class="mx-3 white--text"
                 >
@@ -58,7 +65,7 @@
               
               <!-- No tooltip --> 
               <v-btn v-else
-              :href="footerIcon.src"
+              @click="openFooterLinkNewTab(footerIcon.src)"
               icon
               class="mx-3 white--text"
               >
@@ -104,7 +111,7 @@
       footerIcons: [
         {
           name: 'fa-facebook-f',
-          src: '/',
+          src: '',
           tooltipText: 'Coming Soon'
         },
         {
@@ -128,6 +135,17 @@
       },
       setNavigation(val) {
         this.showNavigation = val;
+      },
+      openFooterLinkNewTab(src) {
+        if (src) {
+          window.open(src, '_blank');
+        }
+      },
+      openBlog() {
+        window.open('http://blog.alloystrengthtraining.com/', '_blank');
+      },
+      routeTo(pathName) {
+        this.$router.push({name: pathName});
       }
     }
   }
@@ -139,8 +157,37 @@
 
 
   .as-main-toolbar {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    height: unset !important;
+
+    &-right {
+      display: flex;
+      flex-wrap: no-wrap;
+      align-items: center;
+      min-width: 350px;
+      justify-content: space-between;
+      margin-right: 12px;
+    }
+
+    .toolbar__items .btn {
+
+      &:first-child {
+        margin-left: 8px;
+      }
+
+      .btn__content {
+        padding: 8px;
+      }
+    }
+
     .toolbar__content > .btn:first-child {
       margin-left: 30px;
+    }
+
+    .toolbar__content {
+      height: unset !important;
+      flex-wrap: wrap;
     }
   }
 
@@ -149,7 +196,6 @@
     border-radius: 30px;
     height: 100%;
     width: 100%;
-
   }
 
   .application .theme--light.toolbar, .theme--light .toolbar {

@@ -20,6 +20,8 @@ import UserStats from '@/demo-user/user-info/UserStats';
 import Progress from '@/demo-user/user-info/Progress'; 
 import Profile from '@/demo-user/user-info/Profile'; 
 
+import FAQ from '@/demo-home/FAQ'; 
+
 import CheckEmail from '@/demo-user/CheckEmail'; 
 import EmailConfirmation from '@/demo-user/EmailConfirmation'; 
 
@@ -32,6 +34,12 @@ const router = new Router({
       path: '/',
       name: 'Homepage',
       component: Homepage,
+      meta: {requireAuth: false}
+    },
+    {
+      path: '/faq',
+      name: 'FAQ',
+      component: FAQ,
       meta: {requireAuth: false}
     },
     { 

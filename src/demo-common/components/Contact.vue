@@ -23,7 +23,7 @@
 <style lang="scss">
     .as-contact {
         text-align: center; 
-        min-height: 550px;
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
