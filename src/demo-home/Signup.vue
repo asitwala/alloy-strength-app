@@ -1,6 +1,6 @@
 <template>
     <div class="as-signup">
-        <v-btn color="primary" @click.stop="openSignupModal">Sign Up</v-btn>
+        <v-btn color="green" style="color: white !important;" @click.stop="openSignupModal">Sign Up</v-btn>
         <v-dialog
             v-model="showSignupModal"
             max-width="750px"

@@ -205,12 +205,12 @@
 
     // NOTE: make sure that "background-size: cover" is placed after background-image
     .as-coach-bryce {
-      background: linear-gradient(to bottom, rgba(0, 41, 77, 0.05) 33%, rgba(0, 41, 77, 0.4) 66%, rgba(0, 0, 0, 0.75) 100%), url("../../../static/bryce-about.jpg") no-repeat center;
+      background: linear-gradient(to bottom, rgba(0, 41, 77, 0.05) 33%, rgba(0, 41, 77, 0.4) 66%, rgba(0, 0, 0, 0.75) 100%), url("../../../static/alex-bryce.jpg") no-repeat center;
       background-size: cover;
     }
 
     .as-coach-sterner {
-      background: linear-gradient(to bottom, rgba(0, 41, 77, 0.05) 33%, rgba(0, 41, 77, 0.4) 66%, rgba(0, 0, 0, 0.75) 100%), url("../../../static/sterner-about.jpg") no-repeat center;
+      background: linear-gradient(to bottom, rgba(0, 41, 77, 0.05) 33%, rgba(0, 41, 77, 0.4) 66%, rgba(0, 0, 0, 0.75) 100%), url("../../../static/alex-sterner.jpg") no-repeat center;
       background-size: cover;
     }
 
@@ -271,7 +271,7 @@
     }
 
     &-pic {
-      background: url("../../../static/sterner-about.jpg") no-repeat center;
+      background: url("../../../static/alex-sterner.jpg") no-repeat center;
       width: 300px; 
       height: 415px; 
       min-width: 300px;
@@ -313,7 +313,7 @@
     }
 
     &-pic {
-      background: url("../../../static/bryce-about.jpg") no-repeat center;
+      background: url("../../../static/alex-bryce.jpg") no-repeat center;
       width: 300px; 
       height: 415px; 
       min-width: 300px;

@@ -1,9 +1,11 @@
 <template>
     <div class="as-check-email">
-        <h2></h2>
+        <div class="as-check-email-container">
+            <h1>Look for an Email from Us</h1>
+            <p>Thanks for signing up! Please check your inbox for a confirmation email to activate your account.</p>
+        </div>
+     
     </div>
-
-
 </template>
 
 
@@ -14,9 +16,13 @@
 
 
 <style lang="scss">
-    .as-check-email {
-        display: flex; 
-        align-items: center;
-    }   
 
+    .as-check-email {
+        text-align: center; 
+        min-height: 550px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+    }   
 </style>

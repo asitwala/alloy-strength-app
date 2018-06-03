@@ -20,7 +20,7 @@ import UserStats from '@/demo-user/user-info/UserStats';
 import Progress from '@/demo-user/user-info/Progress'; 
 import Profile from '@/demo-user/user-info/Profile'; 
 
-
+import CheckEmail from '@/demo-user/CheckEmail'; 
 import EmailConfirmation from '@/demo-user/EmailConfirmation'; 
 
 Vue.use(Router)
@@ -130,6 +130,11 @@ const router = new Router({
       path: '/confirm/:id/:confString',
       name: 'EmailConfirmation',
       component: EmailConfirmation
+    },
+    {
+      path: '/check-email',
+      name: 'CheckEmail',
+      component: CheckEmail
     },
     {
       path: '*',

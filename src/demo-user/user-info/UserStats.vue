@@ -79,7 +79,7 @@ export default {
 
             StatsService.fetchStatsInfo(this.userId).then(response => {
                 if (response.data.accessLevel) {
-                    this.handleAccessLevelGM(1);
+                    this.handleAccessLevelGM(response.data.accessLevel);
                 }
                 this.level = response.data.level; 
                 this.blockNum = response.data.blockNum;
