@@ -62,7 +62,7 @@
     import UsersService from '@/services/UsersService'; 
 
     import AuthCard from '@/demo-common/components/AuthCard'; 
-    import SignupConfirmation from '@/demo-user/SignupConfirmation';
+    import SignupConfirmation from '@/demo-home/SignupConfirmation';
 
     export default {
         components: {

@@ -28,7 +28,7 @@
                             :type="loginVisibility ? 'password' : 'text'"
                             :rules="passwordRules"
                         />
-                        <p class="as-forgot-password" @click="forgotPassword()">Forgot Password?</p>
+                        <p class="as-forgot-password-link" @click="goToForgotPassword()">Forgot Password?</p>
                     </v-form>
                 </template>
                 <template slot="card-footer">
@@ -36,6 +36,13 @@
                 </template>
             </as-modal-card>
         </v-dialog>
+
+
+        <transition name="as-fade" mode="out-in">
+            <as-forgot-password v-if="forgotPassword">
+            
+            </as-forgot-password>
+        </transition>
     </div>
 </template>
 
@@ -45,10 +52,12 @@
     import UsersService from '@/services/UsersService'; 
 
     import AuthCard from '@/demo-common/components/AuthCard'; 
+    import ForgotPassword from '@/demo-home/ForgotPassword'; 
 
     export default {
         components: {
-            'as-modal-card': AuthCard
+            'as-modal-card': AuthCard,
+            'as-forgot-password': ForgotPassword
         },
         data() {
             return {
@@ -70,16 +79,30 @@
                 passwordRules: [
                     v => !this.passwordNeeded || !!v || 'Password is required',
                     v => !this.invalidPassword || 'Password is invalid'
-                ]
+                ],
+
+                // forgot password
+                forgotPassword: false
             };
         }, 
         methods: {
-            forgotPassword() {
-
+            goToForgotPassword() {
+                this.showLoginModal = false; 
+                this.forgotPassword = true; 
             },
             openLoginModal() {
                 this.username = '';
                 this.password = ''; 
+                this.forgotPassword = false; 
+
+                this.loginVisibility = true;
+                this.usernameNeeded = false;
+                this.passwordNeeded = false;
+                this.validLoginForm = true;
+                this.invalidUser = false;
+                this.invalidPassword = false;
+                this.$refs.loginForm.validate();
+
                 this.showLoginModal = true;
             },
             closeLoginModal() {
@@ -153,7 +176,7 @@
     @import '~@/demo-common/styles/colors';
     @import '~@/demo-common/styles/transitions';
 
-    .as-forgot-password {
+    .as-forgot-password-link {
         color: $blueDarken1;
         margin-bottom: 0px;
         cursor: pointer;

@@ -67,6 +67,8 @@
 
     .as-slider {
         position: relative;
+        max-width: 1325px !important;
+        margin: 0 auto;
     }
 
 

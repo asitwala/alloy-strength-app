@@ -1,5 +1,5 @@
 <template>
-    <v-carousel interval="120000" delimiter-icon="fa-dot-circle-o">
+    <v-carousel interval="120000" delimiter-icon="fa-dot-circle-o" class="as-carousel">
         <v-carousel-item v-for="(item, itemIndex) in carouselItems" :src="item.src" :key="item.src">
         </v-carousel-item>
     </v-carousel>
@@ -18,7 +18,6 @@
             };
         }
     };
-
 </script>
 
 
@@ -27,6 +26,9 @@
 @import '~@/demo-common/styles/colors';
 @import '~@/demo-common/styles/transitions';
 
+.as-carousel {
+    max-width: 1325px !important;
+}
 
 .jumbotron__wrapper {
     background-color: rgba(0, 0, 0, 0.1);
