@@ -41,7 +41,6 @@
 </template>
 
 <script>
-
     import UsersService from '@/services/UsersService'; 
 
     let InitializeStep1 = require('./InitializeStep1').default;

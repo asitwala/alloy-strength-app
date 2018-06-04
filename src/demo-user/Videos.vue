@@ -5,8 +5,8 @@
         <div class="as-main-video-container">
             <div class="as-main-video">
                 <iframe :src="selectedVideo.URL" 
-                    width="640" 
-                    height="360" 
+                    :width="videoWidth" 
+                    :height="videoHeight" 
                     frameborder="0"
                     scrolling="no" 
                     seamless="" 
@@ -97,6 +97,21 @@ export default {
     },
     mounted() {
         this.fetchVideoInfo();
+
+        this.$nextTick(() => {
+            window.addEventListener('resize', e => {
+                let videoWidthLarge = (this.videoWidth === "640"); 
+                let videoWidthSmall = (this.videoWidth === "300"); 
+
+                if (window.innerWidth < 640 && videoWidthLarge) {
+                    this.videoWidth = "300"; 
+                    this.videoHeight = "168"; 
+                } else if (window.innerWidth >= 640 && videoWidthSmall) {
+                    this.videoWidth = "640";
+                    this.videoHeight = "360"; 
+                }
+            });
+        });
     },
     data() {
         return {
@@ -107,7 +122,10 @@ export default {
             search: '',
             selected: '',
             selectedOptions: [...Array(25).keys()].map(x => (x + 1).toString()),
-            selectedPlaceholder: "Select a level"
+            selectedPlaceholder: "Select a level",
+
+            videoHeight: "360",
+            videoWidth: "640"
         }; 
     },
     methods: {
@@ -283,12 +301,25 @@ export default {
         background-size: contain;
         border-radius: 2px;
     }
+
+    /* Extra small devices (phones, 640px and down) */
+    @media only screen and (max-width: 640px) {
+        .as-main-video {
+            width: 300px; 
+            height: 168px;
+        }
+
+        .as-main-video-popover-disable {
+            width: 24px;
+            height: 24px;
+        }
+    }
     
     .as-main-video-container {
         display: flex; 
         flex: 1; 
         flex-wrap: wrap; 
-        justify-content: space-evenly;
+        justify-content: center;
     }
 
     .as-main-video-description {

@@ -1,5 +1,7 @@
 <template>
-
+    <div class="as-unauthorized">
+    
+    </div>
 
 </template>
 
@@ -13,5 +15,8 @@
 
 <style lang="scss">
 
+    .as-unauthorized {
+        
+    }
 
 </style>

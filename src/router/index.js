@@ -25,6 +25,8 @@ import FAQ from '@/demo-home/FAQ';
 import CheckEmail from '@/demo-user/CheckEmail'; 
 import EmailConfirmation from '@/demo-user/EmailConfirmation'; 
 
+import store from '../demo-common/mixins/store.js'; 
+
 Vue.use(Router)
 
 const router = new Router({
@@ -148,14 +150,16 @@ const router = new Router({
       path: '*',
       component: {
         template: '<div>404!</div>',
-        meta: {requireAuth: false}
-      }
+      },
+      meta: {requireAuth: false}
     }
   ]
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(routeRecord => routeRecord.meta.requiresAuth)) {
+  console.log('Store', store.state.authorized); 
+  console.log('Matched', to.matched); 
+  if (to.matched.some(routeRecord => routeRecord.meta.requireAuth)) {
     console.log(`Route requires auth`); 
   }
 

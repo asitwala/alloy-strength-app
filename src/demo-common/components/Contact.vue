@@ -6,7 +6,6 @@
             <p><a :href="`mailto:${officialEmail}`">{{ officialEmail }}</a></p>
         </div>
     </div>
-
 </template>
 
 <script>

@@ -134,8 +134,9 @@
 
                     if (loginResponse.data.Success) {
                         this.$session.set("user", loginResponse.data.User);
-
                         this.$session.set("viewingWID", loginResponse.data.User.currentWorkoutID);
+
+                        this.$store.commit('authorize'); 
                         this.closeLoginModal();
 
                         // Handle routing based on type of user 
