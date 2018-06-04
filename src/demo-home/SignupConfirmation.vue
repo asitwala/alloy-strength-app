@@ -23,7 +23,7 @@
                     </div>
                 </template>
                 <template slot="card-footer">
-                    <v-btn color="primary" @click="closeConfirmationModal">Ok</v-btn>
+                    <v-btn color="green white--text" @click="closeConfirmationModal">Ok</v-btn>
                 </template>
             </as-modal-card>
         </v-dialog>
@@ -31,10 +31,10 @@
 </template>
 
 <script>
-    import AuthCard from '@/demo-common/components/AuthCard'; 
+    import AuthCardGreen from '@/demo-common/components/AuthCardGreen'; 
     export default {
         components: {
-            'as-modal-card': AuthCard
+            'as-modal-card': AuthCardGreen
         },
         data() {
             return {

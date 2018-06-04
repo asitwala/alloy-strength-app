@@ -15,16 +15,19 @@
                 <template slot="card-body">
                     <v-form ref="signupForm" v-model="validSignupForm" lazy-validation>
                         <v-text-field
+                            color="green"
                             v-model="name"
                             label="Name"
                             type="text"
                         />
                         <v-text-field
+                            color="green"
                             v-model="email"
                             label="Email"
                             type="text"
                         />
                         <v-text-field
+                            color="green"
                             v-model="password"
                             label="Password"
                             :append-icon="signupVisibility1 ? 'visibility' : 'visibility_off'"
@@ -32,6 +35,7 @@
                             :type="signupVisibility1 ? 'password' : 'text'"
                         />
                         <v-text-field
+                            color="green"
                             v-model="confirmPassword"
                             label="Confirm Password"
                             :append-icon="signupVisibility2 ? 'visibility' : 'visibility_off'"
@@ -41,7 +45,7 @@
                     </v-form>
                 </template>
                 <template slot="card-footer">
-                    <v-btn color="primary" @click="signupSubmit">Submit</v-btn>
+                    <v-btn color="green white--text" @click="signupSubmit">Submit</v-btn>
                 </template>
             </as-modal-card>
         </v-dialog>
@@ -61,12 +65,12 @@
 
     import UsersService from '@/services/UsersService'; 
 
-    import AuthCard from '@/demo-common/components/AuthCard'; 
+    import AuthCardGreen from '@/demo-common/components/AuthCardGreen'; 
     import SignupConfirmation from '@/demo-home/SignupConfirmation';
 
     export default {
         components: {
-            'as-modal-card': AuthCard,
+            'as-modal-card': AuthCardGreen,
             'as-confirmation': SignupConfirmation
         },
         data() {
@@ -115,14 +119,13 @@
 
                 //this.$refs.confirmation.openSignupModal();
 
+                UsersService.signupUser(params).then(response => {
+                   let userId = response.data.newUser.id;
 
-                // UsersService.signupUser(params).then(response => {
-                //    let userId = response.data.newUser.id;
-
-                //    UsersService.sendEmailConfirmation(userId).then(response => {
-                //        console.log('SUCCESS', response);
-                //    });
-                // });
+                   UsersService.sendEmailConfirmation(userId).then(response => {
+                       console.log('SUCCESS', response);
+                   });
+                });
             }
         }
     };
