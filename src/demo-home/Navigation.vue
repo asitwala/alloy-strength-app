@@ -30,6 +30,13 @@
                     <v-list-tile-title>Workouts</v-list-tile-title>
                 </v-list-tile>
 
+                <v-list-tile @click="routeTo('RescheduleWorkouts')">
+                    <v-list-tile-action>
+                        <v-icon/>
+                    </v-list-tile-action>
+                    <v-list-tile-title>Reschedule Workouts</v-list-tile-title>
+                </v-list-tile>
+
                 <v-list-tile v-if="$session.exists() && $session.has('user') ? $session.get('user').isAdmin : false" @click="routeTo('AdminSetLevels')">
                     <v-list-tile-action>
                         <v-icon/>

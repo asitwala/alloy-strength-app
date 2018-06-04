@@ -28,8 +28,6 @@ import EmailConfirmation from '@/demo-user/EmailConfirmation';
 import Unauthorized from '@/demo-home/Unauthorized'; 
 import NoPageExists from '@/demo-home/NoPageExists'; 
 
-import store from '../demo-common/mixins/store.js'; 
-
 Vue.use(Router)
 
 const router = new Router({
@@ -107,7 +105,7 @@ const router = new Router({
       path: '/logout',
       name: 'Logout',
       component: Logout,
-      meta: {requireAuth: true}
+      meta: {requireAuth: false}
     },
     {
       path: '/reset-workouts',
@@ -164,14 +162,6 @@ const router = new Router({
       meta: {requireAuth: false}
     }
   ]
-});
-
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(routeRecord => routeRecord.meta.requireAuth) && !store.state.authorized) {
-    next({name: 'Unauthorized', params: { path: to.path }});
-  } else {
-    next(); 
-  }
 });
 
 export default router;

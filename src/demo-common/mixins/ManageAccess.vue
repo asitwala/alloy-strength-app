@@ -2,6 +2,18 @@
 
 // Use GM for global mixin namespace so vue methods, etc. aren't accidentally overwritten
 export default {
+    beforeRouteEnter (to, from, next) {
+        console.log('Before route enter!');
+        next(vm => {
+            const loggedIn = vm.$session && vm.$session.has('user');
+            const requireAuth = to.meta.requireAuth; 
+            if (!loggedIn && requireAuth) {
+                vm.$router.push({name: 'Unauthorized', params: {path: to.path}});
+            } else {
+                return; 
+            }
+        });
+    },
     data() {
         return {
             accessLevelGM: null,

@@ -14,7 +14,7 @@
             <v-btn flat class="as-main-toolbar-link">Why Alloy Strength</v-btn>
             <v-btn flat class="as-main-toolbar-link" @click="routeTo('FAQ')">FAQ</v-btn>
           </v-toolbar-items>
-          <v-toolbar-side-icon v-if="$session.has('user')"@click="toggleNavigation"></v-toolbar-side-icon>
+          <v-toolbar-side-icon v-if="$session.exists() && $session.has('user')" @click="toggleNavigation"></v-toolbar-side-icon>
         </div>
       </v-toolbar>
 
