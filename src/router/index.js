@@ -39,12 +39,12 @@ const router = new Router({
       component: Homepage,
       meta: {requireAuth: false}
     },
-    {
-      path: '/faq',
-      name: 'FAQ',
-      component: FAQ,
-      meta: {requireAuth: false}
-    },
+    // {
+    //   path: '/faq',
+    //   name: 'FAQ',
+    //   component: FAQ,
+    //   meta: {requireAuth: false}
+    // },
     { 
       path: '/about',
       name: 'About',

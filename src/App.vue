@@ -12,7 +12,10 @@
           <v-toolbar-items>
             <v-btn flat class="as-main-toolbar-link" @click="openBlog">Blog</v-btn>
             <v-btn flat class="as-main-toolbar-link">Why Alloy Strength</v-btn>
-            <v-btn flat class="as-main-toolbar-link" @click="routeTo('FAQ')">FAQ</v-btn>
+            <v-tooltip bottom>
+              <v-btn flat class="as-main-toolbar-link" slot="activator">FAQ</v-btn>
+              <span>Coming Soon</span>
+            </v-tooltip>
           </v-toolbar-items>
           <v-toolbar-side-icon v-if="$session.exists() && $session.has('user')" @click="toggleNavigation"></v-toolbar-side-icon>
         </div>
@@ -72,6 +75,12 @@
                   {{ footerIcon.name }}
                 </v-icon>
               </v-btn>
+            </div>
+            
+            <div>
+              <p style="margin-bottom: 0px !important; font-size: 12px; color: white; padding: 8px; margin-right: 22px;  margin-left: 16px;">Built by 
+                <span style="color: #64b5f6 !important;"><strong>1-Stop Development</strong></span>
+              </p>
             </div>
           </div>
         </div>
@@ -263,6 +272,7 @@
     &-links {
       display: flex;
       flex-wrap: wrap;
+      align-items: center;
     }
   }
 
