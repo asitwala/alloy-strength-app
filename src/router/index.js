@@ -23,7 +23,10 @@ import Profile from '@/demo-user/user-info/Profile';
 import FAQ from '@/demo-home/FAQ'; 
 
 import CheckEmail from '@/demo-user/CheckEmail'; 
-import EmailConfirmation from '@/demo-user/EmailConfirmation'; 
+import EmailConfirmation from '@/demo-user/EmailConfirmation';
+
+import Unauthorized from '@/demo-home/Unauthorized'; 
+import NoPageExists from '@/demo-home/NoPageExists'; 
 
 import store from '../demo-common/mixins/store.js'; 
 
@@ -139,31 +142,36 @@ const router = new Router({
     {
       path: '/confirm/:id/:confString',
       name: 'EmailConfirmation',
-      component: EmailConfirmation
+      component: EmailConfirmation,
+      meta: {requireAuth: false}
     },
     {
       path: '/check-email',
       name: 'CheckEmail',
-      component: CheckEmail
+      component: CheckEmail,
+      meta: {requireAuth: false}
+    },
+    {
+      path: '/unauthorized', 
+      name: 'Unauthorized', 
+      component: Unauthorized,
+      meta: {requireAuth: false},
+      props: true
     },
     {
       path: '*',
-      component: {
-        template: '<div>404!</div>',
-      },
+      component: NoPageExists,
       meta: {requireAuth: false}
     }
   ]
 });
 
 router.beforeEach((to, from, next) => {
-  console.log('Store', store.state.authorized); 
-  console.log('Matched', to.matched); 
-  if (to.matched.some(routeRecord => routeRecord.meta.requireAuth)) {
-    console.log(`Route requires auth`); 
+  if (to.matched.some(routeRecord => routeRecord.meta.requireAuth) && !store.state.authorized) {
+    next({name: 'Unauthorized', params: { path: to.path }});
+  } else {
+    next(); 
   }
-
-  next(); 
 });
 
 export default router;
