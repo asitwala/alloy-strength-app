@@ -16,7 +16,6 @@
           </v-toolbar-items>
           <v-toolbar-side-icon v-if="$session.has('user')"@click="toggleNavigation"></v-toolbar-side-icon>
         </div>
-
       </v-toolbar>
 
       <as-navigation
@@ -155,6 +154,12 @@
   @import '~@/demo-common/styles/transitions';
   @import '~@/demo-common/styles/colors';
 
+  .as-loading {
+    height: 100%; 
+    display: flex; 
+    align-items: center;
+    justify-content: center; 
+  }
 
   .as-main-toolbar {
     padding-top: 8px;

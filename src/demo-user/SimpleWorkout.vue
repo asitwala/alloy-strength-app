@@ -162,7 +162,7 @@
 
     .as-workout-simple-view-container {
         flex: 1;
-        min-width: 400px;
+        min-width: 735px;
         margin-top: 16px;
     }
 

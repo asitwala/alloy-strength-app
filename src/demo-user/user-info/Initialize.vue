@@ -1,6 +1,15 @@
 <template>
     <div class="as-initialize">
-        <div class="as-initialize-stepper">
+        <!-- Loading icon -->
+        <div class="as-loading" v-if="!stepper && !hasFinished">
+            <v-progress-circular indeterminate color="primary"/>
+        </div>
+
+        <div class="as-initialize-finished" v-else-if="hasFinished">
+            <h2>You have already completed the initial sign-up process!</h2>
+        </div>
+
+        <div class="as-initialize-stepper" v-else>
             <v-stepper v-model="stepper">
                 <v-stepper-header>
                     <v-stepper-step step="1"
@@ -45,23 +54,22 @@
             'as-initialize-step-2': InitializeStep2,
             'as-initialize-step-3': InitializeStep3
         },
-        props: {
-            givenStep: {
-                type: Number,
-                default: 1
-            }
-        },
         mounted() {
             UsersService.getAccessInfo(this.$session.get('user').id).then(response => {
                 if (response.data.accessLevel) {
-                    console.log('this.stepper', this.handleAccessLevelStepperGM(1));
-                    this.stepper = this.handleAccessLevelStepperGM(1);
+
+                    if (response.data.accessLevel > 2) {
+                        this.hasFinished = true;
+                    } else {
+                        this.handleAccessLevelGM(response.data.accessLevel);
+                    }
                 }
             });
         },
         data() {
             return {
-                stepper: this.givenStep
+                stepper: null,
+                hasFinished: false
             }
         }, 
         methods: {
@@ -71,7 +79,7 @@
         },
         watch: {
             officialStepGM: function(newVal) {
-                if (this.stepper !== newVal) {
+                if (this.stepper !== newVal && (newVal > 0 && newVal < 4)) {
                     this.stepper = newVal;
                 }
             }
@@ -82,6 +90,10 @@
 
 <style lang="scss">
     @import '~@/demo-common/styles/colors';
+
+    .as-initialize {
+        height: 100%;
+    }
 
     .as-initialize-stepper {
         width: 95%; 
@@ -116,4 +128,11 @@
         margin-top: 12px !important;
     }
 
+
+    .as-initialize-finished {
+        height: 100%;
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+    }
 </style>

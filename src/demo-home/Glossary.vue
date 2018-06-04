@@ -115,7 +115,7 @@
                 <h3>RPE TABLE</h3>
                 <v-card>
                     <v-card-title>
-                        
+                        <as-rpe-table></as-rpe-table>
                     </v-card-title>
                 </v-card>
             </a>                
@@ -236,9 +236,14 @@
 
 
 <script>
+
+    import RPETable from '@/demo-common/components/RPETable'; 
     import UsersService from '@/services/UsersService'; 
 
     export default {
+        components: {
+            'as-rpe-table': RPETable
+        },
         mounted() {
             UsersService.getAccessInfo(this.$session.get('user').id).then(response => {
                 if (response.data.accessLevel) {
@@ -309,7 +314,28 @@
 
 @import '~@/demo-common/styles/colors';
 
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .as-glossary-left-menu {
+        display: none;
+    }
+} 
+
 .as-glossary {
+
+    .card {
+        background-color: $greyLighten3 !important;
+
+        p:last-child {
+            margin-bottom: 0px !important;
+        }
+
+        ol, ul {
+            margin-left: 12px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+    }
 
     ol, ul {
         list-style-position: inside; 
@@ -320,7 +346,10 @@
     &-left-menu {
         margin-top: 3px !important;
         padding-bottom: 50px !important;
-        height: 700px !important;
+        height: unset !important;
+        min-height: 700px !important;
+        max-height: 1050px !important;
+
 
         &-item {
             color: $blueDarken2;
@@ -335,11 +364,11 @@
             margin-bottom: 5px;
             margin-left: 20px;
         }
-
     }
 
     &-content {
-        height: 650px;
+        min-height: 650px;
+        max-height: 1000px;
         overflow-y: auto;
         margin-left: 20px;
         margin-right: 15px;
@@ -351,12 +380,15 @@
         }
 
         h3 {
-            margin-top: 15px;
+            margin-top: 30px;
             margin-bottom: 5px;
             color: $indigoBase;
         }
-    }
 
+        a:first-child > h3 {
+            margin-top: 16px;
+        }
+    }
 
 }
 

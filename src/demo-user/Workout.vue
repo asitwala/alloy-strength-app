@@ -722,7 +722,7 @@ export default {
             flex: 1; 
             margin: 0 20px;
             margin-bottom: 25px;
-            min-width: 300px;
+            min-width: 735px;
         }
     }
 
@@ -732,5 +732,4 @@ export default {
         justify-content: center;
         align-items: center;
     }
-
 </style>
