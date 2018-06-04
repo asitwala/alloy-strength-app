@@ -287,7 +287,7 @@ export default {
         },
         fetchProfileInfo() {
             return UsersService.getProfileInfo(this.userId).then((response) => {
-                if (response.data.accessLevel) {
+                if (this.validAccessLevelGM(response.data.accessLevel)) {
                     this.handleAccessLevelGM(response.data.accessLevel);
                 }
                 this.level = response.data.level;

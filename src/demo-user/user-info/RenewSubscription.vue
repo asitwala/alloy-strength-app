@@ -17,7 +17,7 @@ import InitializeStep1 from '@/demo-user/user-info/InitializeStep1';
 export default {
     mounted() {
         UsersService.getAccessInfo(this.$session.get('user').id).then(response => {
-            if (response.data.accessLevel) {
+            if (this.validAccessLevelGM(response.data.accessLevel)) {
                 this.handleAccessLevelGM(response.data.accessLevel);
             }
         });

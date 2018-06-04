@@ -60,7 +60,7 @@
         },
         mounted() {
             UsersService.getAccessInfo(this.$session.get('user').id).then(response => {
-                if (response.data.accessLevel) {
+                if (this.validAccessLevelGM(response.data.accessLevel)) {
 
                     if (response.data.accessLevel > 2) {
                         this.hasFinished = true;

@@ -133,7 +133,7 @@ export default {
             VideoService.fetchVideoInfo(this.$session.get('user').id).then(response => {
                 if (typeof response === 'object') {
 
-                    if (response.data.accessLevel) {
+                    if (this.validAccessLevelGM(response.data.accessLevel)) {
                         this.handleAccessLevelGM(response.data.accessLevel);
                     }
                     

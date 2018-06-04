@@ -78,7 +78,7 @@ export default {
             this.userId = this.$session.get('user').id; 
 
             StatsService.fetchStatsInfo(this.userId).then(response => {
-                if (response.data.accessLevel) {
+                if (this.validAccessLevelGM(response.data.accessLevel)) {
                     this.handleAccessLevelGM(response.data.accessLevel);
                 }
                 this.level = response.data.level; 

@@ -113,7 +113,7 @@
                 this.userId = this.$session.get('user').id; 
 
                 ProgressService.fetchProgressInfo(this.userId).then(response => {
-                    if (response.data.accessLevel) {
+                    if (this.validAccessLevelGM(response.data.accessLevel)) {
                         this.handleAccessLevelGM(response.data.accessLevel);
                     }
                     

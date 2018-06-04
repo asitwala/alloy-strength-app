@@ -145,7 +145,7 @@
                         if (isAdmin && !hasWorkouts) {
                             this.$router.push({ name: 'AdminSetLevels' }); // admin to set level 
                         } else if (!isAdmin && !hasWorkouts) {
-                            this.$router.push({ name: 'SetLevels' }); // beta user to set level 
+                            this.$router.push({ name: 'Initialize' }); // beta user to set level 
                         } else {
                             this.$router.push({ name: 'Workout' }); // otherwise, take to workouts page 
                         }

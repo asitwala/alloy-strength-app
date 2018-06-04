@@ -283,7 +283,9 @@ export default {
             WorkoutService.fetchWorkoutInfo(UserId, workoutId).then(response => {
                 if (typeof response === 'object') {
 
-                    if (response.data.accessLevel) {
+                    if (this.validAccessLevelGM(response.data.accessLevel)) {
+
+                        console.log('Response.data.accessLevel', response.data.accessLevel);
                         this.handleAccessLevelGM(response.data.accessLevel);
 
                         // 4 -> Progress (no new workouts yet)

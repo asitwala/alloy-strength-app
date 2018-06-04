@@ -21,6 +21,9 @@ export default {
         }
     },
     methods: {
+        validAccessLevelGM(accessLevel) {
+            return (accessLevel >= 0);
+        },
         resetAccessLevelGM() {
             this.accessLevelGM = null;
         },
