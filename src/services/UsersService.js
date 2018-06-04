@@ -35,7 +35,7 @@ export default {
     return Api().post(`/api/users/${params.username}/login`, params);
   },
   getLevelInitially(userId, params) {
-    return Api().post(`/api/users/${userId}/get-level`, params);
+    return Api().put(`/api/users/${userId}/get-level`, params);
   }, 
   generateWorkouts(userId, params) {
     return Api().post(`/api/users/${userId}/get-next-workouts`, params);
