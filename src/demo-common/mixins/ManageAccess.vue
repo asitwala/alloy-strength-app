@@ -29,6 +29,7 @@ export default {
         },
         setAccessLevelGM(accessLevel) {
             this.accessLevelGM = accessLevel; 
+            this.$session.set('accessLevel', this.accessLevelGM);
         },
         handleAccessLevelGM(accessLevel) {
             this.setAccessLevelGM(accessLevel);

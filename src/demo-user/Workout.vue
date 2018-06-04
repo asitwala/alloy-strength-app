@@ -284,8 +284,6 @@ export default {
                 if (typeof response === 'object') {
 
                     if (this.validAccessLevelGM(response.data.accessLevel)) {
-
-                        console.log('Response.data.accessLevel', response.data.accessLevel);
                         this.handleAccessLevelGM(response.data.accessLevel);
 
                         // 4 -> Progress (no new workouts yet)

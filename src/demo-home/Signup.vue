@@ -109,6 +109,7 @@
             },
             signupSubmit() {
                 let params = {
+                    name: this.name,
                     P1: this.password,
                     P2: this.password,
                     username: this.email

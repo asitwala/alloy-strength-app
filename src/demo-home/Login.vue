@@ -135,6 +135,9 @@
                     if (loginResponse.data.Success) {
                         this.$session.set("user", loginResponse.data.User);
                         this.$session.set("viewingWID", loginResponse.data.User.currentWorkoutID);
+
+                        // Manually set accessLevel here for nav sidebar purposes
+                        this.setAccessLevelGM(loginResponse.data.accessInfo.accessLevel); 
                         
                         this.closeLoginModal();
 

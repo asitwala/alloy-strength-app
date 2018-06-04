@@ -160,7 +160,9 @@
                 });
             },
             submitStep2() {
-                this.$emit('submit'); 
+                this.postInfoAndGetLevel().then(() => {
+                    this.$emit('submit');
+                });
             }
         }
     };
