@@ -144,9 +144,12 @@
                         // Handle routing based on type of user 
                         let isAdmin = loginResponse.data.User.isAdmin; 
                         let hasWorkouts = loginResponse.data.hasWorkouts; 
+                        let confirmedEmail = loginResponse.data.User.active;
 
                         if (isAdmin && !hasWorkouts) {
                             this.$router.push({ name: 'AdminSetLevels' }); // admin to set level 
+                        } else if (!isAdmin && !confirmedEmail) {
+                            this.$router.push({name: 'CheckEmail'});
                         } else if (!isAdmin && !hasWorkouts) {
                             this.$router.push({ name: 'Initialize' }); // beta user to set level 
                         } else {

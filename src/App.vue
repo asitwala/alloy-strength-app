@@ -25,7 +25,7 @@
         :visible="showNavigation"
         @update-visibility="setNavigation"/>
 
-      <div class="as-main-body" style="height: 100%">
+      <div class="as-main-body" style="height: 100%; min-height: 600px;">
         <router-view/>
       </div>
      
@@ -79,7 +79,7 @@
             
             <div>
               <p style="margin-bottom: 0px !important; font-size: 12px; color: white; padding: 8px; margin-right: 22px;  margin-left: 16px;">Built by 
-                <span style="color: #64b5f6 !important;"><strong>1-Stop Development</strong></span>
+                <span style="color: #1e88e5 !important; cursor: pointer"><strong>1-Stop Development</strong></span>
               </p>
             </div>
           </div>

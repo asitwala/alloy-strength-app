@@ -25,11 +25,11 @@
                         </v-stepper-content>
 
                         <v-stepper-content step="2" class="as-initialize-stepper-content">
-                            <as-initialize-step-2 ref="step2" @submit="next"/>
+                            <as-initialize-step-2 ref="step2" @submit="handleLevel"/>
                         </v-stepper-content>
 
                         <v-stepper-content step="3" class="as-initialize-stepper-content">
-                            <as-initialize-step-3 ref="step3"/>
+                            <as-initialize-step-3 ref="step3" :given-level="givenLevel"/>
                         </v-stepper-content> 
                     </v-stepper-items>
                 </v-stepper>
@@ -73,12 +73,17 @@
         data() {
             return {
                 stepper: null,
-                hasFinished: false
+                hasFinished: false,
+                givenLevel: null
             }
         }, 
         methods: {
             next() {
                 this.stepper += 1; 
+            }, 
+            handleLevel(levelVal) {
+                this.givenLevel = levelVal; 
+                this.next();
             }
         },
         watch: {

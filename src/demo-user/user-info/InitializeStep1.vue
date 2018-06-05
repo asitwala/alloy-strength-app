@@ -1,62 +1,75 @@
 <template>
-    <div class="as-initialize-step-1">
-        <div class="as-initialize-step-1-packages">
-            <h1>{{ title }}</h1>
-            <p>{{ description }}</p>
-            <v-radio-group v-model="selectedRadio">
-                <v-card v-for="asPackage in asPackages" :key="asPackage.name"
-                    class="as-initialize-available-package"
-                    :class="[{'selected': selectedPackage && asPackage.name === selectedPackage.name}]">
-                    <div class="as-package-overlay"></div>
-                    <v-card-title @click="selectPackage(asPackage)">
-                        <div class="as-package-content">
-                            <div class="as-package-left">
-                                <div class="as-initialize-available-package-title">
-                                    <h2>{{ asPackage.name }}</h2>
-                                    <div class="as-initialize-title-divider"></div> 
-                                    <h4>{{ asPackage.description }}</h4>
-                                </div>
-                                <div class="as-initialize-available-package-desc">
-                                    <h4 style="margin-top: 4px;"> {{ asPackage.price }}</h4>
-                                </div>
-                            </div>
+    <div class="as-initialize-step-1" style="height: 100%">
 
-                            <div class="as-package-right">
-                                <v-radio color="primary" :value="asPackage.radioLabel"></v-radio>
-                            </div>
-                        </div>
-                    </v-card-title>
-                </v-card>
-            </v-radio-group>
+        <!-- Loading icon -->
+        <div class="as-loading" v-if="loading">
+            <v-progress-circular indeterminate color="primary"/>
         </div>
 
-        <div class="as-initialize-step-1-stripe">
-    
-            <h4 class="as-package-message" v-if="!selectedPackage">
-                You have not selected a package.
-            </h4>
+        <transition name="as-fade">
+            <div class="as-initialize-step-1-actual-content" v-if="!loading"
+                style="width: 100%; display: flex; flex-wrap: wrap;">
+                <div class="as-initialize-step-1-packages">
+                    <h1>{{ title }}</h1>
+                    <p>{{ description }}</p>
+                    <v-radio-group v-model="selectedRadio">
+                        <v-card v-for="asPackage in asPackages" :key="asPackage.name"
+                            class="as-initialize-available-package"
+                            :class="[{'selected': selectedPackage && asPackage.name === selectedPackage.name}]">
+                            <div class="as-package-overlay"></div>
+                            <v-card-title @click="selectPackage(asPackage)">
+                                <div class="as-package-content">
+                                    <div class="as-package-left">
+                                        <div class="as-initialize-available-package-title">
+                                            <h2>{{ asPackage.name }}</h2>
+                                            <div class="as-initialize-title-divider"></div> 
+                                            <h4>{{ asPackage.description }}</h4>
+                                        </div>
+                                        <div class="as-initialize-available-package-desc">
+                                            <h4 style="margin-top: 4px;"> {{ asPackage.price }}</h4>
+                                        </div>
+                                    </div>
 
-            <h4 class="as-package-message" v-else>
-                You have selected the 
-                <v-chip label :class="selectedPackageColorClasses"
-                    small
-                    text-color="white"
-                    style="font-weight:bold; margin: 0 4px;">
-                    {{ selectedPackage ? selectedPackage.name: '' }}
-                </v-chip>
-                package.
-            </h4>
-            <v-card class="as-initialize-step-1-stripe-container">
-                <v-card-text>
-                    <h2><span style="margin-right: 12px"><v-icon>fa-shopping-cart</v-icon></span>Checkout</h2>
-                    <p style="margin-top: 12px; margin-bottom: 4px">Please enter your payment information below</p>
-                    <div class="as-initialize-step-1-stripe-component">
-                        <as-stripe @created-token="submitStep1"></as-stripe>
-                        
-                    </div>
-                </v-card-text>
-            </v-card>
-        </div>
+                                    <div class="as-package-right">
+                                        <v-radio color="primary" :value="asPackage.radioLabel"></v-radio>
+                                    </div>
+                                </div>
+                            </v-card-title>
+                        </v-card>
+                    </v-radio-group>
+                </div>
+
+                <div class="as-initialize-step-1-stripe">
+            
+                    <h4 class="as-package-message" v-if="!selectedPackage">
+                        You have not selected a package.
+                    </h4>
+
+                    <h4 class="as-package-message" v-else>
+                        You have selected the 
+                        <v-chip label :class="selectedPackageColorClasses"
+                            small
+                            text-color="white"
+                            style="font-weight:bold; margin: 0 4px;">
+                            {{ selectedPackage ? selectedPackage.name: '' }}
+                        </v-chip>
+                        package.
+                    </h4>
+                    <v-card class="as-initialize-step-1-stripe-container">
+                        <v-card-text>
+                            <h2><span style="margin-right: 12px"><v-icon>fa-shopping-cart</v-icon></span>Checkout</h2>
+                            <p style="margin-top: 12px; margin-bottom: 4px">Please enter your payment information below</p>
+                            <div class="as-initialize-step-1-stripe-component">
+                                <as-stripe @created-token="submitStep1"></as-stripe>
+                                
+                            </div>
+                        </v-card-text>
+                    </v-card>
+                </div>
+            </div>
+        
+        </transition>
+
     </div>
 </template>
 
@@ -101,7 +114,9 @@
                     }
                 ], 
                 selectedPackage: null,
-                selectedRadio: null
+                selectedRadio: null,
+
+                loading: false
             }
         },
         mounted() {
@@ -116,7 +131,9 @@
             submitStep1(stripeToken) {
                 //{ plan: 'AS_Gold' or 'AS_Silver', stripeToken: stripe token}
 
-                let selectedPlan = null; 
+                this.loading = true;
+
+                let selectedPlan = null;
 
                 if (this.selectedPackage.name === 'Gold') {
                     selectedPlan = 'AS_Gold'; 
@@ -132,11 +149,15 @@
                 if (this.renew) {
                     // renewing subscription
                     UsersService.renewSubscription(this.userId, params).then(() => {
-                        this.$emit('submit'); 
+                        this.$emit('submit');
+                    }).finally(() => {
+                        this.loading = false;
                     });
                 } else {
                     UsersService.subscribe(this.userId, params).then(() => {
-                        this.$emit('submit'); 
+                        this.$emit('submit');
+                    }).finally(() => {
+                        this.loading = false; 
                     });
                 }
             }
@@ -161,6 +182,14 @@
     .as-initialize-step-1 {
         display: flex; 
         flex-wrap: wrap;
+
+        min-height: 400px;
+        position: relative;
+
+        .as-loading {
+            position: absolute;
+            right: 50%;
+        }
     }
 
     .as-initialize-step-1-packages {

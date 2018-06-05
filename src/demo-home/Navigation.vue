@@ -68,12 +68,41 @@
                 </div>
 
                 <div v-else>
-                    <p v-if="$session.get('accessLevel') <= 2" style="margin: 24px; text-align: center;">
-                        Please complete the sign up process to view all navigation options.
-                    </p>
-                    <p v-else-if="$session.get('accessLevel') === 3" style="margin: 24px; text-align: center;">
-                        Please renew your subscription to view all navigation options.
-                    </p>
+                    <!-- User hasn't activated account via link in email -->
+                    <div v-if="$session.get('user') && !$session.get('user').active">
+                        <p style="margin: 24px; text-align: center;">
+                            Please check your inbox for a confirmation email to activate your account.
+                        </p>
+                        <v-divider/>
+                    </div>
+
+                    <!-- User hasn't finished sign up process -->
+                    <div v-else-if="$session.get('accessLevel') <= 2">
+                        <p style="margin: 24px; text-align: center;">
+                            Please complete the sign up process to view all navigation options.
+                        </p>
+                        <v-divider/>
+                        <v-list-tile @click="routeTo('Initialize')">
+                            <v-list-tile-action>
+                                <v-icon/>
+                            </v-list-tile-action>
+                            <v-list-tile-title>Complete Sign Up</v-list-tile-title>
+                        </v-list-tile>
+                    </div>
+
+                    <!-- User has not renewed subscription -->
+                    <div v-else-if="$session.get('accessLevel') === 3">
+                        <p style="margin: 24px; text-align: center;">
+                            Please renew your subscription to view all navigation options.
+                        </p>
+                        <v-divider/>
+                        <v-list-tile @click="routeTo('RenewSubscription')">
+                            <v-list-tile-action>
+                                <v-icon/>
+                            </v-list-tile-action>
+                            <v-list-tile-title>RenewSubscription</v-list-tile-title>
+                        </v-list-tile>
+                    </div>
                 </div>
 
                 <v-divider/>
@@ -115,7 +144,7 @@
                 }
             },
             visible: function(newVal) {
-                console.log('this.accessLevelGM', );
+                console.log('session', this.$session.get('user'));
                 this.showDrawer = newVal; 
             }
         }
