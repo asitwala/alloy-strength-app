@@ -112,6 +112,7 @@
                 var postBody = {};
                 postBody.username = this.username;
                 postBody.password = this.password;
+                postBody.timezoneOffset = new Date().getTimezoneOffset()/60;
 
                 this.usernameNeeded = this.username === ""; 
                 this.passwordNeeded = this.password === ""; 
