@@ -57,6 +57,9 @@
 <script>
     import emailRegex from '@/demo-common/mixins/emailRegex'; 
     import AuthCard from '@/demo-common/components/AuthCard'; 
+
+    import UsersService from '@/services/UsersService'; 
+
     export default {
         components: {
             'as-modal-card': AuthCard
@@ -87,7 +90,9 @@
                 this.invalidEmail = !emailRegex.test(this.email);
 
                 if (this.$refs.FPForm.validate()) {
-                    this.sentEmail = true; 
+                    UsersService.forgotPassword({email: this.email}).then(() => {
+                        this.sentEmail = true; 
+                    });
                 }
             }
         },
