@@ -10,20 +10,38 @@
             >
             <as-modal-card @close="closeFPModal">
                 <template slot="card-header">
-                    <h3>Forgot your password? No worries, we're on it!</h3>
+                    <h3>Forgot your password?</h3>
                 </template>
                 <template slot="card-body">
                     <div class="as-forgot-password">
                         <div class="as-forgot-container">
-                            <p style="margin-bottom: 4px !important">
+                            <h2 style="margin-top: 4px; margin-bottom: 12px;">No worries! We're on it!</h2>
+
+                            <h4>STEP 1</h4>
+                            <v-form ref="FPForm" v-model="validFPForm" lazy-validation>
+                                <v-text-field
+                                    label="Please enter your email"
+                                    v-model="email"
+                                    type="text"
+                                    :rules="emailRules">
+                                </v-text-field>
+                            </v-form>
+                     
+                            <h4>STEP 2</h4>
+                            <p style="margin-bottom: 0px !important">
                                 Please click the button below to generate a temporary password that will be sent to your email.
                             </p>
+                            <div style="display: flex; flex-wrap: wrap; align-items: center;">
+                                <v-btn style="margin-left: 0px !important; margin-bottom: 24px;" 
+                                color="primary" :disabled="buttonInactive" @click="sendFPEmail">Send Email</v-btn>
+                                <p v-if="sentEmail" style="margin-bottom: 24px;">An email was sent!</p>
+                            </div>
+                        
 
-                            <v-btn color="primary" :disabled="sendEmailButtonClicked" @click="sendFPEmail">Send Email</v-btn>
-
-                            <p style="margin-top: 4px; margin-bottom: 0px !important;">
+                            <h4>STEP 3</h4>
+                            <p style="margin-bottom: 0px !important;">
                                 Once you receive this temporary password, log into Alloy Strength and visit your 
-                                    <strong>Profile</strong> page to change your password.
+                                <strong>Profile</strong> page to change your password.
                             </p>
                         </div>
                     </div>
@@ -37,20 +55,25 @@
 </template>
 
 <script>
+    import emailRegex from '@/demo-common/mixins/emailRegex'; 
     import AuthCard from '@/demo-common/components/AuthCard'; 
     export default {
         components: {
             'as-modal-card': AuthCard
         },
-        props: {
-            email: {
-                type: String
-            }
-        },
         data() {
             return {
                 showFPModal: true,
-                sendEmailButtonClicked: false
+                sentEmail: false, 
+                email: '',
+                
+                // rules
+                emailRules: [
+                    v => !this.invalidEmail || 'Invalid email. Please try again.'
+                ],
+
+                validFPForm: true,
+                invalidEmail: false
             };
         }, 
         methods: {
@@ -61,8 +84,24 @@
                 this.showFPModal = false;
             },
             sendFPEmail() {
-                console.log('I get here!');
-                this.sendEmailButtonClicked = true; 
+                this.invalidEmail = !emailRegex.test(this.email);
+
+                if (this.$refs.FPForm.validate()) {
+                    this.sentEmail = true; 
+                }
+            }
+        },
+        computed: {
+            buttonInactive() {
+                return (this.email === '' || this.sentEmail); 
+            }
+        },
+        watch: {
+            email: function () {
+                if (this.invalidEmail) {
+                    this.invalidEmail = false; 
+                    this.$refs.FPForm.validate(); 
+                }
             }
         }
     };
@@ -74,7 +113,6 @@
         min-height: 200px;
         display: flex;
         align-items: center;
-        text-align: center;
 
         &-container {
             min-width: 250px;

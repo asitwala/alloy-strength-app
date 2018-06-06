@@ -38,7 +38,13 @@
               </v-btn>
           </div>
 
-          <!-- Footer Links ('About', Social Media, etc.) --> 
+            <div>
+              <p style="margin-bottom: 0px !important; font-size: 12px; color: white; padding: 8px; margin-right: 22px;  margin-left: 16px;">Built by 
+                <span style="color: #1e88e5 !important; cursor: pointer"><strong>1-Stop Development</strong></span>
+              </p>
+            </div>
+
+          <!-- Footer Links ('About', Social Media, etc.) -->
           <div class="as-footer-links">
             <v-btn
               color="white"
@@ -77,11 +83,6 @@
               </v-btn>
             </div>
             
-            <div>
-              <p style="margin-bottom: 0px !important; font-size: 12px; color: white; padding: 8px; margin-right: 22px;  margin-left: 16px;">Built by 
-                <span style="color: #1e88e5 !important; cursor: pointer"><strong>1-Stop Development</strong></span>
-              </p>
-            </div>
           </div>
         </div>
       </v-footer>
@@ -248,6 +249,7 @@
       flex-wrap: wrap;
       width: 100%;
       justify-content: space-between;
+      align-items: center;
       height: auto !important;
     }
 

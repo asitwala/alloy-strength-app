@@ -21,12 +21,13 @@ import Progress from '@/demo-user/user-info/Progress';
 import Profile from '@/demo-user/user-info/Profile'; 
 
 import FAQ from '@/demo-home/FAQ'; 
+import WhyAlloyStrength from '@/demo-home/WhyAlloyStrength';
 
 import CheckEmail from '@/demo-user/CheckEmail'; 
 import EmailConfirmation from '@/demo-user/EmailConfirmation';
 
-import Unauthorized from '@/demo-home/Unauthorized'; 
-import NoPageExists from '@/demo-home/NoPageExists'; 
+import Unauthorized from '@/demo-home/Unauthorized';
+import NoPageExists from '@/demo-home/NoPageExists';
 
 Vue.use(Router)
 
@@ -45,6 +46,12 @@ const router = new Router({
     //   component: FAQ,
     //   meta: {requireAuth: false}
     // },
+    {
+      path: '/why', 
+      name: 'WhyAlloyStrength',
+      component: WhyAlloyStrength,
+      meta: {requireAuth: false}
+    },
     { 
       path: '/about',
       name: 'About',
