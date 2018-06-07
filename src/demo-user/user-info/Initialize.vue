@@ -29,7 +29,7 @@
                         </v-stepper-content>
 
                         <v-stepper-content step="3" class="as-initialize-stepper-content">
-                            <as-initialize-step-3 ref="step3" :given-level="givenLevel"/>
+                            <as-initialize-step-3 ref="step3" :given-level="givenLevel" :given-block-num="givenBlockNum"/>
                         </v-stepper-content> 
                     </v-stepper-items>
                 </v-stepper>
@@ -74,15 +74,17 @@
             return {
                 stepper: null,
                 hasFinished: false,
-                givenLevel: null
+                givenLevel: null,
+                givenBlockNum: null
             }
         }, 
         methods: {
             next() {
                 this.stepper += 1; 
             }, 
-            handleLevel(levelVal) {
-                this.givenLevel = levelVal; 
+            handleLevel(levelInfo) {
+                this.givenLevel = levelInfo.level; 
+                this.givenBlockNum = levelInfo.blockNum;
                 this.next();
             }
         },

@@ -176,7 +176,13 @@
                 return UsersService.getLevelInitially(this.$session.get('user').id, params).then(response => {
                     this.$session.set('user', response.data.user); 
                     this.$session.set('viewingWID', response.data.viewingWID);
-                    this.$emit('submit', response.data.user.level);
+
+                    let levelInfo = {
+                        level: response.data.user.level,
+                        blockNum: response.data.user.blockNum
+                    };
+
+                    this.$emit('submit', levelInfo);
                 });
             },
             submitStep2() {

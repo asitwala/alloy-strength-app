@@ -1,192 +1,203 @@
 <template>
-    <div class="as-profile-container">
-        <as-notification
-            :visible="notificationVisible"
-            type="submit"
-            @update-visibility="val => notificationVisible = val">
-            <template slot="notification-content">
-                <span> {{ notificationMessage }}</span>
-            </template>
-        </as-notification>
-
-        <div class="as-profile">
-            <div class="as-profile-dynamic">
-                <h1>Profile</h1>
-                
-                <v-divider/>
-                <v-form>
-                    <p class="as-profile-desc">Here's where you can manage your account and view some of your workout stats.</p>
-                    <v-expansion-panel class="as-user-panel">
-                        <v-expansion-panel-content>
-                            <div slot="header" class="as-user-options-header">
-                                <h2>User Information</h2>
-                            </div>
-                            <v-card class="as-user-options">
-                                <v-card-text>
-                                    <v-text-field
-                                        v-model="name"
-                                        label="Name"
-                                        readonly
-
-                                    />
-                                    <v-text-field
-                                        v-model="username"
-                                        label="Email"
-                                        readonly
-                                    />
-                                </v-card-text>
-                            </v-card>
-                        </v-expansion-panel-content>
-                    </v-expansion-panel>
-                    
-                    <v-expansion-panel class="as-password-panel">
-                        <v-expansion-panel-content>
-                            <div slot="header" class="as-password-options-header">
-                                <h2>Change Password</h2>
-                            </div>
-
-                            <v-card class="as-password-options">
-                                <v-card-text>
-                                    <v-form 
-                                        ref="passwordForm"
-                                        v-model="validPasswordForm"
-                                        lazy-validation
-                                        >
-                                        <v-text-field
-                                            v-model="oldPassword"
-                                            :rules="oldPasswordRules"
-                                            label="Old Password"
-                                            :append-icon="oldPasswordVisibility ? 'visibility' : 'visibility_off'"
-                                            :append-icon-cb="() => (oldPasswordVisibility = !oldPasswordVisibility)"
-                                            :type="oldPasswordVisibility ? 'password' : 'text'"
-                                        />
-
-                                        <v-text-field
-                                            v-model="newPassword"
-                                            label="New Password"
-                                            :rules="newPasswordRules"
-                                            :append-icon="newPasswordVisibility ? 'visibility' : 'visibility_off'"
-                                            :append-icon-cb="() => (newPasswordVisibility = !newPasswordVisibility)"
-                                            :type="newPasswordVisibility ? 'password' : 'text'"
-                                        />
-
-                                        <v-text-field
-                                            v-model="newPasswordAgain"
-                                            :rules="newPasswordAgainRules"
-                                            label="Confirm New Password"
-                                            :append-icon="newPasswordAgainVisibility ? 'visibility' : 'visibility_off'"
-                                            :append-icon-cb="() => (newPasswordAgainVisibility = !newPasswordAgainVisibility)"
-                                            :type="newPasswordAgainVisibility ? 'password' : 'text'"
-                                        />
-                                    </v-form>
-                                </v-card-text>
-
-                                <v-card-actions>
-                                    <div class="as-profile-card-actions">
-                                        <v-btn
-                                            color="primary"
-                                            @click="changeUserPassword"
-                                            class="as-change-password">Change
-                                        </v-btn>
-                                    </div>
-                                </v-card-actions>
-                            </v-card>
-                        </v-expansion-panel-content>
-                    </v-expansion-panel>
-
-                    <v-expansion-panel class="as-user-panel">
-                        <v-expansion-panel-content>
-                            <div slot="header" class="as-user-options-header">
-                                <h2>Change Subscription</h2>
-                            </div>
-                            <v-card class="as-user-options">
-                                <v-card-text>
-                                    <h3>
-                                        Your current subscription package is 
-                                        <v-chip label :class="oldPackageColorClasses"
-                                            small
-                                            text-color="white"
-                                            style="font-weight:bold; margin: 0 4px;">
-                                            {{ oldPackage ? oldPackage.name: '' }}
-                                        </v-chip>
-                                        <span class="font-size: 14px !important; font-weight: normal !important">{{ oldPackage ? oldPackage.price : '' }}</span>
-                                    </h3>
-
-                                    <p style="font-size: 14px; margin-top: 4px;"
-                                        v-if="oldPackage && subscriptionInfo.endDateString" v-html="`Your subscription will expire on <strong>${subscriptionInfo.endDateString}</strong>. 
-                                        ${subscriptionInfo.secondLine}`"></p>
-
-                                    <div class="as-divider">
-                                        <v-divider/>
-                                    </div>
-                                    
-                                    <h3 style="margin-top: 12px">Switch Subscription</h3>
-                                    <p style="font-size: 14px; margin-top: 4px; margin-bottom: 0px;">If you <strong>switch</strong> your subscription package, changes will become effective AFTER your current
-                                    subscription expires. </p>
-
-                                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <v-select
-                                            auto
-                                            label="Select a Package"
-                                            :items="asPackagesSelect"
-                                            v-model="newPackageSelect"
-                                            single-line
-                                        />
-                                        <v-btn @click="confirmSwitch"
-                                            :disabled="!newPackageSelect"
-                                            small color="primary" style="float: right; margin-top: 8px; margin-bottom: 16px; margin-right: 0px !important;">Switch Subscription</v-btn>
-                                    </div>
-                                
-                                        
-                                    <v-divider style="clear: both"/>
-
-                                    <div>
-                                        <h3 style="margin-top: 12px;">Cancel Subscription</h3>
-                                        <p style="font-size: 14px; margin-top: 4px; margin-bottom: 0px;">After you <strong>cancel</strong> your subscription, you will still have access to Alloy Strength until your subscription's expiration date.</p>
-                                        
-                                        <v-btn @click="confirmCancel"
-                                        small color="red" style="color: white !important; clear: both; float: right; margin-top: 16px; margin-bottom: 16px; margin-right: 0px !important;">Cancel Subscription</v-btn>
-                                    </div>
-                                    
-                    
-                                </v-card-text>
-                            </v-card>
-                        </v-expansion-panel-content>
-                    </v-expansion-panel>
-                </v-form>
-            </div>
-
-            <div class="as-profile-static">
-                <h2 class="as-profile-level-info">Level {{ level }} {{ blockText }} </h2>
-                <v-divider/>
-
-                <div class="as-profile-level-progress">
-                    <v-progress-linear v-model="levelProgress" class="as-profile-level-progress-bar"/>
-                    <p>{{ progressText}}</p>
-                </div>
-
-                <div class="as-no-last-workout" v-if="!lastWorkoutCompleted">
-                    <h3>{{ noWorkoutMessage }}</h3>
-                </div>
-                <div class="as-last-workout" v-else>
-                    <as-last-workout :subworkouts="subworkouts">
-                    </as-last-workout>
-                </div>
-            </div>
+    <div class="as-profile-container-container">
+        <div class="as-loading" v-if="loading">
+            <v-progress-circular indeterminate color="primary"/>
         </div>
 
-        <v-dialog v-model="showDialog" max-width="290" persistent>
-            <v-card>
-            <v-card-text>{{ dialogText }}</v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="primary" flat="flat" @click.native="showDialog = false">No</v-btn>
-                <v-btn color="primary" flat="flat" @click.native="handleDialogYes">Yes</v-btn>
-            </v-card-actions>
-            </v-card>
-        </v-dialog>
+        <transition name="as-fade">
+            <div class="as-profile-container" v-if="!loading">
+                <as-notification
+                    :visible="notificationVisible"
+                    type="submit"
+                    @update-visibility="val => notificationVisible = val">
+                    <template slot="notification-content">
+                        <span> {{ notificationMessage }}</span>
+                    </template>
+                </as-notification>
+
+                <div class="as-profile">
+                    <div class="as-profile-dynamic">
+                        <h1>Profile</h1>
+                        
+                        <v-divider/>
+                        <v-form>
+                            <p class="as-profile-desc">Here's where you can manage your account and view some of your workout stats.</p>
+                            <v-expansion-panel class="as-user-panel">
+                                <v-expansion-panel-content>
+                                    <div slot="header" class="as-user-options-header">
+                                        <h2>User Information</h2>
+                                    </div>
+                                    <v-card class="as-user-options">
+                                        <v-card-text>
+                                            <v-text-field
+                                                v-model="name"
+                                                label="Name"
+                                                readonly
+
+                                            />
+                                            <v-text-field
+                                                v-model="username"
+                                                label="Email"
+                                                readonly
+                                            />
+                                        </v-card-text>
+                                    </v-card>
+                                </v-expansion-panel-content>
+                            </v-expansion-panel>
+                            
+                            <v-expansion-panel class="as-password-panel">
+                                <v-expansion-panel-content>
+                                    <div slot="header" class="as-password-options-header">
+                                        <h2>Change Password</h2>
+                                    </div>
+
+                                    <v-card class="as-password-options">
+                                        <v-card-text>
+                                            <v-form 
+                                                ref="passwordForm"
+                                                v-model="validPasswordForm"
+                                                lazy-validation
+                                                >
+                                                <v-text-field
+                                                    v-model="oldPassword"
+                                                    :rules="oldPasswordRules"
+                                                    label="Old Password"
+                                                    :append-icon="oldPasswordVisibility ? 'visibility' : 'visibility_off'"
+                                                    :append-icon-cb="() => (oldPasswordVisibility = !oldPasswordVisibility)"
+                                                    :type="oldPasswordVisibility ? 'password' : 'text'"
+                                                />
+
+                                                <v-text-field
+                                                    v-model="newPassword"
+                                                    label="New Password"
+                                                    :rules="newPasswordRules"
+                                                    :append-icon="newPasswordVisibility ? 'visibility' : 'visibility_off'"
+                                                    :append-icon-cb="() => (newPasswordVisibility = !newPasswordVisibility)"
+                                                    :type="newPasswordVisibility ? 'password' : 'text'"
+                                                />
+
+                                                <v-text-field
+                                                    v-model="newPasswordAgain"
+                                                    :rules="newPasswordAgainRules"
+                                                    label="Confirm New Password"
+                                                    :append-icon="newPasswordAgainVisibility ? 'visibility' : 'visibility_off'"
+                                                    :append-icon-cb="() => (newPasswordAgainVisibility = !newPasswordAgainVisibility)"
+                                                    :type="newPasswordAgainVisibility ? 'password' : 'text'"
+                                                />
+                                            </v-form>
+                                        </v-card-text>
+
+                                        <v-card-actions>
+                                            <div class="as-profile-card-actions">
+                                                <v-btn
+                                                    color="primary"
+                                                    @click="changeUserPassword"
+                                                    class="as-change-password">Change
+                                                </v-btn>
+                                            </div>
+                                        </v-card-actions>
+                                    </v-card>
+                                </v-expansion-panel-content>
+                            </v-expansion-panel>
+
+                            <v-expansion-panel class="as-user-panel">
+                                <v-expansion-panel-content>
+                                    <div slot="header" class="as-user-options-header">
+                                        <h2>Change Subscription</h2>
+                                    </div>
+                                    <v-card class="as-user-options">
+                                        <v-card-text>
+                                            <h3>
+                                                Your current subscription package is 
+                                                <v-chip label :class="oldPackageColorClasses"
+                                                    small
+                                                    text-color="white"
+                                                    style="font-weight:bold; margin: 0 4px;">
+                                                    {{ oldPackage ? oldPackage.name: '' }}
+                                                </v-chip>
+                                                <span class="font-size: 14px !important; font-weight: normal !important">{{ oldPackage ? oldPackage.price : '' }}</span>
+                                            </h3>
+
+                                            <p style="font-size: 14px; margin-top: 4px;"
+                                                v-if="oldPackage && subscriptionInfo.endDateString" v-html="`Your subscription will expire on <strong>${subscriptionInfo.endDateString}</strong>. 
+                                                ${subscriptionInfo.secondLine}`"></p>
+
+                                            <div class="as-divider">
+                                                <v-divider/>
+                                            </div>
+                                            
+                                            <h3 style="margin-top: 12px">Switch Subscription</h3>
+                                            <p style="font-size: 14px; margin-top: 4px; margin-bottom: 0px;">If you <strong>switch</strong> your subscription package, changes will become effective AFTER your current
+                                            subscription expires. </p>
+
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <v-select
+                                                    auto
+                                                    label="Select a Package"
+                                                    :items="asPackagesSelect"
+                                                    v-model="newPackageSelect"
+                                                    single-line
+                                                />
+                                                <v-btn @click="confirmSwitch"
+                                                    :disabled="!newPackageSelect"
+                                                    small color="primary" style="float: right; margin-top: 8px; margin-bottom: 16px; margin-right: 0px !important;">Switch Subscription</v-btn>
+                                            </div>
+                                        
+                                                
+                                            <v-divider style="clear: both"/>
+
+                                            <div>
+                                                <h3 style="margin-top: 12px;">Cancel Subscription</h3>
+                                                <p style="font-size: 14px; margin-top: 4px; margin-bottom: 0px;">After you <strong>cancel</strong> your subscription, you will still have access to Alloy Strength until your subscription's expiration date.</p>
+                                                
+                                                <v-btn @click="confirmCancel"
+                                                small color="red" style="color: white !important; clear: both; float: right; margin-top: 16px; margin-bottom: 16px; margin-right: 0px !important;">Cancel Subscription</v-btn>
+                                            </div>
+                            
+                                        </v-card-text>
+                                    </v-card>
+                                </v-expansion-panel-content>
+                            </v-expansion-panel>
+                        </v-form>
+                    </div>
+
+                    <div class="as-profile-static">
+                        <h2 class="as-profile-level-info">Level {{ level }} {{ blockText }} </h2>
+                        <v-divider/>
+
+                        <div class="as-profile-level-progress">
+                            <v-progress-linear v-model="levelProgress" class="as-profile-level-progress-bar"/>
+                            <p>{{ progressText}}</p>
+                        </div>
+
+                        <div class="as-no-last-workout" v-if="!lastWorkoutCompleted">
+                            <h3>{{ noWorkoutMessage }}</h3>
+                        </div>
+                        <div class="as-last-workout" v-else>
+                            <as-last-workout :subworkouts="subworkouts">
+                            </as-last-workout>
+                        </div>
+                    </div>
+                </div>
+
+                <v-dialog v-model="showDialog" max-width="290" persistent>
+                    <v-card>
+                    <v-card-text>{{ dialogText }}</v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="primary" flat="flat" @click.native="showDialog = false">No</v-btn>
+                        <v-btn color="primary" flat="flat" @click.native="handleDialogYes">Yes</v-btn>
+                    </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            
+            </div>
+        
+        </transition>
     
     </div>
+
+  
     
 </template>
 
@@ -268,15 +279,22 @@ export default {
 
             showDialog: false,
             dialogText: '',
-            dialogState: '' // cancel or switch 
+            dialogState: '', // cancel or switch
 
+            loading: false
         }
     },
-    mounted() {
+    created() {
+        this.loading = true;
         this.level = this.$session.get('user').level; 
-        this.fetchLastWorkout();
-        this.fetchProfileInfo();
-        this.fetchSubscriptionInfo();
+        let promises = []; 
+        promises.push(this.fetchLastWorkout());
+        promises.push(this.fetchProfileInfo());
+        promises.push(this.fetchSubscriptionInfo());
+
+        Promise.all(promises).finally(() => {
+            this.loading = false; 
+        });  
     },
     methods: {
         notificationAcknowledged() {
@@ -454,6 +472,10 @@ export default {
 
 <style lang="scss">
     @import "~@/demo-common/styles/colors";
+
+    .as-profile-container-container {
+        height: 100%;
+    }
 
     .as-profile {
         display: flex; 

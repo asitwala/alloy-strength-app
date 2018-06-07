@@ -1,80 +1,86 @@
 <template>
-
-<div class="as-progress">
-    <div class="as-progress-summary">
-       <h1 class="as-progress-report-header">Level {{ oldLevel }} Performance Summary</h1>
-        <v-divider/>
-
-        <div class="as-progress-summary-content">
-            <h1 class="as-progress-status-header">{{ statusText }}</h1>
-            <h2>Core Exercises</h2>
-            <v-card class="as-progress-exercise-table">
-                <v-card-title>
-                    <v-data-table
-                        :headers="coreExerciseTableHeaders"
-                        :items="coreExerciseTableItems"
-                        hide-actions>
-                        <template slot="items" slot-scope="props">
-                            <td> {{ props.item.exerciseType }}</td>
-                            <td> {{ props.item.exerciseName }}</td>
-                            <td> {{ props.item.max }}</td>
-                            <td :class="alloyResultClasses(props.item.alloyResult)"> {{ props.item.alloyResult }}</td>
-                        </template>
-                    </v-data-table>
-                </v-card-title>
-            </v-card>
-
-            <h2>Secondary Exercises</h2>
-            <v-card class="as-progress-exercise-table">
-                <v-card-title>
-                    <v-data-table
-                        :headers="secondaryExerciseTableHeaders"
-                        :items="secondaryExerciseTableItems"
-                        hide-actions>
-                        <template slot="items" slot-scope="props">
-                            <td> {{ props.item.exerciseType }}</td>
-                            <td> {{ props.item.exerciseName }}</td>
-                            <td> {{ props.item.max }}</td>
-                            <td :class="alloyResultClasses(props.item.alloyResult)"> {{ props.item.alloyResult }}</td>
-                        </template>
-                    </v-data-table>
-                </v-card-title>
-            </v-card>
-        </div>
+<div class="as-progress-container">
+    <div class="as-loading" v-if="loading">
+        <v-progress-circular indeterminate color="primary"/>
     </div>
+    
+    <transition name="as-fade">
+        <div class="as-progress" v-if="!loading">
+            <div class="as-progress-summary">
+            <h1 class="as-progress-report-header">Level {{ oldLevel }} Performance Summary</h1>
+                <v-divider/>
 
-    <div class="as-progress-next-workout"> <!-- v-if="!inProgress" -->
-        <h1>Next Steps</h1>
-        <v-divider/>
-        <div class="as-progress-next-workout-content" v-if="$session.get('user').isAdmin || !inProgress">
-            <div>
-                <h3>Your next set of workouts will be at 
-                    <span class="as-progress-next-level">
-                        {{ `level ${newLevel}`.toUpperCase() }}
-                    </span>.
-                </h3>
+                <div class="as-progress-summary-content">
+                    <h1 class="as-progress-status-header">{{ statusText }}</h1>
+                    <h2>Core Exercises</h2>
+                    <v-card class="as-progress-exercise-table">
+                        <v-card-title>
+                            <v-data-table
+                                :headers="coreExerciseTableHeaders"
+                                :items="coreExerciseTableItems"
+                                hide-actions>
+                                <template slot="items" slot-scope="props">
+                                    <td> {{ props.item.exerciseType }}</td>
+                                    <td> {{ props.item.exerciseName }}</td>
+                                    <td> {{ props.item.max }}</td>
+                                    <td :class="alloyResultClasses(props.item.alloyResult)"> {{ props.item.alloyResult }}</td>
+                                </template>
+                            </v-data-table>
+                        </v-card-title>
+                    </v-card>
+
+                    <h2>Secondary Exercises</h2>
+                    <v-card class="as-progress-exercise-table">
+                        <v-card-title>
+                            <v-data-table
+                                :headers="secondaryExerciseTableHeaders"
+                                :items="secondaryExerciseTableItems"
+                                hide-actions>
+                                <template slot="items" slot-scope="props">
+                                    <td> {{ props.item.exerciseType }}</td>
+                                    <td> {{ props.item.exerciseName }}</td>
+                                    <td> {{ props.item.max }}</td>
+                                    <td :class="alloyResultClasses(props.item.alloyResult)"> {{ props.item.alloyResult }}</td>
+                                </template>
+                            </v-data-table>
+                        </v-card-title>
+                    </v-card>
+                </div>
             </div>
-            
-            <div v-html="levelUpMessage"></div>
-            <div v-if="newLevel === 11" class="as-level-11"></div>
-            <div v-else-if="newLevel === 16" class="as-level-16"></div>
 
-            <v-btn small color="primary" 
-                @click="routeTo('Videos')"
-                class="as-progress-next-workout-button">
-                View Unlocked Videos</v-btn>
-            <v-btn small color="primary"
-                @click="routeTo('SetLevels')"
-                class="as-progress-next-workout-button">
-                Get New Workouts</v-btn>
-        </div>
+            <div class="as-progress-next-workout"> <!-- v-if="!inProgress" -->
+                <h1>Next Steps</h1>
+                <v-divider/>
+                <div class="as-progress-next-workout-content" v-if="$session.get('user').isAdmin || !inProgress">
+                    <div>
+                        <h3>Your next set of workouts will be at 
+                            <span class="as-progress-next-level">
+                                {{ `level ${newLevel}`.toUpperCase() }}
+                            </span>.
+                        </h3>
+                    </div>
+                    
+                    <div v-html="levelUpMessage"></div>
+                    <div v-if="newLevel === 11" class="as-level-11"></div>
+                    <div v-else-if="newLevel === 16" class="as-level-16"></div>
 
-        <div class="as-progress-next-workout-content2" v-else>
-            <h3>Next steps will be generated once you complete all workouts for your level.</h3>
+                    <v-btn small color="primary" 
+                        @click="routeTo('Videos')"
+                        class="as-progress-next-workout-button">
+                        View Unlocked Videos</v-btn>
+                    <v-btn small color="primary"
+                        @click="routeTo('SetLevels')"
+                        class="as-progress-next-workout-button">
+                        Get New Workouts</v-btn>
+                </div>
+
+                <div class="as-progress-next-workout-content2" v-else>
+                    <h3>Next steps will be generated once you complete all workouts for your level.</h3>
+                </div>
+            </div>
         </div>
-    </div>
+    </transition>
 </div>
-
 </template>
 
 <script>
@@ -102,7 +108,9 @@
                 ], 
                 coreExerciseTableItems: [],
                 secondaryExerciseTableItems: [],
-                levelUpMessage: ''
+                levelUpMessage: '',
+
+                loading: false
             }
         },
         mounted() {
@@ -110,6 +118,7 @@
         },
         methods: {
             fetchProgressInfo() {
+                this.loading = true; 
                 this.userId = this.$session.get('user').id; 
 
                 ProgressService.fetchProgressInfo(this.userId).then(response => {
@@ -124,6 +133,8 @@
                     this.coreExerciseTableItems = response.data.coreExerciseTableItems;
                     this.secondaryExerciseTableItems = response.data.secondaryExerciseTableItems;
                     this.levelUpMessage = response.data.levelUpMessage;
+                }).finally(() => {
+                    this.loading = false; 
                 });
             },
             alloyResultClasses(alloyResult) {
@@ -148,6 +159,10 @@
 <style lang="scss">
 
     @import "~@/demo-common/styles/colors";
+
+    .as-progress-container {
+        height: 100%; 
+    }
 
     .as-progress {
         display: flex;

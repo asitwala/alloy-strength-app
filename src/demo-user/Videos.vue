@@ -1,80 +1,93 @@
 <template>
-    <div class="as-video-library">
-        <h1>Video Library</h1>
-        <v-divider class="as-video-library-divider"/>
-        <div class="as-main-video-container">
-            <div class="as-main-video">
-                <iframe :src="selectedVideo.URL" 
-                    :width="videoWidth" 
-                    :height="videoHeight" 
-                    frameborder="0"
-                    scrolling="no" 
-                    seamless="" 
-                    allowfullscreen="allowfullscreen">
-                </iframe>
-                <div class="as-main-video-popover-disable"></div>
-            </div>
 
-            <v-card class="as-main-video-description">
-                <v-card-title>
-                    <h2>{{ selectedVideo.label }}</h2>
-                </v-card-title>
-                <v-card-text>
-                    <div class="as-main-video-description-body"
-                        v-html="videoDescription">                      
-                    </div>
-                </v-card-text>
-            </v-card>
-
+    <div class="as-video-container">
+        <div class="as-loading" v-if="loading">
+            <v-progress-circular indeterminate color="primary"/>
         </div>
 
-        <div class="as-sub-videos-container">
-            <div class="as-sub-video-filters">
-                <div class="as-sub-video-search-container">
-                    <v-text-field class="as-sub-video-search"
-                        :label="searchFieldPlaceholder"
-                        v-model="search">
-                    </v-text-field>
+        <transition name="as-fade">
+            <div class="as-video-library" v-if="!loading"> 
+                <h1>Video Library</h1>
+                <v-divider class="as-video-library-divider"/>
+                <div class="as-main-video-container">
+                    <div class="as-main-video">
+                        <iframe :src="selectedVideo.URL" 
+                            :width="videoWidth" 
+                            :height="videoHeight" 
+                            frameborder="0"
+                            scrolling="no" 
+                            seamless="" 
+                            allowfullscreen="allowfullscreen">
+                        </iframe>
+                        <div class="as-main-video-popover-disable"></div>
+                    </div>
+
+                    <v-card class="as-main-video-description">
+                        <v-card-title>
+                            <h2>{{ selectedVideo.label }}</h2>
+                        </v-card-title>
+                        <v-card-text>
+                            <div class="as-main-video-description-body"
+                                v-html="videoDescription">                      
+                            </div>
+                        </v-card-text>
+                    </v-card>
+
                 </div>
 
-                <div class="as-sub-video-select-container">
-                    <v-select
-                        class="as-sub-video-select-level"
-                        autocomplete
-                        :label="selectedPlaceholder"
-                        :items="selectedOptions"
-                        v-model="selected"
-                    />
-                </div>
+                <div class="as-sub-videos-container">
+                    <div class="as-sub-video-filters">
+                        <div class="as-sub-video-search-container">
+                            <v-text-field class="as-sub-video-search"
+                                :label="searchFieldPlaceholder"
+                                v-model="search">
+                            </v-text-field>
+                        </div>
 
-                <div class="as-sub-video-clear-filters">
-                    <v-btn
-                        class="as-sub-video-clear-button"
-                        color="primary"
-                        :disabled="!hasFilters"
-                        @click="clearFilters"
-                        >
-                        Clear
-                    </v-btn>
+                        <div class="as-sub-video-select-container">
+                            <v-select
+                                class="as-sub-video-select-level"
+                                autocomplete
+                                :label="selectedPlaceholder"
+                                :items="selectedOptions"
+                                v-model="selected"
+                            />
+                        </div>
+
+                        <div class="as-sub-video-clear-filters">
+                            <v-btn
+                                class="as-sub-video-clear-button"
+                                color="primary"
+                                :disabled="!hasFilters"
+                                @click="clearFilters"
+                                >
+                                Clear
+                            </v-btn>
+                        </div>
+                    
+                    </div>
+                    
+                    <div class="as-sub-videos">
+                        <as-sub-video v-for="subvideo in sortedSubVideos" 
+                            :key="subvideo.label"
+                            :video-info="subvideo"
+                            @switch="switchVideo"
+                            >
+                        </as-sub-video>
+                        <as-sub-video/>
+                        <as-sub-video/>
+                        <as-sub-video/>
+                    </div>
+                
                 </div>
-            
-            </div>
-            
-            <div class="as-sub-videos">
-                <as-sub-video v-for="subvideo in sortedSubVideos" 
-                    :key="subvideo.label"
-                    :video-info="subvideo"
-                    @switch="switchVideo"
-                    >
-                </as-sub-video>
-                <as-sub-video/>
-                <as-sub-video/>
-                <as-sub-video/>
+        
             </div>
         
-        </div>
-   
+        </transition>
     </div>
+
+
+   
 
 </template>
 
@@ -125,11 +138,15 @@ export default {
             selectedPlaceholder: "Select a level",
 
             videoHeight: "360",
-            videoWidth: "640"
+            videoWidth: "640",
+
+            loading: false
         }; 
     },
     methods: {
         fetchVideoInfo() {
+            this.loading = true; 
+
             VideoService.fetchVideoInfo(this.$session.get('user').id).then(response => {
                 if (typeof response === 'object') {
 
@@ -152,9 +169,15 @@ export default {
                     });
                 }
             }).finally(() => {
-                if (Object.keys(this.videoFromWorkout).length > 0) {
-                    this.switchVideo(this.videoFromWorkout);
+                console.log('I get here!');
+
+                if (this.videoFromWorkout) {
+                    if (Object.keys(this.videoFromWorkout).length > 0) {
+                        this.switchVideo(this.videoFromWorkout);
+                    }
                 }
+               
+                this.loading = false; 
             });
         },
         filterVideos() {
@@ -227,6 +250,10 @@ export default {
 <style lang="scss">
 
     @import "~@/demo-common/styles/colors";
+
+    .as-video-container {
+        height: 100%; 
+    }
 
     .as-video-library {
         width: 85%; 

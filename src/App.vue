@@ -11,7 +11,7 @@
         <div class="as-main-toolbar-right">
           <v-toolbar-items>
             <v-btn flat class="as-main-toolbar-link" @click="openBlog">Blog</v-btn>
-            <v-btn flat class="as-main-toolbar-link">Why Alloy Strength</v-btn>
+            <!-- <v-btn flat class="as-main-toolbar-link">Why Alloy Strength</v-btn> -->
             <v-tooltip bottom>
               <v-btn flat class="as-main-toolbar-link" slot="activator">FAQ</v-btn>
               <span>Coming Soon</span>
@@ -181,7 +181,6 @@
       display: flex;
       flex-wrap: no-wrap;
       align-items: center;
-      min-width: 350px;
       justify-content: space-between;
       margin-right: 12px;
     }

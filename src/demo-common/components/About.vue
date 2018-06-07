@@ -2,7 +2,6 @@
   <div class="as-about">
     <div class="as-coaches-header">
     
-    <transition name="as-fade">
       <v-btn v-if="extendedView"
         class="as-coaches-back"
         @click="resetView" 
@@ -11,13 +10,11 @@
         color="primary">
         <v-icon>fa-angle-left</v-icon>
       </v-btn>
-    </transition>
 
     <h1> Meet Our Coaches </h1>
     </div>
     <v-divider/>
 
-    <transition name="as-fade">
       <!-- Place side by side photos here --> 
       <div class="as-coaches" v-if="!extendedView">
         <div class="as-coach" @click="showBryce">
@@ -36,54 +33,54 @@
           </div>
         </div>
       </div>
-    </transition>
 
     <!-- Extended Content --> 
     <div class="as-about-content" v-if="extendedView">
-      <v-card v-if="sterner" class="sterner-extended">
-        <div class="sterner-extended-content">
-          <h2>Alex Sterner</h2>
-          <v-divider/>
-          <div>
-            <p>
-              Alex Sterner, BS, CSCS, USAW is the Co-Founder and Head Strength Coach at Alloy Strength. 
-              He is a Certified Strength and Conditioning Specialist (CSCS) through the National Strength and 
-              Conditioning Association (NSCA). His education in the field began at the University of Connecticut, 
-              where he obtained a bachelor's degree in Kinesiology in 2014. While enrolled, he interned in the 
-              varsity weight room for 7 of the school's athletic teams, and accumulated over 1000 hours under 
-              Coach Maureen Butler and Coach Travis Illian.
-            </p>
 
-            <p>
-              Since graduating from UConn, Coach Sterner worked in a commercial fitness setting for a year until 
-              moving to San Diego in the summer of 2015. He then worked at the Parisi Speed School, providing a 
-              sport-performance environment to athletes of various ages. From October 2016-December 2017 he worked 
-              at the University of California San Diego where he taught Recreation classes, provides post-rehab 
-              care and personal training. Sterner is now a Strength Coach at the world-famous Glute Lab. Named one of 
-              the top 20 gyms in the US by Men’s Health, Glute Lab is owned by the “Glute Guy” Bret Contreras, PhD, CSCS*D, 
-              the world’s foremost authority on glute training.
-            </p>
+        <v-card v-if="sterner" class="sterner-extended">
+          <div class="sterner-extended-content">
+            <h2>Alex Sterner</h2>
+            <v-divider/>
+            <div>
+              <p>
+                Alex Sterner, BS, CSCS, USAW is the Co-Founder and Head Strength Coach at Alloy Strength. 
+                He is a Certified Strength and Conditioning Specialist (CSCS) through the National Strength and 
+                Conditioning Association (NSCA). His education in the field began at the University of Connecticut, 
+                where he obtained a bachelor's degree in Kinesiology in 2014. While enrolled, he interned in the 
+                varsity weight room for 7 of the school's athletic teams, and accumulated over 1000 hours under 
+                Coach Maureen Butler and Coach Travis Illian.
+              </p>
 
-            <p>
-              Upon moving to San Diego, Coach Sterner continued competing in Brazilian Jiu-jitsu under Andre Galvao at 
-              Atos HQ. It was here that he first met JT Torres, who he began strength training at Parisi in the fall 
-              of 2015. Since then he and Coach Bryce have trained the majority of the Atos HQ competition team. This 
-              includes organizing group lifting sessions for the 2017 IBJJF Worlds camp, where Atos secured their first 
-              ever team title. In a 1-on-1 setting he coached Andre Galvao through the 2017 IBJJF Worlds and 2017 ADCC Superfight, 
-              resulting in a gold medal for Galvao on both occasions.
-            </p>
+              <p>
+                Since graduating from UConn, Coach Sterner worked in a commercial fitness setting for a year until 
+                moving to San Diego in the summer of 2015. He then worked at the Parisi Speed School, providing a 
+                sport-performance environment to athletes of various ages. From October 2016-December 2017 he worked 
+                at the University of California San Diego where he taught Recreation classes, provides post-rehab 
+                care and personal training. Sterner is now a Strength Coach at the world-famous Glute Lab. Named one of 
+                the top 20 gyms in the US by Men’s Health, Glute Lab is owned by the “Glute Guy” Bret Contreras, PhD, CSCS*D, 
+                the world’s foremost authority on glute training.
+              </p>
+
+              <p>
+                Upon moving to San Diego, Coach Sterner continued competing in Brazilian Jiu-jitsu under Andre Galvao at 
+                Atos HQ. It was here that he first met JT Torres, who he began strength training at Parisi in the fall 
+                of 2015. Since then he and Coach Bryce have trained the majority of the Atos HQ competition team. This 
+                includes organizing group lifting sessions for the 2017 IBJJF Worlds camp, where Atos secured their first 
+                ever team title. In a 1-on-1 setting he coached Andre Galvao through the 2017 IBJJF Worlds and 2017 ADCC Superfight, 
+                resulting in a gold medal for Galvao on both occasions.
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div class="sterner-extended-pic-container">
-          <div class="sterner-extended-pic"></div>
-            <p class="instagram-text">Follow Coach Sterner on Instagram </p>
-            <a href="https://www.instagram.com/alex.sterner/" class="instagram">
-              <v-icon small>fa-instagram</v-icon>alex.sterner
-            </a>
-        </div>
-        
-      </v-card>
+          <div class="sterner-extended-pic-container">
+            <div class="sterner-extended-pic"></div>
+              <p class="instagram-text">Follow Coach Sterner on Instagram </p>
+              <a href="https://www.instagram.com/alex.sterner/" class="instagram">
+                <v-icon small>fa-instagram</v-icon>alex.sterner
+              </a>
+          </div>
+          
+        </v-card>
 
       <v-card v-if="bryce">
         <div class="bryce-extended">
@@ -241,6 +238,7 @@
   .sterner-extended {
     display: flex; 
     flex-wrap: wrap;
+    padding-bottom: 12px;
 
     &-content {
       flex: 1; 
@@ -256,6 +254,7 @@
 
     &-pic-container {
       text-align: center;
+      margin: 0 auto;
 
       .instagram-text {
         margin: 0px !important;
@@ -298,6 +297,7 @@
 
     &-pic-container {
       text-align: center;
+      margin: 0 auto;
 
       .instagram-text {
         margin: 0px !important;

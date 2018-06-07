@@ -28,6 +28,7 @@
                         <h3 class="as-initialize-step-3-select-days">
                             Select {{ numWorkoutDays }} days you'd like to work out on
                         </h3>
+                        <p>We recommend spacing out your workouts throughout the week so that you have at least 1 day of rest between each workout if possible (e.g. Monday, Wednesday, Friday for a 3-day schedule or Tuesday, Thursday, Saturday, Sunday for a 4-day schedule).</p>
                         
                         <div class="as-initialize-step-3-days">
                             <div class="as-initialize-step-3-day"
@@ -73,6 +74,10 @@
             givenLevel: {
                 type: Number,
                 default: null
+            },
+            givenBlockNum: {
+                type: Number,
+                default: null
             }
         },
         data() {
@@ -102,15 +107,16 @@
         },
         methods: {
             postWorkouts() {
-                this.loading = true; 
-
                 if (this.selectedDaysLength !== this.numWorkoutDays) {
                     this.validSelectedDays = false; 
                 } else {
                     this.validSelectedDays = true;
                 }
 
+                console.log('Valid selected days', this.validSelectedDays);
+
                 if (this.validSelectedDays) {
+                    this.loading = true; 
                     let daysList = []; 
                     this.selectedDays.forEach(day => {
                         daysList.push(this.days.indexOf(day));
@@ -185,7 +191,15 @@
             },
             blockText() {
                 if (this.level > 10) {
-                    let blockNum = this.$session.get('user').blockNum; 
+
+                    let blockNum = null;
+
+                    if (this.givenBlockNum > 0) {
+                        blockNum = this.givenBlockNum;
+                    } else {
+                        blockNum = this.$session.get('user').blockNum; 
+                    }
+             
                     if (blockNum === 1) {
                         return `\u2014 Block ${blockNum}: Volume`; 
                     } else if (blockNum === 2) {
@@ -234,7 +248,6 @@
     }
 
     .as-initialize-step-3-select-days {
-        margin-bottom: 8px;
     }
 
     .as-initialize-step-3-days {
