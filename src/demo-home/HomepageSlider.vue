@@ -27,7 +27,7 @@
 @import '~@/demo-common/styles/transitions';
 
 .as-carousel {
-    max-width: 1325px !important;
+    max-width: 1280px !important;
 }
 
 .jumbotron__wrapper {

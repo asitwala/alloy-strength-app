@@ -63,7 +63,7 @@
                     <v-card-actions>
                         <div class="get-next-set" v-if="hasButton && !notEditable">
                             <v-btn class="get-next-set-button" 
-                                @click="getNextSet"
+                                @click="showSetWarning"
                                 color=primary small>{{ buttonDisplay }}</v-btn>
                         </div>
                     </v-card-actions>
@@ -141,6 +141,15 @@ export default {
         headers: {
             type: Array,
             required: true
+        },
+        warnNextSet: {
+            type: Boolean
+        },
+        warningText: {
+            type: String
+        },
+        setWarningOk: {
+            type: Boolean
         }
     },
     methods: {
@@ -149,7 +158,18 @@ export default {
         },
         getNextSet() {
             this.$emit('refresh', {patternNumber: this.number, buttonName: this.buttonName});
-        }   
+        },
+        showSetWarning() {
+            if (this.warnNextSet) {
+                let warningInfo = {
+                    warnNextSet: this.warnNextSet,
+                    warningText: this.warningText
+                };
+                this.$emit('showWarning', warningInfo);
+            } else {
+                this.getNextSet();
+            }
+        }
     },
     computed: {
         hasVideo() {
@@ -161,6 +181,13 @@ export default {
                 'as-strength-drop': (this.specialClass === 'drop'),
                 'as-alloy': (this.specialClass === 'alloy')
             };
+        }
+    },
+    watch: {
+        setWarningOk: function(newVal) {
+            if (newVal && this.warnNextSet) {
+                this.getNextSet();
+            }
         }
     }
 };

@@ -113,8 +113,6 @@
                     this.validSelectedDays = true;
                 }
 
-                console.log('Valid selected days', this.validSelectedDays);
-
                 if (this.validSelectedDays) {
                     this.loading = true; 
                     let daysList = []; 

@@ -14,6 +14,8 @@
         </template>
     </as-notification>
 
+    <as-warning :visible="setWarningVisible" :text="setWarningText" @close="setWarningAcknowledged"></as-warning>
+
     <!-- Loading icon -->
     <div class="as-loading" v-if="loading"> 
         <v-progress-circular indeterminate color="primary"/>
@@ -88,6 +90,7 @@
                         <as-subworkout 
                             v-for="(subworkout, subworkoutIndex) in subworkouts" 
                             @refresh="updateSpecial"
+                            @showWarning="showSetWarning"
                             :not-editable="notEditable"
                             :key="subworkout.name"
                             :type="subworkout.type"
@@ -104,6 +107,9 @@
                             :buttonDisplay="subworkout.buttonDisplay ? subworkout.buttonDisplay : ''"
                             :buttonName="subworkout.buttonName"
                             :headers="headersList[subworkoutIndex]"
+                            :warn-next-set="subworkout.warnNextSet"
+                            :warning-text="subworkout.warningText"
+                            :set-warning-ok="setWarningOk"
                         />
                     </div>
 
@@ -113,8 +119,10 @@
                         </div>
                         <as-simple-workout 
                             @refresh="() => fetchWorkoutInfo()"
+                            @showWarning="showSetWarning"
                             :not-editable="notEditable"
-                            :subworkouts="subworkouts"/>
+                            :subworkouts="subworkouts"
+                            :set-warning-ok="setWarningOk"/>
                     </div>
                 </transition>
                 
@@ -123,7 +131,6 @@
                         Select workout dates by using the dropdown menu and buttons below.
                     </div>
                 
-
                     <v-date-picker
                         width="300"
                         v-model="date"
@@ -187,6 +194,9 @@ let Notification = require('../demo-common/components/Notification.vue').default
 import WorkoutLegend from '@/demo-common/components/WorkoutLegend'; 
 
 import WorkoutPrompt from '@/demo-user/user-info/WorkoutPrompt';
+
+import SetWarning from '@/demo-common/components/SetWarning'; 
+
 import WorkoutService from '@/services/WorkoutService';
 
 const headerMap = {
@@ -204,6 +214,7 @@ const headerMap = {
 
 export default {
     components: {
+        'as-warning': SetWarning,
         'as-workout-legend': WorkoutLegend,
         'as-subworkout': Subworkout,
         'as-simple-workout': SimpleWorkout,
@@ -214,6 +225,15 @@ export default {
         this.fetchWorkoutInfo();
     },
     methods: {
+        showSetWarning(warningInfo) {
+            if (warningInfo.warnNextSet) {
+                this.setWarningVisible = true;
+                this.setWarningText = warningInfo.warningText;
+            }
+        },
+        setWarningAcknowledged() {
+            this.setWarningOk = true; 
+        },
         updateSpecial(buttonInfo) {
             let {patternNumber, buttonName} = buttonInfo; 
             let userId = this.$session.get("user").id;
@@ -221,6 +241,7 @@ export default {
             let tempKey = '';
             let tempValue = '';  
             let body = {};
+    
             let splitCode = buttonName.split("|");
             body.specialType = splitCode[1];
             body.patternNum = splitCode[2];
@@ -358,6 +379,9 @@ export default {
                 }
             }).finally(() => {
                 this.loading = false; 
+                this.setWarningVisible = false;
+                this.setWarningText = '';
+                this.setWarningOk = false;
             });
         },
         setTableHeaders() {
@@ -527,7 +551,12 @@ export default {
             showPrompt: false,
 
             // loading icon
-            loading: false
+            loading: false,
+
+            // set warning
+            setWarningVisible: false,
+            setWarningText: '',
+            setWarningOk: false
         };
     },
     computed: {

@@ -169,8 +169,6 @@ export default {
                     });
                 }
             }).finally(() => {
-                console.log('I get here!');
-
                 if (this.videoFromWorkout) {
                     if (Object.keys(this.videoFromWorkout).length > 0) {
                         this.switchVideo(this.videoFromWorkout);
