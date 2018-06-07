@@ -1,8 +1,9 @@
 <template>
     <div class="as-homepage">
+        <div class="as-homepage-spacer"></div>
         <div class="as-homepage-auth">
             <h2 class="as-homepage-header">Driven and dedicated in our commitment to maximize your <strong>strength, power, performance, and health</strong>.</h2>
-            <as-signup></as-signup>
+            <as-signup class="as-signup-button"></as-signup>
             <as-login class="as-login-button"></as-login>
         </div>
         
@@ -53,10 +54,15 @@
     .as-homepage {
         height: 575px;
         overflow: auto;
+
+        &-spacer {
+            height: 20px;
+            width: 100%;
+        }
     }
 
     .as-homepage-header {
-        margin: 24px;
+        text-align: center;
         font-weight: 300;
 
         strong {
@@ -64,11 +70,11 @@
         }
     }
 
-
     .as-slider {
         position: relative;
         max-width: 1325px !important;
         margin: 0 auto;
+        margin-top: 24px;
     }
 
 
@@ -82,15 +88,15 @@
         right: 16%;
     }
 
-
-
     .as-homepage-auth {
         display: flex;
+        flex-wrap: wrap;
         justify-content: center;
         align-items: center;
+        margin: 0 12px;
 
-        .as-login-button {
-            margin-right: 24px !important;
+        .as-signup-button {
+            margin-left: 4px;
         }
     }
   

@@ -25,7 +25,7 @@
         :visible="showNavigation"
         @update-visibility="setNavigation"/>
 
-      <div class="as-main-body" style="height: 100%; min-height: 600px;">
+      <div class="as-main-body" style="height: 100%; min-height: 450px;">
         <router-view/>
       </div>
      
@@ -175,6 +175,7 @@
     padding-top: 8px;
     padding-bottom: 8px;
     height: unset !important;
+    max-height: 100px !important;
 
     &-right {
       display: flex;
@@ -243,6 +244,7 @@
     width: 100%;
     height: auto !important;
     min-height: unset !important;
+    max-height: 250px !important;
 
     &-extra-formatting {
       display: flex;

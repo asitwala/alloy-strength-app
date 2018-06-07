@@ -12,7 +12,7 @@
                     <v-list-tile-action>
                         <v-icon>account_circle</v-icon>
                     </v-list-tile-action>
-                    <v-list-tile-title>{{ ($session.exists() && $session.has('user')) ? $session.get('user').username : '' }}</v-list-tile-title>
+                    <v-list-tile-title>{{ ($session.exists() && $session.has('user')) ? ($session.get('user').name || '') : '' }}</v-list-tile-title>
                 </v-list-tile>
                 <v-divider/>
 

@@ -29,7 +29,7 @@
                                     />
                                     <v-text-field
                                         v-model="username"
-                                        label="Username"
+                                        label="Email"
                                     />
                                 </v-card-text>
                             </v-card>
@@ -295,6 +295,7 @@ export default {
                 this.levelProgress = parseFloat(response.data.percentComplete);
                 this.progressText = response.data.progressText; 
                 this.username = response.data.username; 
+                this.name = response.data.name; 
             });
         },
         fetchSubscriptionInfo() {
