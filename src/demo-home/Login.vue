@@ -16,7 +16,7 @@
                     <v-form ref="loginForm" v-model="validLoginForm" lazy-validation>
                         <v-text-field
                             v-model="username"
-                            label="Username"
+                            label="Email"
                             type="text"
                             :rules="usernameRules"
                         />
@@ -73,12 +73,12 @@
 
                 // rules
                 usernameRules: [
-                    v => !this.usernameNeeded || !!v || 'Username is required',
-                    v => !this.invalidUser || 'User could not be found'
+                    v => !this.usernameNeeded || !!v || 'Email is required.',
+                    v => !this.invalidUser || 'User could not be found.'
                 ],
                 passwordRules: [
-                    v => !this.passwordNeeded || !!v || 'Password is required',
-                    v => !this.invalidPassword || 'Password is invalid'
+                    v => !this.passwordNeeded || !!v || 'Password is required.',
+                    v => !this.invalidPassword || 'Password is invalid.'
                 ],
 
                 // forgot password

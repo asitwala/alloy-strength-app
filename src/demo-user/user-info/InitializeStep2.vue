@@ -20,10 +20,12 @@
                                         <v-text-field
                                             v-model="height1"
                                             :suffix="units.height1"
+                                            type="number"
                                         /> 
                                         <v-text-field
                                             v-model="height2"
                                             :suffix="units.height2"
+                                            type="number"
                                         /> 
                                     </div>
                                     
@@ -31,6 +33,7 @@
                                     <v-text-field
                                         v-model="weight"
                                         :suffix="units.weight"
+                                        type="number"
                                     /> 
                                 </div>
                             </v-card-text>
@@ -48,10 +51,12 @@
                                         <v-text-field
                                             v-model="years"
                                             suffix="years"
+                                            type="number"
                                         /> 
                                         <v-text-field
                                             v-model="months"
                                             suffix="months"
+                                            type="number"
                                         /> 
                                     </div>
                                     
@@ -89,16 +94,19 @@
                                     v-model="squat"
                                     label="Squat"
                                     :suffix="units.weight"
+                                    type="number"
                                 /> 
                                 <v-text-field
                                     v-model="benchPress"
                                     label="Bench Press"
                                     :suffix="units.weight"
+                                    type="number"
                                 /> 
                                 <v-text-field
                                     v-model="deadlift"
                                     label="Deadlift"
                                     :suffix="units.weight"
+                                    type="number"
                                 /> 
                                 <h3>Other</h3>
                                 <v-text-field

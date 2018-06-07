@@ -19,12 +19,14 @@
                             v-model="name"
                             label="Name"
                             type="text"
+                            :rules="nameRules"
                         />
                         <v-text-field
                             color="green"
                             v-model="email"
                             label="Email"
                             type="text"
+                            :rules="emailRules"
                         />
                         <v-text-field
                             color="green"
@@ -33,6 +35,7 @@
                             :append-icon="signupVisibility1 ? 'visibility' : 'visibility_off'"
                             :append-icon-cb="() => (signupVisibility1 = !signupVisibility1)"
                             :type="signupVisibility1 ? 'password' : 'text'"
+                            :rules="passwordRules"
                         />
                         <v-text-field
                             color="green"
@@ -41,6 +44,7 @@
                             :append-icon="signupVisibility2 ? 'visibility' : 'visibility_off'"
                             :append-icon-cb="() => (signupVisibility2 = !signupVisibility2)"
                             :type="signupVisibility2 ? 'password' : 'text'"
+                            :rules="confirmPasswordRules"
                         />
                     </v-form>
                 </template>
@@ -63,6 +67,8 @@
 
 <script>
 
+    import emailRegex from '@/demo-common/mixins/emailRegex'; 
+
     import UsersService from '@/services/UsersService'; 
 
     import AuthCardGreen from '@/demo-common/components/AuthCardGreen'; 
@@ -84,15 +90,38 @@
                 password: '',
                 confirmPassword: '',
 
+
                 // visibility
                 signupVisibility1: true,
                 signupVisibility2: true,
 
                 signupSuccess: false,
 
-
-
                 // rules
+                invalidEmail: false,
+                passwordsDoNotMatch: false,
+                nameEntered: true,
+                emailEntered: true,
+                passwordEntered: true,
+                confirmPasswordEntered: true,
+                passwordMinimumLength: true,
+
+                nameRules: [
+                    v => this.nameEntered || 'Name is required.'
+                ],
+
+                emailRules: [
+                    v => this.emailEntered || 'Email is required.',
+                    v => !this.invalidEmail || 'Invalid email format. Please try again.'
+                ],
+                passwordRules: [
+                    v => this.passwordEntered || 'Password is required.',
+                    v => this.passwordMinimumLength || 'Password must contain at least 8 characters.',
+                    v => !this.passwordsDoNotMatch || 'Passwords do not match.'
+                ],
+                confirmPasswordRules: [
+                    v => this.confirmPasswordEntered || 'Password confirmation is required.'
+                ]
             };
         }, 
         methods: {
@@ -103,30 +132,93 @@
                 this.password = '';
                 this.confirmPassword = ''; 
                 this.showSignupModal = true; 
+                this.invalidEmail = false;
+                this.passwordsDoNotMatch = false;
+
+                this.nameEntered = true;
+                this.emailEntered = true;
+                this.passwordEntered = true;
+                this.confirmPasswordEntered = true;
+
+                this.$refs.signupForm.validate();
             },
             closeSignupModal() {
                 this.showSignupModal = false;
             },
             signupSubmit() {
-                let params = {
-                    name: this.name,
-                    P1: this.password,
-                    P2: this.password,
-                    username: this.email
-                };
+                // Check email and passwords
+                this.invalidEmail = !emailRegex.test(this.email);
+                this.passwordsDoNotMatch = (this.password !== this.confirmPassword);
+                this.nameEntered = (this.name !== ''); 
+                this.emailEntered = (this.email !== ''); 
+                this.passwordEntered = (this.password !== ''); 
+                this.confirmPasswordEntered = (this.confirmPassword !== ''); 
+                this.passwordMinimumLength = (this.password.length >= 8) ;
 
-                this.closeSignupModal();
-                this.signupSuccess = true;
+                if (this.$refs.signupForm.validate()) {
+                    let params = {
+                        name: this.name,
+                        P1: this.password,
+                        P2: this.password,
+                        username: this.email
+                    };
 
-                //this.$refs.confirmation.openSignupModal();
+                    this.closeSignupModal();
 
-                UsersService.signupUser(params).then(response => {
-                   let userId = response.data.newUser.id;
+                    UsersService.signupUser(params).then(response => {
+                        let userId = response.data.newUser.id;
 
-                   UsersService.sendEmailConfirmation(userId).then(response => {
-                       console.log('SUCCESS', response);
-                   });
-                });
+                        UsersService.sendEmailConfirmation(userId).then(response => {
+                            this.signupSuccess = true;
+                        });
+                    });
+                }
+            }
+        },
+        watch: {
+            name: function () {
+                if (!this.nameEntered) {
+                    this.nameEntered = true; 
+                    this.$refs.signupForm.validate(); 
+                }
+            },
+            email: function () {
+                if (!this.emailEntered) {
+                    this.emailEntered = true; 
+                    this.$refs.signupForm.validate(); 
+                }
+
+                if (this.invalidEmail) {
+                    this.invalidEmail = false;
+                    this.$refs.signupForm.validate(); 
+                }
+            }, 
+            password: function () {
+                if (!this.passwordEntered) {
+                    this.passwordEntered = true; 
+                    this.$refs.signupForm.validate();
+                }
+
+                if (!this.passwordMinimumLength) {
+                    this.passwordMinimumLength = true; 
+                    this.$refs.signupForm.validate();
+                }
+
+                if (this.passwordsDoNotMatch) {
+                    this.passwordsDoNotMatch = false; 
+                    this.$refs.signupForm.validate(); 
+                }
+            },
+            confirmPassword: function () {
+                if (!this.confirmPasswordEntered) {
+                    this.confirmPasswordEntered = true; 
+                    this.$refs.signupForm.validate(); 
+                }
+
+                if (this.passwordsDoNotMatch) {
+                    this.passwordsDoNotMatch = false; 
+                    this.$refs.signupForm.validate(); 
+                }
             }
         }
     };
