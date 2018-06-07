@@ -97,6 +97,10 @@
 
         .as-signup-button {
             margin-left: 4px;
+            
+            .btn {
+                margin-right: 0px !important;
+            }
         }
     }
   

@@ -145,6 +145,7 @@
             },
             visible: function(newVal) {
                 console.log('session', this.$session.get('user'));
+                console.log('Session', this.$session.getAll());
                 this.showDrawer = newVal; 
             }
         }

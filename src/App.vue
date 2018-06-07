@@ -175,7 +175,7 @@
     padding-top: 8px;
     padding-bottom: 8px;
     height: unset !important;
-    max-height: 100px !important;
+    max-height: 150px !important;
 
     &-right {
       display: flex;

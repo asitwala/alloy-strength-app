@@ -17,7 +17,7 @@
                                 v-if="specialDescriber">{{ specialDescriber }}</h4>
                             <v-tooltip bottom v-if="hasVideo">
                                 <v-icon 
-                                    class="video-icon" 
+                                    class="as-video-icon" 
                                     small
                                     slot="activator"
                                     @click.stop="goToVideo()"
@@ -29,9 +29,9 @@
                     </div>
                     <div class="header-description-block" style="display:block">
                         <div class="header-exercise-description">
-                            <p style="padding-right: 12px; border-right: 1px solid #aaa">{{ describer }}</p>
+                            <p style="padding-right: 12px;">{{ describer }}</p>
                             <div class="suggested-weight-string" v-if="suggestedWeightString">
-                                <p style="padding-left: 8px;">{{ suggestedWeightString }} </p>
+                                <p style="padding-left: 12px; border-left: 1px solid #aaa">{{ suggestedWeightString }} </p>
                             </div>
                         </div>
                     </div>
@@ -197,13 +197,10 @@ export default {
             //color: white; 
         }
 
-        .as-video-button {
-            margin: 6px 0px;
-
-            .btn__content {
-                background-color: $lightBlueDarken3;
-                color: white;
-            }
+        .as-video-icon {
+            margin-left: 6px;
+            margin-right: 6px;
+            margin-bottom: 12px;
         }
 
         &-header {

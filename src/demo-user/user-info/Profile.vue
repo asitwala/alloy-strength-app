@@ -26,10 +26,13 @@
                                     <v-text-field
                                         v-model="name"
                                         label="Name"
+                                        readonly
+
                                     />
                                     <v-text-field
                                         v-model="username"
                                         label="Email"
+                                        readonly
                                     />
                                 </v-card-text>
                             </v-card>
@@ -295,7 +298,7 @@ export default {
                 this.levelProgress = parseFloat(response.data.percentComplete);
                 this.progressText = response.data.progressText; 
                 this.username = response.data.username; 
-                this.name = response.data.name; 
+                this.name = this.$session.get('user').name;
             });
         },
         fetchSubscriptionInfo() {
@@ -468,7 +471,6 @@ export default {
 
         .as-profile-dynamic {
             margin: 16px;
-            min-width: 500px;
             max-width: 500px;
             flex: 1; 
 
@@ -541,9 +543,13 @@ export default {
     .as-no-last-workout {
         display: flex; 
         flex: 1; 
-        height: 465px;
+        height: 100%;
         justify-content: center;
         align-items: center; 
+    }
+
+    .as-last-workout {
+        overflow: auto;
     }
 
 
