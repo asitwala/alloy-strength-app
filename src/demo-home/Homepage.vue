@@ -21,7 +21,10 @@
             </div>
         </div>
         
+
         <div class="as-panel-2"></div>
+
+        <as-look-inside></as-look-inside>
     </div>
 </template>
 
@@ -30,6 +33,7 @@
 
 
     import HomepageSlider from '@/demo-home/HomepageSlider'; 
+    import LookInside from '@/demo-home/LookInside'; 
 
     import Login from '@/demo-home/Login'; 
     import Signup from '@/demo-home/Signup'; 
@@ -38,6 +42,7 @@
     export default {
         components: {
             'as-homepage-slider': HomepageSlider,
+            'as-look-inside': LookInside,
             'as-login': Login,
             'as-signup': Signup
         }

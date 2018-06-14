@@ -1,5 +1,5 @@
 <template>
-    <v-carousel interval="120000" delimiter-icon="fa-dot-circle-o" class="as-carousel">
+    <v-carousel interval="7000" delimiter-icon="fa-dot-circle-o" class="as-carousel">
         <v-carousel-item v-for="(item, itemIndex) in carouselItems" :src="item.src" :key="item.src">
         </v-carousel-item>
     </v-carousel>
@@ -12,7 +12,10 @@
             return {
                 carouselItems: [
                     {
-                       src: '../../static/test2.png'
+                        src: '../../static/test2.png'
+                    }, 
+                    {
+                        src: '../../static/test4.png'
                     }
                 ]
             };
