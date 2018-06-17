@@ -20,8 +20,14 @@ import UserStats from '@/demo-user/user-info/UserStats';
 import Progress from '@/demo-user/user-info/Progress'; 
 import Profile from '@/demo-user/user-info/Profile'; 
 
+import FAQ from '@/demo-home/FAQ'; 
+import WhyAlloyStrength from '@/demo-home/WhyAlloyStrength';
 
-import EmailConfirmation from '@/demo-user/EmailConfirmation'; 
+import CheckEmail from '@/demo-user/CheckEmail'; 
+import EmailConfirmation from '@/demo-user/EmailConfirmation';
+
+import Unauthorized from '@/demo-home/Unauthorized';
+import NoPageExists from '@/demo-home/NoPageExists';
 
 Vue.use(Router)
 
@@ -32,6 +38,18 @@ const router = new Router({
       path: '/',
       name: 'Homepage',
       component: Homepage,
+      meta: {requireAuth: false}
+    },
+    // {
+    //   path: '/faq',
+    //   name: 'FAQ',
+    //   component: FAQ,
+    //   meta: {requireAuth: false}
+    // },
+    {
+      path: '/why', 
+      name: 'WhyAlloyStrength',
+      component: WhyAlloyStrength,
       meta: {requireAuth: false}
     },
     { 
@@ -94,7 +112,7 @@ const router = new Router({
       path: '/logout',
       name: 'Logout',
       component: Logout,
-      meta: {requireAuth: true}
+      meta: {requireAuth: false}
     },
     {
       path: '/reset-workouts',
@@ -129,24 +147,29 @@ const router = new Router({
     {
       path: '/confirm/:id/:confString',
       name: 'EmailConfirmation',
-      component: EmailConfirmation
+      component: EmailConfirmation,
+      meta: {requireAuth: false}
+    },
+    {
+      path: '/check-email',
+      name: 'CheckEmail',
+      component: CheckEmail,
+      meta: {requireAuth: false}
+    },
+    {
+      path: '/unauthorized', 
+      name: 'Unauthorized', 
+      component: Unauthorized,
+      meta: {requireAuth: false},
+      props: true
     },
     {
       path: '*',
-      component: {
-        template: '<div>404!</div>',
-        meta: {requireAuth: false}
-      }
+      component: NoPageExists,
+      meta: {requireAuth: false}
     }
   ]
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(routeRecord => routeRecord.meta.requiresAuth)) {
-    console.log(`Route requires auth`); 
-  }
-
-  next(); 
-});
 
 export default router;

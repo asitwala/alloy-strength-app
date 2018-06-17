@@ -1,5 +1,6 @@
 <template>
- <div class="as-workout-container">
+
+<div class="as-workout-container">
     <as-notification
         :visible="notificationVisible"
         :type="notificationType"
@@ -13,156 +14,172 @@
         </template>
     </as-notification>
 
-    <div class="as-workout-header">
-        <div class="as-workout-options">
-            <div class="as-subworkout-descs">
-                <h1>{{ titlePart1 }}</h1>
-                <h3>{{ titlePart1Extend }}</h3>
-            </div>
-            <div class="as-subworkout-controls">
-                <v-checkbox 
-                    class="as-workout-options-checkbox"
-                    color="primary"
-                    label="Simple View"
-                    v-model="showSimpleView"
-                >
-                </v-checkbox>
-                <v-checkbox 
-                    class="as-workout-options-checkbox"
-                    color="primary"
-                    label="Show Calendar"
-                    v-model="showCalendar"
-                >
-                </v-checkbox>
-                <v-btn 
-                    v-if="!notEditable"
-                    class="as-subworkout-button"
-                    @click="checkClear()">
-                    Reset
-                </v-btn>
-                <v-btn color="primary"
-                    v-if="!notEditable"
-                    class="as-subworkout-button"
-                    @click="saveWorkoutInfo()">
-                    Save
-                </v-btn>
-                <v-btn color="green" 
-                    v-if="!notEditable"
-                    class="as-subworkout-button"
-                    @click="checkSubmit()">
-                    Submit
-                </v-btn>
-            </div>
-        </div>
-        <v-divider/>
+    <as-warning :visible="setWarningVisible" :text="setWarningText" @close="setWarningAcknowledged"></as-warning>
+
+    <!-- Loading icon -->
+    <div class="as-loading" v-if="loading"> 
+        <v-progress-circular indeterminate color="primary"/>
     </div>
 
-    <as-workout-prompt :copy="copy" :show-prompt="showPrompt"></as-workout-prompt>
-
-    <div class="as-workout">
-
-        <transition name="as-fade" mode="out-in">
-
-            <div class="as-no-workout" v-if="contentView === 1">
-                <h3>{{ noWorkoutMessage }}</h3>
-            </div>
-
-            <div class="as-no-workout" v-if="contentView === 2">
-                <h3>{{ hiddenWorkoutMessage }}</h3>
-            </div>
-
-            <div class="as-subworkout-container" v-if="contentView === 3">
-                <div class="as-subworkout-options">
-                    <h3>{{ titlePart2 }}</h3>
-                    <p class="as-subworkout-suggested-disclaimer">Brackets [ ] indicate a recommended value, e.g. [ 7 ] in an RPE box means a target RPE of 7 for that set.</p>
+    <transition name="as-fade">
+        <div class="as-workout-actual-content"  v-if="!loading">
+            <div class="as-workout-header">
+                <div class="as-workout-options">
+                    <div class="as-subworkout-descs">
+                        <h1>{{ titlePart1 }}</h1>
+                        <h3>{{ titlePart1Extend }}</h3>
+                    </div>
+                    <div class="as-subworkout-controls">
+                        <v-checkbox 
+                            class="as-workout-options-checkbox"
+                            color="primary"
+                            label="Simple View"
+                            v-model="showSimpleView"
+                        >
+                        </v-checkbox>
+                        <v-checkbox 
+                            class="as-workout-options-checkbox"
+                            color="primary"
+                            label="Show Calendar"
+                            v-model="showCalendar"
+                        >
+                        </v-checkbox>
+                        <v-btn 
+                            v-if="!notEditable"
+                            class="as-subworkout-button"
+                            @click="checkClear()">
+                            Reset
+                        </v-btn>
+                        <v-btn color="primary"
+                            v-if="!notEditable"
+                            class="as-subworkout-button"
+                            @click="saveWorkoutInfo()">
+                            Save
+                        </v-btn>
+                        <v-btn color="green" 
+                            v-if="!notEditable"
+                            class="as-subworkout-button"
+                            @click="checkSubmit()">
+                            Submit
+                        </v-btn>
+                    </div>
                 </div>
-            
-                <as-subworkout 
-                    v-for="(subworkout, subworkoutIndex) in subworkouts" 
-                    @refresh="updateSpecial"
-                    :not-editable="notEditable"
-                    :key="subworkout.name"
-                    :type="subworkout.type"
-                    :name="subworkout.name"
-                    :suggested-weight-string="subworkout.suggestedWeightString"
-                    :special-class="subworkout.class"
-                    :special-describer="subworkout.specialDescriber"
-                    :describer="subworkout.describer"
-                    :video="subworkout.hasVideo ? subworkout.selectedVideo : {}"
-                    :RPEOptions="subworkout.RPEOptions"
-                    :dataTableItems="subworkout.dataTableItems"
-                    :number="subworkout.number"
-                    :hasButton="subworkout.hasButton"
-                    :buttonDisplay="subworkout.buttonDisplay ? subworkout.buttonDisplay : ''"
-                    :buttonName="subworkout.buttonName"
-                    :headers="headersList[subworkoutIndex]"
-                />
+                <v-divider/>
             </div>
 
-            <div class="as-simple-workout-container" v-if="contentView === 4">
-                <div class="as-subworkout-options">
-                    <h3>{{ titlePart2 }}</h3>
-                </div>
-                <as-simple-workout 
-                    @refresh="() => fetchWorkoutInfo()"
-                    :not-editable="notEditable"
-                    :subworkouts="subworkouts"/>
-            </div>
-        </transition>
-        
-        <div class="as-date-pickers" v-if="showCalendar">
-            <div class="as-date-pickers-text">
-                Select workout dates by using the dropdown menu and buttons below.
-            </div>
-        
+            <as-workout-prompt :copy="copy" :show-prompt="showPrompt"></as-workout-prompt>
 
-            <v-date-picker
-                width="300"
-                v-model="date"
-                :events="arrayEvents"
-                :event-color="arrayEventsColors"
-            />
-            
-            <as-workout-legend></as-workout-legend>
+            <div class="as-workout">
 
-            <div class="as-workout-date-dropdown-options">
-                <div class="as-workout-date-any-date">
-                    <v-select
-                        class="body-1"
-                        :items="formattedWorkoutDates"
-                        v-model="selectedDateWithWeekDay"
-                        label="Select workout dates"
-                        single-line
-                    ></v-select>
-                    <v-btn
-                        @click="getSpecificWorkout"
-                        class="as-workout-date-any-date-btn"
-                        small
-                        color="primary">
-                        <span>Go</span> 
-                    </v-btn>
-                </div>
-                <div class="as-workout-date-back-next">
-                    <v-btn
-                        @click="getLastWorkout"
-                        class="as-workout-date-back-btn"
-                        small
-                        color="primary">
-                        <v-icon left>fa-angle-left</v-icon> 
-                        <span>Last</span>
-                    </v-btn>
-                    <v-btn
-                        @click="getNextWorkout"
-                        class="as-workout-date-next-btn"
-                        small
-                        color="primary">
-                        <span>Next</span> 
-                        <v-icon right>fa-angle-right</v-icon> 
-                    </v-btn>
+                <transition name="as-fade" mode="out-in">
+
+                    <div class="as-no-workout" v-if="contentView === 1">
+                        <h3>{{ noWorkoutMessage }}</h3>
+                    </div>
+
+                    <div class="as-no-workout" v-if="contentView === 2">
+                        <h3>{{ hiddenWorkoutMessage }}</h3>
+                    </div>
+
+                    <div class="as-subworkout-container" v-if="contentView === 3">
+                        <div class="as-subworkout-options">
+                            <h3>{{ titlePart2 }}</h3>
+                            <p class="as-subworkout-suggested-disclaimer">Brackets [ ] indicate a recommended value, e.g. [ 7 ] in an RPE box means a target RPE of 7 for that set.</p>
+                        </div>
+                    
+                        <as-subworkout 
+                            v-for="(subworkout, subworkoutIndex) in subworkouts" 
+                            @refresh="updateSpecial"
+                            @showWarning="showSetWarning"
+                            :not-editable="notEditable"
+                            :key="subworkout.name"
+                            :type="subworkout.type"
+                            :name="subworkout.name"
+                            :suggested-weight-string="subworkout.suggestedWeightString"
+                            :special-class="subworkout.class"
+                            :special-describer="subworkout.specialDescriber"
+                            :describer="subworkout.describer"
+                            :video="subworkout.hasVideo ? subworkout.selectedVideo : {}"
+                            :RPEOptions="subworkout.RPEOptions"
+                            :dataTableItems="subworkout.dataTableItems"
+                            :number="subworkout.number"
+                            :hasButton="subworkout.hasButton"
+                            :buttonDisplay="subworkout.buttonDisplay ? subworkout.buttonDisplay : ''"
+                            :buttonName="subworkout.buttonName"
+                            :headers="headersList[subworkoutIndex]"
+                            :warn-next-set="subworkout.warnNextSet"
+                            :warning-text="subworkout.warningText"
+                            :set-warning-ok="setWarningOk"
+                        />
+                    </div>
+
+                    <div class="as-simple-workout-container" v-if="contentView === 4">
+                        <div class="as-subworkout-options">
+                            <h3>{{ titlePart2 }}</h3>
+                        </div>
+                        <as-simple-workout 
+                            @refresh="() => fetchWorkoutInfo()"
+                            @showWarning="showSetWarning"
+                            :not-editable="notEditable"
+                            :subworkouts="subworkouts"
+                            :set-warning-ok="setWarningOk"/>
+                    </div>
+                </transition>
+                
+                <div class="as-date-pickers" v-if="showCalendar">
+                    <div class="as-date-pickers-text">
+                        Select workout dates by using the dropdown menu and buttons below.
+                    </div>
+                
+                    <v-date-picker
+                        width="300"
+                        v-model="date"
+                        :events="arrayEvents"
+                        :event-color="arrayEventsColors"
+                    />
+                    
+                    <as-workout-legend></as-workout-legend>
+
+                    <div class="as-workout-date-dropdown-options">
+                        <div class="as-workout-date-any-date">
+                            <v-select
+                                class="body-1"
+                                :items="formattedWorkoutDates"
+                                v-model="selectedDateWithWeekDay"
+                                label="Select workout dates"
+                                single-line
+                            ></v-select>
+                            <v-btn
+                                @click="getSpecificWorkout"
+                                class="as-workout-date-any-date-btn"
+                                small
+                                color="primary">
+                                <span>Go</span> 
+                            </v-btn>
+                        </div>
+                        <div class="as-workout-date-back-next">
+                            <v-btn
+                                @click="getLastWorkout"
+                                class="as-workout-date-back-btn"
+                                small
+                                color="primary">
+                                <v-icon left>fa-angle-left</v-icon> 
+                                <span>Last</span>
+                            </v-btn>
+                            <v-btn
+                                @click="getNextWorkout"
+                                class="as-workout-date-next-btn"
+                                small
+                                color="primary">
+                                <span>Next</span> 
+                                <v-icon right>fa-angle-right</v-icon> 
+                            </v-btn>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </transition>
 </div>
 
 </template>
@@ -177,6 +194,9 @@ let Notification = require('../demo-common/components/Notification.vue').default
 import WorkoutLegend from '@/demo-common/components/WorkoutLegend'; 
 
 import WorkoutPrompt from '@/demo-user/user-info/WorkoutPrompt';
+
+import SetWarning from '@/demo-common/components/SetWarning'; 
+
 import WorkoutService from '@/services/WorkoutService';
 
 const headerMap = {
@@ -194,6 +214,7 @@ const headerMap = {
 
 export default {
     components: {
+        'as-warning': SetWarning,
         'as-workout-legend': WorkoutLegend,
         'as-subworkout': Subworkout,
         'as-simple-workout': SimpleWorkout,
@@ -204,6 +225,15 @@ export default {
         this.fetchWorkoutInfo();
     },
     methods: {
+        showSetWarning(warningInfo) {
+            if (warningInfo.warnNextSet) {
+                this.setWarningVisible = true;
+                this.setWarningText = warningInfo.warningText;
+            }
+        },
+        setWarningAcknowledged() {
+            this.setWarningOk = true; 
+        },
         updateSpecial(buttonInfo) {
             let {patternNumber, buttonName} = buttonInfo; 
             let userId = this.$session.get("user").id;
@@ -211,6 +241,7 @@ export default {
             let tempKey = '';
             let tempValue = '';  
             let body = {};
+    
             let splitCode = buttonName.split("|");
             body.specialType = splitCode[1];
             body.patternNum = splitCode[2];
@@ -265,6 +296,7 @@ export default {
             });
         },
         fetchWorkoutInfo() {
+            this.loading = true; 
             let _User = this.$session.get("user");
             let UserId = _User.id;
             let workoutId = this.$session.get("viewingWID");
@@ -272,7 +304,7 @@ export default {
             WorkoutService.fetchWorkoutInfo(UserId, workoutId).then(response => {
                 if (typeof response === 'object') {
 
-                    if (response.data.accessLevel) {
+                    if (this.validAccessLevelGM(response.data.accessLevel)) {
                         this.handleAccessLevelGM(response.data.accessLevel);
 
                         // 4 -> Progress (no new workouts yet)
@@ -345,6 +377,11 @@ export default {
                         });
                     }
                 }
+            }).finally(() => {
+                this.loading = false; 
+                this.setWarningVisible = false;
+                this.setWarningText = '';
+                this.setWarningOk = false;
             });
         },
         setTableHeaders() {
@@ -511,7 +548,15 @@ export default {
 
             // workout prompt
             copy: {},
-            showPrompt: false
+            showPrompt: false,
+
+            // loading icon
+            loading: false,
+
+            // set warning
+            setWarningVisible: false,
+            setWarningText: '',
+            setWarningOk: false
         };
     },
     computed: {
@@ -596,6 +641,7 @@ export default {
     .as-workout-container {
         width: 90%; 
         margin: 0 auto;
+        height: 100%;
     }
 
     .as-workout-header {
@@ -722,7 +768,7 @@ export default {
             flex: 1; 
             margin: 0 20px;
             margin-bottom: 25px;
-            min-width: 300px;
+            min-width: 735px;
         }
     }
 
@@ -732,5 +778,4 @@ export default {
         justify-content: center;
         align-items: center;
     }
-
 </style>

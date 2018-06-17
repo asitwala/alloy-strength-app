@@ -6,7 +6,6 @@
             <p><a :href="`mailto:${officialEmail}`">{{ officialEmail }}</a></p>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -23,7 +22,7 @@
 <style lang="scss">
     .as-contact {
         text-align: center; 
-        min-height: 550px;
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;

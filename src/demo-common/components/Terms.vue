@@ -29,14 +29,14 @@
 
             <h2>Recurring Billing</h2>
             <p>
-                Billing occurs via one of three subscription packages. The Bronze package, for a 
-                single month at $40 per month, the Silver package, for 6 months at $30 per month, 
-                and the Gold package, for 12 months at $25 per month. Monthly billing shall commence 
-                on the 1st day of membership, and for Gold and Silver packages will continue via 
-                automatic and recurring billing and payments every 30-days until cancellation. 
+                Billing occurs via one of two subscription packages. The Silver package, at $25 per month, 
+                and the Gold package, at $15 per month for 6 months (a total of $90). Monthly billing shall commence 
+                on the 1st day of membership and for the Silver package, will continue via 
+                automatic and recurring billing and payments every 30-days until cancellation. For the Gold package, 
+                monthly billing shall continue via automatic and recurring billing and payments every 6 months.
                 Upon cancellation, access to this website will cease immediately. There will be no 
                 refunds issued unless otherwise specified. If you have questions about the billing 
-                policy of this program, or wish to cancel your subscription, please contact
+                policy of this program, or wish to cancel your subscription before the expiration date, please contact
                 <a :href="`mailto:${officialEmail}`">{{ officialEmail }}</a>.
             </p>
 

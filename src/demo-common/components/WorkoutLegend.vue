@@ -22,7 +22,6 @@
                     <span>Upcoming</span>
                 </div>
             </div>
-            
         </v-card-text>
     
     </v-card>

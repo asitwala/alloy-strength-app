@@ -2,50 +2,46 @@
 
 // Use GM for global mixin namespace so vue methods, etc. aren't accidentally overwritten
 export default {
+    beforeRouteEnter (to, from, next) {
+        next(vm => {
+            const loggedIn = vm.$session && vm.$session.has('user');
+            const requireAuth = to.meta.requireAuth; 
+            if (!loggedIn && requireAuth) {
+                vm.$router.push({name: 'Unauthorized', params: {path: to.path}});
+            } else {
+                return; 
+            }
+        });
+    },
     data() {
         return {
             accessLevelGM: null,
-            stepGM: null,
             officialStepGM: null
         }
     },
     methods: {
+        validAccessLevelGM(accessLevel) {
+            return (accessLevel >= 0);
+        },
         resetAccessLevelGM() {
             this.accessLevelGM = null;
         },
         setAccessLevelGM(accessLevel) {
             this.accessLevelGM = accessLevel; 
+            this.$session.set('accessLevel', this.accessLevelGM);
         },
         handleAccessLevelGM(accessLevel) {
             this.setAccessLevelGM(accessLevel);
             this.handleRoutingGM();
         },
-        handleAccessLevelStepperGM(accessLevel) {
-            this.setAccessLevelGM(accessLevel);
-
-            if (this.$route.name === 'Initialize') {
-                let returnValue = 0;
-                if (accessLevel === 0) {
-                    returnValue = 1;
-                } else if (accessLevel === 1) {
-                    returnValue = 2; 
-                } else if (accessLevel === 2) {
-                    returnValue = 3; 
-                }
-                
-                console.log('Return value', returnValue);
-                this.officialStepGM = returnValue;
-                return returnValue;
-            } else {
-                this.handleRoutingGM();
-            }
-        },
         routeToStepperGM(stepNum) {
             const notInStepper = this.$route.name !== 'Initialize';
 
             if (notInStepper) {    
-                this.$router.push({name: `Initialize`, params: { givenStep: stepNum }});
+                this.$router.push({name: `Initialize`});
             } 
+
+            this.officialStepGM = stepNum;
         },
         routeElsewhereGM(name) {
             if (this.$route.name !== name) {

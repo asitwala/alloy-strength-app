@@ -16,7 +16,7 @@
                     <v-form ref="loginForm" v-model="validLoginForm" lazy-validation>
                         <v-text-field
                             v-model="username"
-                            label="Username"
+                            label="Email"
                             type="text"
                             :rules="usernameRules"
                         />
@@ -28,7 +28,7 @@
                             :type="loginVisibility ? 'password' : 'text'"
                             :rules="passwordRules"
                         />
-                        <p class="as-forgot-password" @click="forgotPassword()">Forgot Password?</p>
+                        <p class="as-forgot-password-link" @click="goToForgotPassword()">Forgot Password?</p>
                     </v-form>
                 </template>
                 <template slot="card-footer">
@@ -36,6 +36,13 @@
                 </template>
             </as-modal-card>
         </v-dialog>
+
+
+        <transition name="as-fade" mode="out-in">
+            <as-forgot-password v-if="forgotPassword">
+            
+            </as-forgot-password>
+        </transition>
     </div>
 </template>
 
@@ -45,10 +52,12 @@
     import UsersService from '@/services/UsersService'; 
 
     import AuthCard from '@/demo-common/components/AuthCard'; 
+    import ForgotPassword from '@/demo-home/ForgotPassword'; 
 
     export default {
         components: {
-            'as-modal-card': AuthCard
+            'as-modal-card': AuthCard,
+            'as-forgot-password': ForgotPassword
         },
         data() {
             return {
@@ -64,22 +73,36 @@
 
                 // rules
                 usernameRules: [
-                    v => !this.usernameNeeded || !!v || 'Username is required',
-                    v => !this.invalidUser || 'User could not be found'
+                    v => !this.usernameNeeded || !!v || 'Email is required.',
+                    v => !this.invalidUser || 'User could not be found.'
                 ],
                 passwordRules: [
-                    v => !this.passwordNeeded || !!v || 'Password is required',
-                    v => !this.invalidPassword || 'Password is invalid'
-                ]
+                    v => !this.passwordNeeded || !!v || 'Password is required.',
+                    v => !this.invalidPassword || 'Password is invalid.'
+                ],
+
+                // forgot password
+                forgotPassword: false
             };
         }, 
         methods: {
-            forgotPassword() {
-
+            goToForgotPassword() {
+                this.showLoginModal = false; 
+                this.forgotPassword = true; 
             },
             openLoginModal() {
                 this.username = '';
                 this.password = ''; 
+                this.forgotPassword = false; 
+
+                this.loginVisibility = true;
+                this.usernameNeeded = false;
+                this.passwordNeeded = false;
+                this.validLoginForm = true;
+                this.invalidUser = false;
+                this.invalidPassword = false;
+                this.$refs.loginForm.validate();
+
                 this.showLoginModal = true;
             },
             closeLoginModal() {
@@ -89,6 +112,7 @@
                 var postBody = {};
                 postBody.username = this.username;
                 postBody.password = this.password;
+                postBody.timezoneOffset = new Date().getTimezoneOffset()/60;
 
                 this.usernameNeeded = this.username === ""; 
                 this.passwordNeeded = this.password === ""; 
@@ -111,18 +135,24 @@
 
                     if (loginResponse.data.Success) {
                         this.$session.set("user", loginResponse.data.User);
-
                         this.$session.set("viewingWID", loginResponse.data.User.currentWorkoutID);
+
+                        // Manually set accessLevel here for nav sidebar purposes
+                        this.setAccessLevelGM(loginResponse.data.accessInfo.accessLevel); 
+                        
                         this.closeLoginModal();
 
                         // Handle routing based on type of user 
                         let isAdmin = loginResponse.data.User.isAdmin; 
                         let hasWorkouts = loginResponse.data.hasWorkouts; 
+                        let confirmedEmail = loginResponse.data.User.active;
 
                         if (isAdmin && !hasWorkouts) {
                             this.$router.push({ name: 'AdminSetLevels' }); // admin to set level 
+                        } else if (!isAdmin && !confirmedEmail) {
+                            this.$router.push({name: 'CheckEmail'});
                         } else if (!isAdmin && !hasWorkouts) {
-                            this.$router.push({ name: 'SetLevels' }); // beta user to set level 
+                            this.$router.push({ name: 'Initialize' }); // beta user to set level 
                         } else {
                             this.$router.push({ name: 'Workout' }); // otherwise, take to workouts page 
                         }
@@ -153,7 +183,7 @@
     @import '~@/demo-common/styles/colors';
     @import '~@/demo-common/styles/transitions';
 
-    .as-forgot-password {
+    .as-forgot-password-link {
         color: $blueDarken1;
         margin-bottom: 0px;
         cursor: pointer;

@@ -1,50 +1,59 @@
 <template>
-    <div class="as-set-levels">
-        <div class="as-initialize-step-3">
-            <div class="as-initialize-step-3-container">
-                <div class="as-initialize-step-3-left">
+    <div class="as-set-levels" style="height: 100%;">
 
-                    <h1 class="as-set-levels-header">{{ title }}</h1>
-
-                    <h3>Select a start date</h3>
-                    <p style="margin-bottom: 0px !important;">Enter below or use by clicking on the calendar to the right.</p>
-                    <v-form v-model="validForm">
-                        <v-text-field
-                            v-model="startDate"
-                            :rules="startDateRules"
-                            return-masked-value
-                            placeholder="MM/DD/YYYY"
-                            mask="##/##/####"
-                        />
-                    </v-form>
-                
-                    <h3 class="as-initialize-step-3-select-days">
-                        Select {{ numWorkoutDays }} days you'd like to work out on
-                    </h3>
-                    
-                    <div class="as-initialize-step-3-days">
-                        <div class="as-initialize-step-3-day"
-                            v-for="day in days" :key="day">
-                            <v-checkbox 
-                                color="primary"
-                                :label="day" v-model="selectedDays" :value="day">
-                            </v-checkbox>
-                        </div>
-                    </div>
-
-                    <p class="as-select-days-error" v-if="!validSelectedDays">
-                        You have selected {{ selectedDaysLength }} workout days. Please select <strong>{{ numWorkoutDays }}</strong>.
-                    </p>
-                </div>
-                <div class="as-initialize-step-3-right as-set-levels-calendar">
-                    <v-date-picker v-model="startDateCalendar"></v-date-picker>
-                </div>
-            </div>
-            <v-btn 
-                color="primary" 
-                class="submit-button"
-                @click="postWorkouts()">Submit</v-btn>
+        <!-- Loading icon -->
+        <div class="as-loading" v-if="loading">
+            <v-progress-circular indeterminate color="primary"/>
         </div>
+    
+        <transition name="as-fade">
+            <div class="as-initialize-step-3" v-if="!loading">
+                <div class="as-initialize-step-3-container">
+                    <div class="as-initialize-step-3-left">
+
+                        <h1 class="as-set-levels-header">{{ title }}</h1>
+
+                        <h3>Select a start date</h3>
+                        <p style="margin-bottom: 0px !important;">Enter below or use by clicking on the calendar to the right.</p>
+                        <v-form v-model="validForm">
+                            <v-text-field
+                                v-model="startDate"
+                                :rules="startDateRules"
+                                return-masked-value
+                                placeholder="MM/DD/YYYY"
+                                mask="##/##/####"
+                            />
+                        </v-form>
+                    
+                        <h3 class="as-initialize-step-3-select-days">
+                            Select {{ numWorkoutDays }} days you'd like to work out on
+                        </h3>
+                        <p>We recommend spacing out your workouts throughout the week so that you have at least 1 day of rest between each workout if possible (e.g. Monday, Wednesday, Friday for a 3-day schedule or Tuesday, Thursday, Saturday, Sunday for a 4-day schedule).</p>
+                        
+                        <div class="as-initialize-step-3-days">
+                            <div class="as-initialize-step-3-day"
+                                v-for="day in days" :key="day">
+                                <v-checkbox 
+                                    color="primary"
+                                    :label="day" v-model="selectedDays" :value="day">
+                                </v-checkbox>
+                            </div>
+                        </div>
+
+                        <p class="as-select-days-error" v-if="!validSelectedDays">
+                            You have selected {{ selectedDaysLength }} workout days. Please select <strong>{{ numWorkoutDays }}</strong>.
+                        </p>
+                    </div>
+                    <div class="as-initialize-step-3-right as-set-levels-calendar">
+                        <v-date-picker v-model="startDateCalendar"></v-date-picker>
+                    </div>
+                </div>
+                <v-btn 
+                    color="primary" 
+                    class="submit-button"
+                    @click="postWorkouts()">Submit</v-btn>
+            </div>
+        </transition>
     </div>
 
 </template>
@@ -61,6 +70,14 @@
             reschedule: {
                 type: Boolean,
                 default: false
+            },
+            givenLevel: {
+                type: Number,
+                default: null
+            },
+            givenBlockNum: {
+                type: Number,
+                default: null
             }
         },
         data() {
@@ -74,11 +91,19 @@
                 ],
                 validForm: false,
                 validSelectedDays: true,
-                level: ''
+                level: '',
+
+                loading: false
             }
         },
         mounted() {
-            this.level = this.$session.get('user').level; 
+            if (Number(this.givenLevel) > 0) {
+                this.level = this.givenLevel; 
+            } else {
+                if (this.$session.has('user')) {
+                    this.level = this.$session.get('user').level;
+                }
+            }
         },
         methods: {
             postWorkouts() {
@@ -89,6 +114,7 @@
                 }
 
                 if (this.validSelectedDays) {
+                    this.loading = true; 
                     let daysList = []; 
                     this.selectedDays.forEach(day => {
                         daysList.push(this.days.indexOf(day));
@@ -102,7 +128,8 @@
                         }
 
                         return UsersService.rescheduleWorkouts(this.$session.get('user').id, params).then(() => {
-                            console.log('Rescheduled workouts'); 
+                            this.$router.push({name: 'Workout'});
+                            this.loading = false; 
                         });
                     } else {
                         let params = {
@@ -113,9 +140,9 @@
                         return UsersService.adminGenerateWorkouts(this.$session.get('user').id, params).then(()=> {
                             this.$session.set("viewingWID", 1);
                             this.$router.push({name: 'Workout'});
+                            this.loading = false;
                         });
                     }
-                    
                 }
             },
             supportCalendar(textValue) {
@@ -141,6 +168,11 @@
             },
             startDateCalendar: function(newValue) {
                 this.supportText(newValue); 
+            },
+            givenLevel: function(newValue) {
+                if (Number(newValue) > 0) {
+                    this.level = newValue; 
+                }
             }
         },
         computed: {
@@ -157,7 +189,15 @@
             },
             blockText() {
                 if (this.level > 10) {
-                    let blockNum = this.$session.get('user').blockNum; 
+
+                    let blockNum = null;
+
+                    if (this.givenBlockNum > 0) {
+                        blockNum = this.givenBlockNum;
+                    } else {
+                        blockNum = this.$session.get('user').blockNum; 
+                    }
+             
                     if (blockNum === 1) {
                         return `\u2014 Block ${blockNum}: Volume`; 
                     } else if (blockNum === 2) {
@@ -181,6 +221,14 @@
     .as-set-levels {
         padding: 20px;
         height: 100%;
+
+        min-height: 400px;
+        position: relative;
+
+        .as-loading {
+            position: absolute;
+            right: 50%;
+        }
     }
 
     .as-set-levels-header {
@@ -198,7 +246,6 @@
     }
 
     .as-initialize-step-3-select-days {
-        margin-bottom: 8px;
     }
 
     .as-initialize-step-3-days {

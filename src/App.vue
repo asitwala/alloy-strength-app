@@ -6,30 +6,45 @@
           <img class="as-logo" src="../static/logo.svg">
         </v-btn>
         <v-toolbar-title class="white--text as-toolbar-title" 
-        @click="goToHomePage">ALLOY STRENGTH</v-toolbar-title>
+        @click="goToHomePage">ELECTRUM PERFORMANCE</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-toolbar-side-icon v-if="$session.has('user')"@click="toggleNavigation"></v-toolbar-side-icon>
+        <div class="as-main-toolbar-right">
+          <v-toolbar-items>
+            <v-btn flat class="as-main-toolbar-link" @click="openBlog">Blog</v-btn>
+            <!-- <v-btn flat class="as-main-toolbar-link">Why Alloy Strength</v-btn> -->
+            <v-tooltip bottom>
+              <v-btn flat class="as-main-toolbar-link" slot="activator">FAQ</v-btn>
+              <span>Coming Soon</span>
+            </v-tooltip>
+          </v-toolbar-items>
+          <v-toolbar-side-icon v-if="$session.exists() && $session.has('user')" @click="toggleNavigation"></v-toolbar-side-icon>
+        </div>
       </v-toolbar>
 
       <as-navigation
         :visible="showNavigation"
         @update-visibility="setNavigation"/>
 
-      <div class="as-main-body" style="height: 100%">
+      <div class="as-main-body" style="height: 100%; min-height: 450px;">
         <router-view/>
       </div>
-      
      
       <v-footer class="as-footer">
         <div class="as-footer-extra-formatting">
           <div class="as-footer-info">
               <v-btn disabled class="as-footer-copyright" flat >
-                <span>© {{ currentYear }} &mdash; Alloy Strength Training Systems. </span> 
+                <span>© {{ currentYear }} &mdash; Electrum Performance Systems. </span> 
                 <span>All Rights Reserved</span>
               </v-btn>
           </div>
 
-          <!-- Footer Links ('About', Social Media, etc.) --> 
+            <div>
+              <p style="margin-bottom: 0px !important; font-size: 12px; color: white; padding: 8px; margin-right: 22px;  margin-left: 16px;">Built by 
+                <span style="color: #1e88e5 !important; cursor: pointer"><strong>1-Stop Development</strong></span>
+              </p>
+            </div>
+
+          <!-- Footer Links ('About', Social Media, etc.) -->
           <div class="as-footer-links">
             <v-btn
               color="white"
@@ -45,7 +60,7 @@
               <v-tooltip v-if="footerIcon.tooltipText" top>
                 <v-btn 
                 slot="activator"
-                :href="footerIcon.src"
+                @click="openFooterLinkNewTab(footerIcon.src)"
                 icon
                 class="mx-3 white--text"
                 >
@@ -58,7 +73,7 @@
               
               <!-- No tooltip --> 
               <v-btn v-else
-              :href="footerIcon.src"
+              @click="openFooterLinkNewTab(footerIcon.src)"
               icon
               class="mx-3 white--text"
               >
@@ -67,6 +82,7 @@
                 </v-icon>
               </v-btn>
             </div>
+            
           </div>
         </div>
       </v-footer>
@@ -104,7 +120,7 @@
       footerIcons: [
         {
           name: 'fa-facebook-f',
-          src: '/',
+          src: '',
           tooltipText: 'Coming Soon'
         },
         {
@@ -128,6 +144,17 @@
       },
       setNavigation(val) {
         this.showNavigation = val;
+      },
+      openFooterLinkNewTab(src) {
+        if (src) {
+          window.open(src, '_blank');
+        }
+      },
+      openBlog() {
+        window.open('http://blog.alloystrengthtraining.com/', '_blank');
+      },
+      routeTo(pathName) {
+        this.$router.push({name: pathName});
       }
     }
   }
@@ -137,10 +164,45 @@
   @import '~@/demo-common/styles/transitions';
   @import '~@/demo-common/styles/colors';
 
+  .as-loading {
+    height: 100%; 
+    display: flex; 
+    align-items: center;
+    justify-content: center; 
+  }
 
   .as-main-toolbar {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    height: unset !important;
+    max-height: 150px !important;
+
+    &-right {
+      display: flex;
+      flex-wrap: no-wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-right: 12px;
+    }
+
+    .toolbar__items .btn {
+
+      &:first-child {
+        margin-left: 8px;
+      }
+
+      .btn__content {
+        padding: 8px;
+      }
+    }
+
     .toolbar__content > .btn:first-child {
       margin-left: 30px;
+    }
+
+    .toolbar__content {
+      height: unset !important;
+      flex-wrap: wrap;
     }
   }
 
@@ -149,7 +211,6 @@
     border-radius: 30px;
     height: 100%;
     width: 100%;
-
   }
 
   .application .theme--light.toolbar, .theme--light .toolbar {
@@ -182,12 +243,14 @@
     width: 100%;
     height: auto !important;
     min-height: unset !important;
+    max-height: 250px !important;
 
     &-extra-formatting {
       display: flex;
       flex-wrap: wrap;
       width: 100%;
       justify-content: space-between;
+      align-items: center;
       height: auto !important;
     }
 
@@ -212,6 +275,7 @@
     &-links {
       display: flex;
       flex-wrap: wrap;
+      align-items: center;
     }
   }
 

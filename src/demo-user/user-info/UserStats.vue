@@ -1,49 +1,58 @@
 <template>
 <div class="as-user-stats">
-    <div class="as-user-stats-header">
-        <h1>Your Workout Stats for Level {{ level }} {{ blockText }}</h1>
-        <div class="as-user-stats-meta">
-            <v-progress-circular
-                :size="125"
-                :width="15"
-                :rotate="360"
-                :value="levelProgress"
-                color="primary"
-                class="as-user-stats-meta-diagram"
-            >
-            <div class="as-user-stats-meta-diagram-text">
-                <p class="as-user-stats-meta-diagram-text-level"><b>Level {{ level }}</b></p>
-                <v-divider class="as-user-stats-meta-diagram-text-divider"/>
-                <p class="as-user-stats-meta-diagram-text-percent">{{ levelProgress }}% complete</p>
-            </div>
-            
-            </v-progress-circular>
-            <div class="as-user-stats-meta-text">
-                <p><b>Workouts Completed:</b> {{ completed }} out of {{ total }} ({{ levelProgress }}%)</p>
-            </div>
-           
-        </div>
-       
-        
+
+     <!-- Loading icon -->
+    <div class="as-loading" v-if="loading">
+        <v-progress-circular indeterminate color="primary"/>
     </div>
-    <v-card class="as-user-stats-table">
-        <v-card-title>
-            <v-data-table
-                
-                :headers="exerciseTableHeaders"
-                :items="exerciseTableItems"
-                hide-actions
-            >
-                <template slot="items" slot-scope="props">
-                    <td> {{ props.item.exerciseType }}</td>
-                    <td> {{ props.item.exerciseName }}</td>
-                    <td> {{ props.item.max }}</td>
-                    <td :class="alloyResultClasses(props.item.alloyResult)"> {{ props.item.alloyResult }}</td>
-                    <td> {{ props.item.lastSet }}</td>
-                </template>
-            </v-data-table>    
-        </v-card-title>
-    </v-card>
+
+    <transition name="as-fade">
+        <div class="as-user-stats-actual-content" v-if="!loading">
+            <div class="as-user-stats-header">
+                <h1>Your Workout Stats for Level {{ level }} {{ blockText }}</h1>
+                <div class="as-user-stats-meta">
+                    <v-progress-circular
+                        :size="125"
+                        :width="15"
+                        :rotate="360"
+                        :value="levelProgress"
+                        color="primary"
+                        class="as-user-stats-meta-diagram"
+                    >
+                    <div class="as-user-stats-meta-diagram-text">
+                        <p class="as-user-stats-meta-diagram-text-level"><b>Level {{ level }}</b></p>
+                        <v-divider class="as-user-stats-meta-diagram-text-divider"/>
+                        <p class="as-user-stats-meta-diagram-text-percent">{{ levelProgress }}% complete</p>
+                    </div>
+                    
+                    </v-progress-circular>
+                    <div class="as-user-stats-meta-text">
+                        <p><b>Workouts Completed:</b> {{ completed }} out of {{ total }} ({{ levelProgress }}%)</p>
+                    </div>
+                </div>
+            </div>
+            <v-card class="as-user-stats-table">
+                <v-card-title>
+                    <v-data-table
+                        
+                        :headers="exerciseTableHeaders"
+                        :items="exerciseTableItems"
+                        hide-actions
+                    >
+                        <template slot="items" slot-scope="props">
+                            <td> {{ props.item.exerciseType }}</td>
+                            <td> {{ props.item.exerciseName }}</td>
+                            <td> {{ props.item.max }}</td>
+                            <td :class="alloyResultClasses(props.item.alloyResult)"> {{ props.item.alloyResult }}</td>
+                            <td> {{ props.item.lastSet }}</td>
+                        </template>
+                    </v-data-table>    
+                </v-card-title>
+            </v-card>
+        
+        </div>
+    </transition>
+
 </div>
 </template>
 
@@ -67,19 +76,24 @@ export default {
             exerciseTableItems: [],
             levelProgress: 0,
             completed: 0,
-            total: 0
+            total: 0,
+
+            loading: false
         };
     },
     mounted() {
-        this.fetchStatsInfo(); 
+        this.loading = true; 
+        this.fetchStatsInfo().finally(() => {
+            this.loading = false;
+        }); 
     },
     methods: {
         fetchStatsInfo() {
             this.userId = this.$session.get('user').id; 
 
-            StatsService.fetchStatsInfo(this.userId).then(response => {
-                if (response.data.accessLevel) {
-                    this.handleAccessLevelGM(1);
+            return StatsService.fetchStatsInfo(this.userId).then(response => {
+                if (this.validAccessLevelGM(response.data.accessLevel)) {
+                    this.handleAccessLevelGM(response.data.accessLevel);
                 }
                 this.level = response.data.level; 
                 this.blockNum = response.data.blockNum;
@@ -120,6 +134,7 @@ export default {
     .as-user-stats {
         width: 85%; 
         margin: 0 auto;
+        height: 100%;
     }
 
     .as-user-stats-header {

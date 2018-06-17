@@ -34,7 +34,7 @@
                     <v-btn v-if="subworkout.hasButton && !notEditable"
                         small
                         color="primary"
-                        @click="updateSpecial(subworkout.number, subworkout.buttonName)"
+                        @click="showSetWarning(subworkout.number, subworkout.buttonName, subworkout.warnNextSet, subworkout.warningText)"
                     >{{ subworkout.buttonDisplay }}</v-btn>
 
                     <p><a v-if="subworkout.hasVideo" @click="goToVideo(subworkout.selectedVideo)"><b>Watch Video</b></a></p>
@@ -106,7 +106,16 @@
             subworkouts: {
                 type: Array, 
                 default: () => []
+            },
+            setWarningOk: {
+                type: Boolean
             }
+        },
+        data() {
+            return {
+                patternNumber: null,
+                buttonName: null
+            };
         },
         methods: {
             formatRPESelectSuggested(option, suggested) {
@@ -117,13 +126,27 @@
                     let case3 = parseFloat(option) >= split[0];
                     let case4 = parseFloat(option) <= split[1];
 
-                    console.log(`Testing RPE`, option === (case1 || case2 && case3 && case4));
-
                     return option === (case1 || case2 && case3 && case4);
                 }
             },
             goToVideo(video) {
                 this.$router.push({name: "Videos", params: {videoFromWorkout: video}});
+            },
+            showSetWarning(patternNumber, buttonName, warnNextSet, warningText) {
+                if (warnNextSet) {
+                    this.patternNumber = patternNumber;
+                    this.buttonName = buttonName; 
+
+                    let warningInfo = {
+                        warnNextSet: warnNextSet,
+                        warningText: warningText
+                    }
+
+                    this.$emit('showWarning', warningInfo);
+                    
+                } else {
+                    this.updateSpecial(patternNumber, buttonName);
+                }
             },
             updateSpecial(patternNumber, buttonName) {
                 let userId = this.$session.get("user").id;
@@ -152,6 +175,13 @@
                     }
                 });
             }
+        },
+        watch: {
+            setWarningOk: function(newVal) {
+                if (newVal) {
+                    this.updateSpecial(this.patternNumber, this.buttonName);
+                }
+            }
         }
     };
 </script>
@@ -162,7 +192,7 @@
 
     .as-workout-simple-view-container {
         flex: 1;
-        min-width: 400px;
+        min-width: 735px;
         margin-top: 16px;
     }
 

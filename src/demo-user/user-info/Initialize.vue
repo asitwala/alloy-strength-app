@@ -1,38 +1,51 @@
 <template>
     <div class="as-initialize">
-        <div class="as-initialize-stepper">
-            <v-stepper v-model="stepper">
-                <v-stepper-header>
-                    <v-stepper-step step="1"
-                        :complete="stepper > 1">Select a Package</v-stepper-step>
-                    <v-divider/>
-                    <v-stepper-step step="2"
-                        :complete="stepper > 2">Provide Training Experience</v-stepper-step>
-                    <v-divider/>
-                    <v-stepper-step step="3"
-                        :complete="stepper > 3">Select Workout Days</v-stepper-step>
-                </v-stepper-header>
-                
-                <v-stepper-items class="as-initialize-stepper-content-container">
-                    <v-stepper-content step="1" class="as-initialize-stepper-content">
-                        <as-initialize-step-1 ref="step1" @submit="next"/>
-                    </v-stepper-content>
-
-                    <v-stepper-content step="2" class="as-initialize-stepper-content">
-                        <as-initialize-step-2 ref="step2" @submit="next"/>
-                    </v-stepper-content>
-
-                    <v-stepper-content step="3" class="as-initialize-stepper-content">
-                        <as-initialize-step-3 ref="step3"/>
-                    </v-stepper-content> 
-                </v-stepper-items>
-            </v-stepper>
+        <!-- Loading icon -->
+        <div class="as-loading" v-if="!stepper && !hasFinished">
+            <v-progress-circular indeterminate color="primary"/>
         </div>
+        
+        <transition name="as-fade">
+            <div class="as-initialize-stepper" v-if="stepper && !hasFinished">
+                <v-stepper v-model="stepper">
+                    <v-stepper-header>
+                        <v-stepper-step step="1"
+                            :complete="stepper > 1">Select a Package</v-stepper-step>
+                        <v-divider/>
+                        <v-stepper-step step="2"
+                            :complete="stepper > 2">Provide Training Experience</v-stepper-step>
+                        <v-divider/>
+                        <v-stepper-step step="3"
+                            :complete="stepper > 3">Select Workout Days</v-stepper-step>
+                    </v-stepper-header>
+                    
+                    <v-stepper-items class="as-initialize-stepper-content-container">
+                        <v-stepper-content step="1" class="as-initialize-stepper-content">
+                            <as-initialize-step-1 ref="step1" @submit="next"/>
+                        </v-stepper-content>
+
+                        <v-stepper-content step="2" class="as-initialize-stepper-content">
+                            <as-initialize-step-2 ref="step2" @submit="handleLevel"/>
+                        </v-stepper-content>
+
+                        <v-stepper-content step="3" class="as-initialize-stepper-content">
+                            <as-initialize-step-3 ref="step3" :given-level="givenLevel" :given-block-num="givenBlockNum"/>
+                        </v-stepper-content> 
+                    </v-stepper-items>
+                </v-stepper>
+            </div>
+        </transition>
+
+        <transition name="as-fade">
+            <div class="as-initialize-finished" v-if="hasFinished">
+                <h2>You have already completed the initial sign-up process!</h2>
+            </div>
+        </transition>
+       
     </div>
 </template>
 
 <script>
-
     import UsersService from '@/services/UsersService'; 
 
     let InitializeStep1 = require('./InitializeStep1').default;
@@ -45,33 +58,39 @@
             'as-initialize-step-2': InitializeStep2,
             'as-initialize-step-3': InitializeStep3
         },
-        props: {
-            givenStep: {
-                type: Number,
-                default: 1
-            }
-        },
         mounted() {
             UsersService.getAccessInfo(this.$session.get('user').id).then(response => {
-                if (response.data.accessLevel) {
-                    console.log('this.stepper', this.handleAccessLevelStepperGM(1));
-                    this.stepper = this.handleAccessLevelStepperGM(1);
+                if (this.validAccessLevelGM(response.data.accessLevel)) {
+
+                    if (response.data.accessLevel > 2) {
+                        this.hasFinished = true;
+                    } else {
+                        this.handleAccessLevelGM(response.data.accessLevel);
+                    }
                 }
             });
         },
         data() {
             return {
-                stepper: this.givenStep
+                stepper: null,
+                hasFinished: false,
+                givenLevel: null,
+                givenBlockNum: null
             }
         }, 
         methods: {
             next() {
                 this.stepper += 1; 
+            }, 
+            handleLevel(levelInfo) {
+                this.givenLevel = levelInfo.level; 
+                this.givenBlockNum = levelInfo.blockNum;
+                this.next();
             }
         },
         watch: {
             officialStepGM: function(newVal) {
-                if (this.stepper !== newVal) {
+                if (this.stepper !== newVal && (newVal > 0 && newVal < 4)) {
                     this.stepper = newVal;
                 }
             }
@@ -82,6 +101,10 @@
 
 <style lang="scss">
     @import '~@/demo-common/styles/colors';
+
+    .as-initialize {
+        height: 100%;
+    }
 
     .as-initialize-stepper {
         width: 95%; 
@@ -116,4 +139,11 @@
         margin-top: 12px !important;
     }
 
+
+    .as-initialize-finished {
+        height: 100%;
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+    }
 </style>
