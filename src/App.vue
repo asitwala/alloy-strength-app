@@ -6,7 +6,7 @@
           <img class="as-logo" src="../static/logo.svg">
         </v-btn>
         <v-toolbar-title class="white--text as-toolbar-title" 
-        @click="goToHomePage">ALLOY STRENGTH</v-toolbar-title>
+        @click="goToHomePage">ELECTRUM PERFORMANCE</v-toolbar-title>
         <v-spacer></v-spacer>
         <div class="as-main-toolbar-right">
           <v-toolbar-items>
@@ -33,7 +33,7 @@
         <div class="as-footer-extra-formatting">
           <div class="as-footer-info">
               <v-btn disabled class="as-footer-copyright" flat >
-                <span>© {{ currentYear }} &mdash; Alloy Strength Training Systems. </span> 
+                <span>© {{ currentYear }} &mdash; Electrum Performance Systems. </span> 
                 <span>All Rights Reserved</span>
               </v-btn>
           </div>

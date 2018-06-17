@@ -10,13 +10,13 @@
         <div class="as-slider">
             <as-homepage-slider></as-homepage-slider>
              <div class="as-slider-overlay">
-                <h3>WHO IS ALLOY STRENGTH?</h3>
-                <p style="margin-top: 12px">
-                Al·loy (/ˈaˌloi/), noun - a metal made by combining two or more metallic elements, especially to give greater strength or resistance to corrosion. 
+                <h3>WHO IS ELECTRUM PERFORMANCE?</h3>
+                <p style="margin-top: 12px"> 
+                   E·lec·trum (/əˈlektrəm/), noun - an alloy of gold with at least 20% silver. An alloy is a metal made by combining two or more metallic elements, especially to give greater strength or resistance to corrosion. 
                 </p>
 
                 <p style="margin-bottom: 0px !important">
-                Alloy Strength is a virtual training platform that provides cutting-edge individualized online workout programs to athletes of any sport, at any skill or experience level, worldwide. 
+                Electrum Performance is a virtual training platform that provides cutting-edge individualized online workout programs to athletes of any sport, at any skill or experience level, worldwide. 
                 </p>
             </div>
         </div>
@@ -33,7 +33,7 @@
 
 
     import HomepageSlider from '@/demo-home/HomepageSlider'; 
-    import LookInside from '@/demo-home/LookInside'; 
+    import LookInside from '@/demo-home/LookInside';
 
     import Login from '@/demo-home/Login'; 
     import Signup from '@/demo-home/Signup'; 
