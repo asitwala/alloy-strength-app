@@ -22,13 +22,19 @@
         </div>
         
 
-        <div class="as-panel-2" style="width:100%; 
-        background-color:#1976d2; margin-top:40px; padding-top:15px;">
-            <h2 class="as-homepage-header" 
-                style="margin-bottom:15px; color:white;">
-                Comprehensive online training system includes <strong>96</strong> different workout templates,
-                video library, and 25 performance levels to track your progress
-            </h2>
+        <div class="as-panel-2">
+            <div class="as-panel-2-text">
+                 <h2 class="as-homepage-header" 
+                    style="color:white;">
+                    Our comprehensive online training system includes 
+                </h2>
+                <div class="as-panel-2-text-list">
+                    <p><v-icon color="white" small class="as-panel-2-list-icon">fa-dot-circle-o</v-icon> <strong>96</strong> different workout templates</p>
+                    <p><v-icon color="white" small class="as-panel-2-list-icon">fa-dot-circle-o</v-icon> An extensive video library</p>
+                    <p><v-icon color="white" small class="as-panel-2-list-icon">fa-dot-circle-o</v-icon> <strong>25</strong> performance levels to track your progress</p>
+                </div>
+            </div>
+            
             <as-look-inside></as-look-inside>
         </div>
 
@@ -113,6 +119,41 @@
             .btn {
                 margin-right: 0px !important;
             }
+        }
+    }
+
+    .as-panel-2 {
+        width: 100%; 
+        background-color: rgba(38, 50, 56, 0.9); 
+        margin-top: 48px; 
+        padding-top: 24px;
+    }
+
+    .as-panel-2-text {
+        color: white;
+        margin: 0 auto;
+
+        h2 {
+            font-size: 24px;
+        }
+
+        &-list {
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            margin-top: 12px;
+
+            .as-panel-2-list-icon {
+                margin-right: 4px;
+            }
+
+            p {
+                font-size: 18px;
+                padding: 4px 20px;
+            }
+
         }
     }
   

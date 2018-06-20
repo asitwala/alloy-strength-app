@@ -227,7 +227,7 @@
     cursor: pointer;
     font-family: 'Russo One'; 
     letter-spacing: 0.5px;
-    font-size: 24px;
+    font-size: 20px;
   }
 
   .application .theme--light.footer, .theme--light .footer {
