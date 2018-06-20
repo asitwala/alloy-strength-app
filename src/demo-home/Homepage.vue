@@ -1,5 +1,5 @@
 <template>
-    <div class="as-homepage">
+    <div class="as-homepage" style="height:100%;">
         <div class="as-homepage-spacer"></div>
         <div class="as-homepage-auth">
             <h2 class="as-homepage-header">Driven and dedicated in our commitment to maximize your <strong>strength, power, performance, and health</strong>.</h2>
@@ -8,7 +8,7 @@
         </div>
         
         <div class="as-slider">
-            <as-homepage-slider></as-homepage-slider>
+            <as-homepage-slider style="width:100%;"></as-homepage-slider>
              <div class="as-slider-overlay">
                 <h3>WHO IS ELECTRUM PERFORMANCE?</h3>
                 <p style="margin-top: 12px"> 
@@ -22,9 +22,16 @@
         </div>
         
 
-        <div class="as-panel-2"></div>
+        <div class="as-panel-2" style="width:100%; 
+        background-color:#1976d2; margin-top:40px; padding-top:15px;">
+            <h2 class="as-homepage-header" 
+                style="margin-bottom:15px; color:white;">
+                Comprehensive online training system includes <strong>96</strong> different workout templates,
+                video library, and 25 performance levels to track your progress
+            </h2>
+            <as-look-inside></as-look-inside>
+        </div>
 
-        <as-look-inside></as-look-inside>
     </div>
 </template>
 

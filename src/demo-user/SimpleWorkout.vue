@@ -26,7 +26,12 @@
                     <span style="font-size:12px;"><br/><b>{{subworkout.describer}}</b></span>
                 </td>
                 <td>
-                <span>{{subworkout.name}}</span>
+                <span>{{subworkout.name}} 
+                    <!-- {{subworkout.class}} -->
+                </span>
+                    <p v-if="subworkout.class == 'bodyweight'" style="margin-bottom: 0px !important">
+                        <b>Bodyweight Exercise</b>
+                    </p>
                     <p v-if="subworkout.simpleWeightString" style="margin-bottom: 0px !important">
                         <b>{{ subworkout.simpleWeightString }}</b>
                     </p>
@@ -72,7 +77,8 @@
                         </select>
                         <select v-model="Cell.value" defaultValue="Select RPE" 
                             v-if="Cell.status =='Empty'" style ="webkit-appearance: menulist; border: 1px solid black;">
-                            <option :value="null" disabled>Select RPE ({{Cell.suggested}})</option>
+                            <option :value="null" disabled v-if="Cell.suggested">Select RPE ({{Cell.suggested}})</option>
+                            <option :value="null" disabled v-if="!Cell.suggested">Select RPE</option>
                             <option :value="option" v-for="option in subworkout.RPEOptions" :key="option">
                                 <span v-if="Cell.suggested ? formatRPESelectSuggested(option, Cell.suggested) : false">{{option}} (suggested)</span>
                                 <span v-else>{{option}}</span>

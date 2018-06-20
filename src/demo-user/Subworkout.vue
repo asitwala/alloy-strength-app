@@ -10,7 +10,14 @@
                                 style="font-weight:bold;margin-left: 0px; margin-right:12px;margin-bottom: 12px;">
                                 {{ type.toUpperCase() }}
                             </v-chip>
-                            <h3 class="as-subworkout-name" style="line-height:20px !important;margin-left: 0px !important; margin-bottom:12px;">{{ name }}</h3>
+                            <h3 class="as-subworkout-name" 
+                            style="line-height:20px !important;margin-left: 0px !important; margin-bottom:12px;">
+                            {{ name }}</h3>
+                            <h4 class="as-subworkout-special-set-name" 
+                                style="margin-bottom: 12px; margin-top: 2px; "
+                                v-if="sclass == 'bodyweight'">
+                                Bodyweight Exercise
+                            </h4>
                             <h4 class="as-subworkout-special-set-name" 
                                 style="margin-bottom: 12px; margin-top: 2px"
                                 :class="dynamicColorClasses"
@@ -100,6 +107,9 @@ export default {
         name: {
             type: String,
             required: true
+        },
+        sclass: {
+            type: String,
         },
         describer: {
             type: String,

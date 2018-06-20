@@ -95,6 +95,7 @@
                             :key="subworkout.name"
                             :type="subworkout.type"
                             :name="subworkout.name"
+                            :sclass="subworkout.class"
                             :suggested-weight-string="subworkout.suggestedWeightString"
                             :special-class="subworkout.class"
                             :special-describer="subworkout.specialDescriber"
@@ -116,6 +117,7 @@
                     <div class="as-simple-workout-container" v-if="contentView === 4">
                         <div class="as-subworkout-options">
                             <h3>{{ titlePart2 }}</h3>
+                            <p class="as-subworkout-suggested-disclaimer">Brackets () indicate a recommended value, e.g. (7) in an RPE box means a target RPE of 7 for that set.</p>
                         </div>
                         <as-simple-workout 
                             @refresh="() => fetchWorkoutInfo()"
@@ -414,7 +416,21 @@ export default {
         },
         checkSubmit() {
             let blankFields = this.fieldsLeftBlank; 
-            if (blankFields > 0) {
+            let subs = this.subworkouts;
+            let unfinished = false;
+            let unfinishedWarning = "";
+            subs.forEach(sub => {
+                if (sub.submitWarning) {
+                    unfinished = true;
+                    unfinishedWarning = sub.submitWarningMessage;
+                }
+            })
+            if (unfinished) {
+                this.notificationMessage = unfinishedWarning;
+                this.notificationType = "submitWarning";
+                this.notificationVisible = true; 
+            }
+            else if (blankFields > 0) {
                 if (blankFields === 1) {
                     this.notificationMessage = `It seems like ${blankFields} field was left blank. Would you still like to submit?`;
                 } else {
@@ -422,7 +438,8 @@ export default {
                 }
                 this.notificationType = "submitWarning";
                 this.notificationVisible = true; 
-            } else {
+            } 
+            else {
                 this.submitWorkoutInfo(); 
             }
         },
