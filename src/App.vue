@@ -10,11 +10,17 @@
         <v-spacer></v-spacer>
         <div class="as-main-toolbar-right">
           <v-toolbar-items>
-            <v-btn flat class="as-main-toolbar-link" @click="openBlog">Blog</v-btn>
+            <v-tooltip bottom>
+              <v-btn flat class="as-main-toolbar-link" slot="activator">Blog</v-btn>
+              <span>Coming Soon</span>
+            </v-tooltip>
+            
             <!-- <v-btn flat class="as-main-toolbar-link">Why Electrum Performance</v-btn> -->
+
             <v-tooltip bottom>
               <v-btn flat class="as-main-toolbar-link" slot="activator">FAQ</v-btn>
               <span>Coming Soon</span>
+
             </v-tooltip>
           </v-toolbar-items>
           <v-toolbar-side-icon v-if="$session.exists() && $session.has('user')" @click="toggleNavigation"></v-toolbar-side-icon>
@@ -151,7 +157,7 @@
         }
       },
       openBlog() {
-        window.open('http://blog.alloystrengthtraining.com/', '_blank');
+        //window.open('http://blog.alloystrengthtraining.com/', '_blank');
       },
       routeTo(pathName) {
         this.$router.push({name: pathName});
