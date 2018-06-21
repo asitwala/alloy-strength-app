@@ -46,7 +46,9 @@
 
             <div>
               <p style="margin-bottom: 0px !important; font-size: 12px; color: white; padding: 8px; margin-right: 22px;  margin-left: 16px;">Built by 
-                <span style="color: #1e88e5 !important; cursor: pointer"><strong>1-Stop Development</strong></span>
+                <span style="color: #1e88e5 !important; cursor: pointer" @click="open1StopDev">
+                  <strong>1-Stop Development</strong>
+                </span>
               </p>
             </div>
 
@@ -158,6 +160,9 @@
       },
       openBlog() {
         //window.open('http://blog.alloystrengthtraining.com/', '_blank');
+      },
+      open1StopDev() {
+        window.open(`https://www.1stopdev.com/`, '_blank');
       },
       routeTo(pathName) {
         this.$router.push({name: pathName});
