@@ -2,7 +2,7 @@
   <div class="as-users">
     <v-card class="as-user-data-table-container">
       <v-card-title>
-        <h2>ALLOY STRENGTH USERS</h2>
+        <h2>ELECTRUM PERFORMANCE USERS</h2>
         <v-spacer></v-spacer>
         <v-text-field
           append-icon="search"

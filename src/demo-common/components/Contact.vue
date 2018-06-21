@@ -13,7 +13,7 @@
     export default {
         data() {
             return {
-                officialEmail: 'alloystrengthtraining@gmail.com'
+                officialEmail: 'electrumperformance@gmail.com'
             }
         }
     };

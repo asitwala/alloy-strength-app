@@ -40,7 +40,7 @@
 
                             <h4>STEP 3</h4>
                             <p style="margin-bottom: 0px !important;">
-                                Once you receive this temporary password, log into Alloy Strength and visit your 
+                                Once you receive this temporary password, log into Electrum Performance and visit your 
                                 <strong>Profile</strong> page to change your password.
                             </p>
                         </div>

@@ -3,7 +3,7 @@
         <as-renew-subscription
             :renew="true"
             title="Renew Subscription"
-            description="Your subscription is no longer valid. Please renew your subscription to continue with Alloy Strength’s training system.">
+            description="Your subscription is no longer valid. Please renew your subscription to continue with Electrum Performance’s training system.">
 
         </as-renew-subscription>
     </div>

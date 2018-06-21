@@ -1,7 +1,7 @@
 <template>
     <div class="as-unauthorized">
         <div>
-            <h1>You are not authorized to view this page: www.alloystrengthtraining.com{{ path }}</h1>
+            <h1>You are not authorized to view this page: www.electrumperformance.com{{ path }}</h1>
             <p style="margin-top: 4px; margin-bottom: 4px;">Please log in and then navigate to this page.</p>
             <as-login></as-login>
         </div>

@@ -33,16 +33,16 @@
                 <v-divider/>
 
                 <div class="as-glossary-content">
-                    <a name="alloy-strength">
-                        <h3>WHO IS ALLOY STRENGTH?</h3>
+                    <a name="electrum-performance">
+                        <h3>WHO IS ELECTRUM PERFORMANCE?</h3>
                         <v-card>
                             <v-card-title>
                                 <p>
-                                    Al·loy (/ˈaˌloi/), noun - a metal made by combining two or more metallic elements, especially to give
-                                    greater strength or resistance to corrosion.
+                                    E·lec·trum (/əˈlektrəm/), noun - an alloy of gold with at least 20% silver. An alloy is a metal made by combining 
+                                    two or more metallic elements, especially to give greater strength or resistance to corrosion.
                                     <br>
                                     <br>
-                                    Alloy Strength is a virtual training platform that provides cutting-edge individualized online workout
+                                    Electrum Performance is a virtual training platform that provides cutting-edge individualized online workout
                                     programs to athletes of any sport, at any skill or experience level, worldwide. Our coaches come from
                                     some of the best academic programs in the world, with experience working with elite athletes in
                                     multiple sports across the country, and are NSCA Certified Strength and Conditioning Specialists (CSCS).
@@ -50,7 +50,7 @@
                                     focused training community.
                                     <br>
                                     <br>
-                                    At Alloy Strength, no two programs are the same. We specify our programming to every individual,
+                                    At Electrum Performance, no two programs are the same. We specify our programming to every individual,
                                     helping you move better, perform better, and become an alloy; strong and resilient.
                                 </p>
                             </v-card-title>
@@ -77,7 +77,7 @@
                         <v-card>
                             <v-card-title>
                                 <p>
-                                    The levels progression is the exercise progression used in Alloy Strength’s training system. Rather than having a “back and biceps” or “legs” or “arms and abs” training day, we are concerned with training the
+                                    The levels progression is the exercise progression used in Electrum Performance’s training system. Rather than having a “back and biceps” or “legs” or “arms and abs” training day, we are concerned with training the
                                     global movement patterns our body can perform. For each compound pattern and associated
                                     global movement patterns our body can perform. For each compound pattern and associated
                                     accessories, there are 25 increasingly-challenging levels. Each microcycle, or 1-month block of training,
@@ -167,7 +167,7 @@
                             <v-card-title>
                                 <p>There are many ways to prepare, or “warm-up”, prior to a training session. It is important to warm-up in order to decrease the risk of injury and increase performance. A warm-up must serve three main purposes: 
                                 <ol><li>Increase core body temperature</li> 
-                                <li>Increase heart rate</li> <li>Prime the various systems of the body to perform certain movements.</li></ol> It is very easy to increase core body temperature and heart rate, as hopping on a stationary bike for 5 minutes will do this just fine. However, mobilizing and activating the body correctly necessitates more specific requirements, and can make a true difference in performance. While you are welcome to warm up on your own if there is a method that you strongly prefer, see the Alloy Strength Warm Up Series for our recommended training preparation.
+                                <li>Increase heart rate</li> <li>Prime the various systems of the body to perform certain movements.</li></ol> It is very easy to increase core body temperature and heart rate, as hopping on a stationary bike for 5 minutes will do this just fine. However, mobilizing and activating the body correctly necessitates more specific requirements, and can make a true difference in performance. While you are welcome to warm up on your own if there is a method that you strongly prefer, see the Electrum Performance Warm Up Series for our recommended training preparation.
                                 </p>
                             </v-card-title>
                         </v-card>
@@ -269,8 +269,8 @@
                 loading: false,
                 leftMenuItems: [
                     {
-                        tag: "alloy-strength",
-                        title: "Alloy Strength"
+                        tag: "electrum-performance",
+                        title: "Electrum Performance"
                     },
                     {
                         tag: "autoregulatory-training",

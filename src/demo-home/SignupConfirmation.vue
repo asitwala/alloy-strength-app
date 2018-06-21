@@ -15,7 +15,7 @@
                     <div class="as-signup-confirmation">
                         <div class="as-signup-confirmation-container">
                             <h1>Congratulations!</h1>
-                            <p style="margin-bottom: 0px !important;">You have successfully signed up for Alloy Strength!</p>
+                            <p style="margin-bottom: 0px !important;">You have successfully signed up for Electrum Performance!</p>
                             <p>Please check your email after a few minutes for instructions on 
                                 <strong>how to activate your account</strong>.
                             </p>

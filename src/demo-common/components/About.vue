@@ -43,7 +43,7 @@
             <v-divider/>
             <div>
               <p>
-                Alex Sterner, BS, CSCS, USAW is the Co-Founder and Head Strength Coach at Alloy Strength. 
+                Alex Sterner, BS, CSCS, USAW is the Co-Founder and Head Strength Coach at Electrum Performance. 
                 He is a Certified Strength and Conditioning Specialist (CSCS) through the National Strength and 
                 Conditioning Association (NSCA). His education in the field began at the University of Connecticut, 
                 where he obtained a bachelor's degree in Kinesiology in 2014. While enrolled, he interned in the 
@@ -96,7 +96,7 @@
             <v-divider/>
             <div>
               <p>
-                Alex Bryce, MSE, CSCS*D is the Co-Founder and Head Strength Coach at Alloy Strength. Bryce is 
+                Alex Bryce, MSE, CSCS*D is the Co-Founder and Head Strength Coach at Electrum Performance. Bryce is 
                 a Certified Strength and Conditioning Specialist (CSCS) through the National Strength and Conditioning 
                 Association (NSCA). He has experience working with all ages and training levels, and an extensive background 
                 in exercise technique, program design and periodization for both individuals and teams.

@@ -93,7 +93,7 @@
             }, 
             description: {
                 type: String, 
-                default: `Please select one of the packages below to get started with Alloy Strength's
+                default: `Please select one of the packages below to get started with Electrum Performance's
                 training system.`
             }
         },
@@ -126,7 +126,7 @@
         methods: {
             selectPackage(asPackage) {
                 this.selectedPackage = asPackage;
-                this.selectedRadio = this.selectedPackage.radioLabel; // use to populate the radio input 
+                this.selectedRadio = this.selectedPackage.radioLabel; // use to populate the radio input
             },
             submitStep1(stripeToken) {
                 //{ plan: 'AS_Gold' or 'AS_Silver', stripeToken: stripe token}

@@ -148,7 +148,7 @@
 
                                             <div>
                                                 <h3 style="margin-top: 12px;">Cancel Subscription</h3>
-                                                <p style="font-size: 14px; margin-top: 4px; margin-bottom: 0px;">After you <strong>cancel</strong> your subscription, you will still have access to Alloy Strength until your subscription's expiration date.</p>
+                                                <p style="font-size: 14px; margin-top: 4px; margin-bottom: 0px;">After you <strong>cancel</strong> your subscription, you will still have access to Electrum Performance until your subscription's expiration date.</p>
                                                 
                                                 <v-btn @click="confirmCancel"
                                                 small color="red" style="color: white !important; clear: both; float: right; margin-top: 16px; margin-bottom: 16px; margin-right: 0px !important;">Cancel Subscription</v-btn>
@@ -376,7 +376,7 @@ export default {
             }
         },
         confirmCancel() {
-            this.dialogText = 'Are you sure you want to cancel your subscription to Alloy Strength Training?'; 
+            this.dialogText = 'Are you sure you want to cancel your subscription to Electrum Performance Training?'; 
             this.dialogState = 'Cancel'; 
             this.showDialog = true; 
         },

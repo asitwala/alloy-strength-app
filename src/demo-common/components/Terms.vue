@@ -8,10 +8,10 @@
             <p>
                 Please read these Terms and Conditions carefully before using this site. 
                 These Terms and Conditions of Use (these “Terms and Conditions”) set forth 
-                the agreement between the www.alloystrengtraining.com web site (this “Site”), 
+                the agreement between the www.electrumperformance.com web site (this “Site”), 
                 which is owned, operated and maintained by San Diego Strength and Conditioning, 
-                LLC (DBA “Alloy Strength”), and each user governing the use of this web site. 
-                Alloy Strength (“we”, “us”, “our”) want each visitor to this Site to have the 
+                LLC (DBA “Electrum Performance”), and each user governing the use of this web site. 
+                Electrum Performance (“we”, “us”, “our”) want each visitor to this Site to have the 
                 best experience possible, so the following terms and conditions have been 
                 established. Please read these Terms and Conditions carefully before using this 
                 Site. 
@@ -20,8 +20,8 @@
             <p>
                 By using this site, you are agreeing to these Terms and Conditions. 
                 If you do not agree to these Terms and Conditions in totality, do NOT use this site. 
-                Alloy Strength may revise and update these Terms and Conditions at any time. 
-                Your continued usage of the Alloy Strength web site (the “Site”) will mean you 
+                Electrum Performance may revise and update these Terms and Conditions at any time. 
+                Your continued usage of the Electrum Performance web site (the “Site”) will mean you 
                 accept those changes. You are encouraged to review this Site and these terms 
                 periodically for any updates or changes. Your continued access or use of this Site 
                 shall be deemed your notification and acceptance of these changes.
@@ -56,32 +56,32 @@
                 Agreement.
             </p>
 
-            <h2>Liability of Alloy Strength</h2>
+            <h2>Liability of Electrum Performance</h2>
             <p>
                 When using this Site, information is transmitted over a medium that may be beyond 
-                the control and jurisdiction of Alloy Strength. Accordingly, Alloy Strength assumes 
+                the control and jurisdiction of Electrum Performance. Accordingly, Electrum Performance assumes 
                 no liability for or relating to the delay, failure, interruption, or corruption of 
                 any data or other information transmitted in connection with use of this Site.
             </p>
             <p>
-                Alloy Strength, any licensors, and any suppliers, to the fullest extent permitted by 
+                Electrum Performance, any licensors, and any suppliers, to the fullest extent permitted by 
                 law, disclaim all warranties, either express or implied, statutory or otherwise, 
                 including but not limited to the implied warranties of merchantability, non-infringement 
                 of third parties’ rights, and fitness for particular purpose.
             </p>
             <p>
-                Without limiting the foregoing, Alloy Strength, its licensors, and its suppliers make 
+                Without limiting the foregoing, Electrum Performance, its licensors, and its suppliers make 
                 no representations or warranties about the following: the accuracy, reliability, completeness, 
                 or timeliness of the Content, text, graphics, links, or communications provided on or through 
-                the use of this Site or Alloy Strength.
+                the use of this Site or Electrum Performance.
             </p>
             <p>
-                In no event shall Alloy Strength (or any of its licensors, suppliers, or third parties
+                In no event shall Electrum Performance (or any of its licensors, suppliers, or third parties
                 mentioned on this Site) be liable for any damages (including, without limitation, 
                 incidental and consequential damages, personal injury/wrongful death, lost profits, 
                 or damages resulting from lost data or business interruption) resulting from the use 
                 of or inability to use this Site, and/or the Content, regardless of whether based on 
-                warranty, contract, tort, or any other legal theory, whether or not Alloy Strength, its 
+                warranty, contract, tort, or any other legal theory, whether or not Electrum Performance, its 
                 licensors, its suppliers, or any third parties mentioned on this Site are advised of the 
                 possibility of such damages. Any claims arising in connection with your use of this Site, 
                 or any Content, must be brought within one (1) year of the date of the event giving rise to 
@@ -95,10 +95,10 @@
 
             <h2>Indemnity</h2>
             <p>
-                By execution of this agreement, you hereby agree to indemnify and hold harmless Alloy Strength 
-                from any loss, liability, damage, or cost Alloy Strength may incur due to the provision of 
-                online strength training by Alloy Strength to you. You agree to defend, indemnify, and hold 
-                Alloy Strength, its officers, directors, employees, agents, and licensors, harmless from and 
+                By execution of this agreement, you hereby agree to indemnify and hold harmless Electrum Performance 
+                from any loss, liability, damage, or cost Electrum Performance may incur due to the provision of 
+                online strength training by Electrum Performance to you. You agree to defend, indemnify, and hold 
+                Electrum Performance, its officers, directors, employees, agents, and licensors, harmless from and 
                 against any claims, actions or demands, liabilities and settlements including without limitation, 
                 reasonable legal and accounting fees, resulting from, or alleged to result from, your violation 
                 of these Terms and Conditions.
@@ -106,11 +106,11 @@
 
             <h2>Jurisdiction</h2>
             <p>
-                You expressly agree that exclusive jurisdiction for any dispute with Alloy Strength, or in 
+                You expressly agree that exclusive jurisdiction for any dispute with Electrum Performance, or in 
                 any way relating to your use of this Site, resides in the courts of the State of California 
                 and you further agree and expressly consent to the exercise of personal jurisdiction in the 
                 courts of the State of California in connection with any such dispute including any claim 
-                involving Alloy Strength or its affiliates, subsidiaries, employees, contractors, officers, 
+                involving Electrum Performance or its affiliates, subsidiaries, employees, contractors, officers, 
                 directors, telecommunication providers, and content providers. If any provision of these Terms 
                 and Conditions is found to be invalid by any court having competent jurisdiction, the invalidity 
                 of such provision shall not affect the validity of the remaining provisions of these Terms and 
@@ -122,7 +122,7 @@
             <h2>Complete Agreement</h2>
             <p>
                 Unless expressly provided in a particular “legal notice” on this Site, these Terms and Conditions 
-                constitute the entire agreement between you and Alloy Strength with respect to the use of this 
+                constitute the entire agreement between you and Electrum Performance with respect to the use of this 
                 Site, and the Content.. You also may be subject to additional terms and conditions that may 
                 apply when you use affiliate services, third-party content or third-party software. Our failure 
                 to exercise or enforce any right or provision of these Terms and Conditions shall not constitute 
@@ -134,8 +134,8 @@
 
             <h2>General</h2>
             <p>
-                Alloy Strength is based in San Diego, California in the United States of America with principal 
-                offices in San Diego, California. Alloy Strength makes no claims that Alloy Strength, this Site 
+                Electrum Performance is based in San Diego, California in the United States of America with principal 
+                offices in San Diego, California. Electrum Performance makes no claims that Electrum Performance, this Site 
                 and the Content are appropriate or may be downloaded outside of the United States. Access to the 
                 Content may not be legal by certain persons or in certain countries. If you access this Site from 
                 outside the United States, you do so at your own risk and are responsible for compliance with the 
@@ -149,21 +149,21 @@
 
             <h2>This Site Does Not Provide Medical Advice</h2>
             <p>
-                The contents of this Site, such as text, graphics, images, information obtained from Alloy Strength’s 
+                The contents of this Site, such as text, graphics, images, information obtained from Electrum Performance’s 
                 licensors, and other material contained on this Site (collectively, the “Content”) are for 
                 informational purposes only.The content on this Site is not a substitute for professional 
                 medical advice, diagnosis, or treatment. Always seek the advice of your physician or other 
                 qualified health provider with any questions you may have regarding a medical condition. 
                 Never disregard professional medical advice or delay in seeking it because of something 
                 you have read on this Site. If you think you may have a medical emergency, call your doctor 
-                or 911 immediately. Alloy Strength does not recommend or endorse any specific tests, physicians, 
+                or 911 immediately. Electrum Performance does not recommend or endorse any specific tests, physicians, 
                 products, procedures, opinions, or other information that may be mentioned on this Site. Reliance 
-                on any information provided by Alloy Strength, Alloy Strength employees, others appearing on this 
-                Site at the invitation of Alloy Strength, or other visitors to this Site is solely at your own risk. 
+                on any information provided by Electrum Performance, Electrum Performance employees, others appearing on this 
+                Site at the invitation of Electrum Performance, or other visitors to this Site is solely at your own risk. 
                 Results with this program may vary. Exercise and proper diet are necessary to achieve and maintain a 
                 healthy lifestyle. Consult your healthcare professional before beginning any diet or fitness regimen 
                 and please refer to your healthcare professional with any medical related questions that may arise 
-                while training with the Alloy Strength Levels Progression.
+                while training with the Electrum Performance Levels Progression.
             </p>
         </div>
     </div>
@@ -174,7 +174,7 @@
     export default {
         data() {
             return {
-                officialEmail: 'alloystrengthtraining@gmail.com'
+                officialEmail: 'electrumperformance@gmail.com'
             }
         }
     };

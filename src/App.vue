@@ -11,7 +11,7 @@
         <div class="as-main-toolbar-right">
           <v-toolbar-items>
             <v-btn flat class="as-main-toolbar-link" @click="openBlog">Blog</v-btn>
-            <!-- <v-btn flat class="as-main-toolbar-link">Why Alloy Strength</v-btn> -->
+            <!-- <v-btn flat class="as-main-toolbar-link">Why Electrum Performance</v-btn> -->
             <v-tooltip bottom>
               <v-btn flat class="as-main-toolbar-link" slot="activator">FAQ</v-btn>
               <span>Coming Soon</span>
@@ -125,7 +125,7 @@
         },
         {
           name: 'fa-instagram',
-          src: 'https://www.instagram.com/alloy_strength',
+          src: 'https://www.instagram.com/electrum_performance',
           tooltipText: ''
         },
         {

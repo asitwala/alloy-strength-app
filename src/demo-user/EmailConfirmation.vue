@@ -11,14 +11,14 @@
                 <transition name="as-name">
                     <div v-if="!loading && activated">
                         <p style="margin-top: 4px; margin-bottom: 4px;">Your account has successfully been activated!
-                        Log in to finish the sign up process and get started with Alloy Strength.
+                        Log in to finish the sign up process and get started with Electrum Performance.
                         </p>
                         <as-login></as-login>
                     </div>
 
                     <div v-else-if="!loading && alreadyConfirmed">
                         <p style="margin-top: 4px; margin-bottom: 4px;">Your account was already activated! Please log in 
-                        to start using Alloy Strength.
+                        to start using Electrum Performance.
                         </p>
                         <as-login></as-login>
                     </div>
