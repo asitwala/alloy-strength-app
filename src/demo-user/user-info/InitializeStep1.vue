@@ -130,7 +130,7 @@
             },
             submitStep1(stripeToken) {
                 //{ plan: 'AS_Gold' or 'AS_Silver', stripeToken: stripe token}
-
+                console.log("submitStep1!!!");
                 this.loading = true;
 
                 let selectedPlan = null;
@@ -140,12 +140,16 @@
                 } else if (this.selectedPackage.name === 'Silver') {
                     selectedPlan = 'AS_Silver'; 
                 }
+                
+                if (!stripeToken) {
+                    return;
+                }
 
                 let params = {
                     planID: selectedPlan,
                     stripeToken: stripeToken.id
                 };
-                
+                console.log("LINE 148");
                 if (this.renew) {
                     // renewing subscription
                     UsersService.renewSubscription(this.userId, params).then(() => {
