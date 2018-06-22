@@ -7,12 +7,12 @@
     <transition name="as-fade">
         <div class="as-progress" v-if="!loading">
             <div class="as-progress-summary">
-            <h1 class="as-progress-report-header">Level {{ oldLevel }} Performance Summary</h1>
+            <h1 class="as-progress-report-header">Level {{ oldLevel }}{{oldBlockString}} Performance Summary</h1>
                 <v-divider/>
-
                 <div class="as-progress-summary-content">
                     <h1 class="as-progress-status-header">{{ statusText }}</h1>
-                    <h2>Core Exercises</h2>
+                    <h2>Primary Exercises</h2>
+                    <p>All <b>Alloy Sets</b> for primary exercises must pass to proceed to the next level.</p>
                     <v-card class="as-progress-exercise-table">
                         <v-card-title>
                             <v-data-table
@@ -55,7 +55,7 @@
                     <div>
                         <h3>Your next set of workouts will be at 
                             <span class="as-progress-next-level">
-                                {{ `level ${newLevel}`.toUpperCase() }}
+                                {{ `level ${newLevel}`.toUpperCase() }}{{`${blockString}`.toUpperCase() }}
                             </span>.
                         </h3>
                     </div>
@@ -86,11 +86,14 @@
 <script>
 
     import ProgressService from '@/services/ProgressService'; 
+    import UsersService from '@/services/UsersService';
 
     export default {
         data() {
             return {
                 oldLevel: 0,
+                blockString: '',
+                oldBlockString: '',
                 newLevel: 0,
                 statusText: '',
                 userId: 1,
@@ -120,7 +123,7 @@
             fetchProgressInfo() {
                 this.loading = true; 
                 this.userId = this.$session.get('user').id; 
-
+            
                 ProgressService.fetchProgressInfo(this.userId).then(response => {
                     if (this.validAccessLevelGM(response.data.accessLevel)) {
                         this.handleAccessLevelGM(response.data.accessLevel);
@@ -129,6 +132,11 @@
                     this.oldLevel = response.data.oldLevel; 
                     this.newLevel = response.data.newLevel; 
                     this.statusText = response.data.statusText; 
+                    if (response.data.blockNum != 0) {
+                        let oldBlockNum = (response.data.blockNum == 1) ? 2 : 1;
+                        this.blockString = ' - Block ' + response.data.blockNum;
+                        this.oldBlockString = ' - Block ' + oldBlockNum;
+                    }
 
                     this.coreExerciseTableItems = response.data.coreExerciseTableItems;
                     this.secondaryExerciseTableItems = response.data.secondaryExerciseTableItems;

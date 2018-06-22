@@ -31,6 +31,8 @@
                     </div>
                 </div>
             </div>
+            <br>
+            <p>The stats below represent your performance on <b>Alloy Sets</b> for primary exercises. These must pass to proceed to the next level.</p>
             <v-card class="as-user-stats-table">
                 <v-card-title>
                     <v-data-table

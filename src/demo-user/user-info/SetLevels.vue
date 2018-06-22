@@ -97,13 +97,17 @@
             }
         },
         mounted() {
-            if (Number(this.givenLevel) > 0) {
-                this.level = this.givenLevel; 
-            } else {
-                if (this.$session.has('user')) {
-                    this.level = this.$session.get('user').level;
+            UsersService.updateUser(this.$session.get('user').id).then(response => {
+                this.$session.set('user', response.data);
+            }).finally(() => {
+                if (Number(this.givenLevel) > 0) {
+                    this.level = this.givenLevel; 
+                } else {
+                    if (this.$session.has('user')) {
+                        this.level = this.$session.get('user').level;
+                    }
                 }
-            }
+            })
         },
         methods: {
             postWorkouts() {

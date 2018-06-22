@@ -85,6 +85,11 @@
                 blockNums: ['1', '2']
             }
         },
+        mounted() {
+            UsersService.updateUser(this.$session.get('user').id).then(response => {
+                this.$session.set('user', response.data);
+            })
+        },
         methods: {
             generateWorkouts() {
 

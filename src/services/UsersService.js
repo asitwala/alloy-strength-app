@@ -13,6 +13,9 @@ export default {
   sendEmailConfirmation(userId) {
     return Api().post(`/api/users/${userId}/confirmation-email`);
   },
+  updateUser(userId) {
+    return Api().get(`/api/users/${userId}`);
+  },  
   getEmailConfirmation(userId, confString) {
     return Api().get(`/api/users/${userId}/confirm/${confString}`);
   },
