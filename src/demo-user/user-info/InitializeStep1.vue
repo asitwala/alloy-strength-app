@@ -140,11 +140,17 @@
                 } else if (this.selectedPackage.name === 'Silver') {
                     selectedPlan = 'AS_Silver'; 
                 }
-                
+
                 if (!stripeToken) {
+                    this.loading = false;
+                    console.log('INCORRECT!!!');
                     return;
                 }
-
+                else {
+                    console.log('correct credit card!!!');
+                    this.loading = false;
+                }
+                return
                 let params = {
                     planID: selectedPlan,
                     stripeToken: stripeToken.id
