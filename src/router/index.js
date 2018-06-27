@@ -23,6 +23,7 @@ import Profile from '@/demo-user/user-info/Profile';
 import CheckEmail from '@/demo-user/CheckEmail'; 
 import EmailConfirmation from '@/demo-user/EmailConfirmation';
 
+import FAQ from '@/demo-home/FAQ'; 
 import Unauthorized from '@/demo-home/Unauthorized';
 import NoPageExists from '@/demo-home/NoPageExists';
 
@@ -37,12 +38,12 @@ const router = new Router({
       component: Homepage,
       meta: {requireAuth: false}
     },
-    // {
-    //   path: '/faq',
-    //   name: 'FAQ',
-    //   component: FAQ,
-    //   meta: {requireAuth: false}
-    // },
+    {
+      path: '/faq',
+      name: 'FAQ',
+      component: FAQ,
+      meta: {requireAuth: false}
+    },
     { 
       path: '/about',
       name: 'About',
