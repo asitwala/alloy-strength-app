@@ -7,6 +7,57 @@
         </v-btn>
         <v-toolbar-title class="white--text as-toolbar-title" 
         @click="goToHomePage">ELECTRUM PERFORMANCE</v-toolbar-title>
+          <div class="as-footer-links" hidden style="display:none;"> <!-- HIDDEN FOR TESTING -->
+            <div v-for="footerIcon in footerIcons"
+              :key="footerIcon.name"> <!-- With tooltip --> 
+              <v-tooltip v-if="footerIcon.tooltipText" top>
+                <v-btn 
+                slot="activator"
+                @click="openFooterLinkNewTab(footerIcon.src)"
+                icon
+                class="mx-3 white--text"
+                >
+                  <v-icon>
+                    {{ footerIcon.name }}
+                  </v-icon>
+                </v-btn>
+                <span>{{ footerIcon.tooltipText }}</span>
+              </v-tooltip>              
+              <v-btn v-else
+              @click="openFooterLinkNewTab(footerIcon.src)"
+              icon
+              class="mx-3 white--text"
+              > <!-- No tooltip --> 
+                <v-icon>
+                  {{ footerIcon.name }}
+                </v-icon>
+              </v-btn>
+            </div>            
+          </div>
+            <!-- <div style="">
+              <p style="margin-bottom: 0px !important; font-size: 12px; color: white; padding: 8px; margin-right: 22px;  margin-left: 16px;">Built by 
+                <span style="color: #1e88e5 !important; cursor: pointer" @click="open1StopDev">
+                  <strong>1-Stop Development</strong>
+                </span>
+              </p>
+            </div> -->
+        <v-spacer></v-spacer>
+          <div class="as-main-toolbar-right">
+          
+          <v-btn
+              color="white"
+              flat
+              v-for="link in footerLinks"
+              :key="link.name"
+              :to="link.pathName"
+            >{{ link.name }}</v-btn>
+            <v-toolbar-items>
+            <v-tooltip bottom>              
+              <v-btn flat class="as-main-toolbar-link" slot="activator"
+              @click="openBlog"
+              >Blog</v-btn>
+              <!-- <span>Coming Soon</span> -->
+            </v-tooltip>
           <div class="as-footer-links">
             <div v-for="footerIcon in footerIcons"
               :key="footerIcon.name">
@@ -23,8 +74,7 @@
                   </v-icon>
                 </v-btn>
                 <span>{{ footerIcon.tooltipText }}</span>
-              </v-tooltip>
-              
+              </v-tooltip>              
               <!-- No tooltip --> 
               <v-btn v-else
               @click="openFooterLinkNewTab(footerIcon.src)"
@@ -36,29 +86,7 @@
                 </v-icon>
               </v-btn>
             </div>            
-          </div>
-            <!-- <div style="">
-              <p style="margin-bottom: 0px !important; font-size: 12px; color: white; padding: 8px; margin-right: 22px;  margin-left: 16px;">Built by 
-                <span style="color: #1e88e5 !important; cursor: pointer" @click="open1StopDev">
-                  <strong>1-Stop Development</strong>
-                </span>
-              </p>
-            </div> -->
-        <v-spacer></v-spacer>
-          <div class="as-main-toolbar-right">
-            <v-btn
-              color="white"
-              flat
-              v-for="link in footerLinks"
-              :key="link.name"
-              :to="link.pathName"
-            >{{ link.name }}</v-btn>
-            <v-toolbar-items>
-            <v-tooltip bottom>
-              <v-btn flat class="as-main-toolbar-link" slot="activator">Blog</v-btn>
-              <span>Coming Soon</span>
-            </v-tooltip>
-            
+          </div>              
             <!-- <v-btn flat class="as-main-toolbar-link">Why Electrum Performance</v-btn> -->
 
             <v-btn flat class="as-main-toolbar-link" @click="goToFAQ">FAQ</v-btn>
@@ -125,7 +153,7 @@
         {
           pathName: 'Contact',
           name: 'Contact Us'
-        }
+        },
       ],
       footerIcons: [
         {
