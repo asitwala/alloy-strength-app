@@ -6,8 +6,8 @@
             <v-expansion-panel-content v-for="(item, index) in items" :key="index">
                 <div slot="header"><p class="as-faq-question">{{ item.question}}</p></div>
                 <v-card>
-                    <v-card-text class="grey lighten-3">
-                        {{ item.answer }}
+                    <v-card-text class="grey lighten-3 as-faq-question-text">
+                        <div v-html="item.answer"></div>
                     </v-card-text>
                 </v-card>
             </v-expansion-panel-content>
@@ -39,6 +39,14 @@ export default {
         &-question {
             font-size: 18px;
             margin-bottom: 0px !important;
+        }
+
+        &-question-text {
+            div {
+                p:last-of-type {
+                    margin-bottom: 0px !important;
+                }
+            }
         }
 
         .card__text {

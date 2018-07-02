@@ -30,7 +30,7 @@
                 </h2>
                 <div class="as-panel-2-text-list">
                     <p><v-icon color="white" small class="as-panel-2-list-icon">fa-dot-circle-o</v-icon> <strong>96</strong> different workout templates</p>
-                    <p><v-icon color="white" small class="as-panel-2-list-icon">fa-dot-circle-o</v-icon> An extensive video library</p>
+                    <p><v-icon color="white" small class="as-panel-2-list-icon">fa-dot-circle-o</v-icon><strong>50+</strong> video tutorials</p>
                     <p><v-icon color="white" small class="as-panel-2-list-icon">fa-dot-circle-o</v-icon> <strong>25</strong> performance levels to track your progress</p>
                 </div>
             </div>

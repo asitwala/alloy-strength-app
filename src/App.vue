@@ -61,11 +61,7 @@
             
             <!-- <v-btn flat class="as-main-toolbar-link">Why Electrum Performance</v-btn> -->
 
-            <v-tooltip bottom>
-              <v-btn flat class="as-main-toolbar-link" slot="activator">FAQ</v-btn>
-              <span>Coming Soon</span>
-
-            </v-tooltip>
+            <v-btn flat class="as-main-toolbar-link" @click="goToFAQ">FAQ</v-btn>
           </v-toolbar-items>
           <v-toolbar-side-icon v-if="$session.exists() && $session.has('user')" @click="toggleNavigation"></v-toolbar-side-icon>
         </div>
@@ -153,6 +149,9 @@
       goToHomePage() {
         this.$router.push({name: 'Homepage'});
       },
+      goToFAQ() {
+        this.$router.push({name: 'FAQ'});
+      },
       toggleNavigation() {
         this.showNavigation = !this.showNavigation;
       },
@@ -165,7 +164,7 @@
         }
       },
       openBlog() {
-        //window.open('http://blog.alloystrengthtraining.com/', '_blank');
+        window.open('http://blog.electrumperformance.com/', '_blank');
       },
       open1StopDev() {
         window.open(`https://www.1stopdev.com/`, '_blank');

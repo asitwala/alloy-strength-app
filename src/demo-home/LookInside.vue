@@ -45,22 +45,22 @@
                 lookInsideImages: [
                     {
                         name: 'Workout Page (Exercise Card)',
-                        caption: 'Include caption here for workout page',
+                        caption: 'An example Exercise Card and Training Calendar, which includes every detail necessary for a tailor-made training program',
                         path: '../../static/DemoShots/WorkoutComplexResized.png'
                     }, 
                     {
                         name: 'Workout Page, Simple View (Exercise Card)',
-                        caption: 'Include caption here for workout page (simple view)',
+                        caption: 'Choose between two options for your display, including a condensed "Simple View" that is mobile-friendly',
                         path: '../../static/DemoShots/WorkoutSimpleGood2.png'
                     },
                     {
                         name: 'Video Library',
-                        caption: 'Include caption here for video library',
+                        caption: 'Our extensive library includes detailed technique videos and corresponding written descriptions',
                         path: '../../static/DemoShots/Video_DefaultResized.png'
                     },
                     {
                         name: 'Progress Report',
-                        caption: 'Include caption here for progress report',
+                        caption: 'The Performance Summary helps track your progress and shows when you are ready to level up!',
                         path: '../../static/DemoShots/Progress.png'
                     }
                 ],
