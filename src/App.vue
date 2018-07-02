@@ -7,54 +7,7 @@
         </v-btn>
         <v-toolbar-title class="white--text as-toolbar-title" 
         @click="goToHomePage">ELECTRUM PERFORMANCE</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <div class="as-main-toolbar-right">
-          <v-toolbar-items>
-            <v-btn flat class="as-main-toolbar-link" @click="openBlog">Blog</v-btn>
-            
-            <!-- <v-btn flat class="as-main-toolbar-link">Why Electrum Performance</v-btn> -->
-
-            <v-btn flat class="as-main-toolbar-link" @click="goToFAQ">FAQ</v-btn>
-          </v-toolbar-items>
-          <v-toolbar-side-icon v-if="$session.exists() && $session.has('user')" @click="toggleNavigation"></v-toolbar-side-icon>
-        </div>
-      </v-toolbar>
-
-      <as-navigation
-        :visible="showNavigation"
-        @update-visibility="setNavigation"/>
-
-      <div class="as-main-body" style="height: 100%; min-height: 450px;">
-        <router-view/>
-      </div>
-     
-      <v-footer class="as-footer">
-        <div class="as-footer-extra-formatting">
-          <div class="as-footer-info">
-              <v-btn disabled class="as-footer-copyright" flat >
-                <span>© {{ currentYear }} &mdash; Electrum Performance Systems. </span> 
-                <span>All Rights Reserved</span>
-              </v-btn>
-          </div>
-
-            <div>
-              <p style="margin-bottom: 0px !important; font-size: 12px; color: white; padding: 8px; margin-right: 22px;  margin-left: 16px;">Built by 
-                <span style="color: #1e88e5 !important; cursor: pointer" @click="open1StopDev">
-                  <strong>1-Stop Development</strong>
-                </span>
-              </p>
-            </div>
-
-          <!-- Footer Links ('About', Social Media, etc.) -->
           <div class="as-footer-links">
-            <v-btn
-              color="white"
-              flat
-              v-for="link in footerLinks"
-              :key="link.name"
-              :to="link.pathName"
-            >{{ link.name }}</v-btn>
-
             <div v-for="footerIcon in footerIcons"
               :key="footerIcon.name">
               <!-- With tooltip --> 
@@ -82,9 +35,65 @@
                   {{ footerIcon.name }}
                 </v-icon>
               </v-btn>
-            </div>
-            
+            </div>            
           </div>
+            <!-- <div style="">
+              <p style="margin-bottom: 0px !important; font-size: 12px; color: white; padding: 8px; margin-right: 22px;  margin-left: 16px;">Built by 
+                <span style="color: #1e88e5 !important; cursor: pointer" @click="open1StopDev">
+                  <strong>1-Stop Development</strong>
+                </span>
+              </p>
+            </div> -->
+        <v-spacer></v-spacer>
+          <div class="as-main-toolbar-right">
+            <v-btn
+              color="white"
+              flat
+              v-for="link in footerLinks"
+              :key="link.name"
+              :to="link.pathName"
+            >{{ link.name }}</v-btn>
+            <v-toolbar-items>
+            <v-tooltip bottom>
+              <v-btn flat class="as-main-toolbar-link" slot="activator">Blog</v-btn>
+              <span>Coming Soon</span>
+            </v-tooltip>
+            
+            <!-- <v-btn flat class="as-main-toolbar-link">Why Electrum Performance</v-btn> -->
+
+            <v-btn flat class="as-main-toolbar-link" @click="goToFAQ">FAQ</v-btn>
+          </v-toolbar-items>
+          <v-toolbar-side-icon v-if="$session.exists() && $session.has('user')" @click="toggleNavigation"></v-toolbar-side-icon>
+        </div>
+      </v-toolbar>
+
+      <as-navigation
+        :visible="showNavigation"
+        @update-visibility="setNavigation"/>
+
+      <div class="as-main-body" style="height: 100%; min-height: 450px;">
+        <router-view/>
+      </div>
+     
+      <v-footer class="as-footer">
+        <div class="as-footer-extra-formatting">
+          <div class="as-footer-info">
+              <v-btn disabled class="as-footer-copyright" flat >
+                <span>© {{ currentYear }} &mdash; Electrum Performance Systems. </span> 
+                <span>All Rights Reserved</span>
+              </v-btn>
+          </div>
+
+            <div style="">
+              <p style="margin-bottom: 0px !important; font-size: 12px; color: white; padding: 8px; margin-right: 22px;  margin-left: 16px;">Built by 
+                <span style="color: #1e88e5 !important; cursor: pointer" @click="open1StopDev">
+                  <strong>1-Stop Development</strong>
+                </span>
+              </p>
+            </div>
+
+          <!-- Footer Links ('About', Social Media, etc.) -->
+
         </div>
       </v-footer>
     </v-app>

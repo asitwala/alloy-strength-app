@@ -12,8 +12,6 @@
             <tr v-for="subworkout in subworkouts" :key="subworkout.number">
                 <td>
                     {{subworkout.type}}
-                    
-                    
                     <span v-if="subworkout.specialDescriber && subworkout.class == 'stop'" style="color:#1976d2;">
                     <br/><b>{{subworkout.specialDescriber}}</b></span>
                     

@@ -158,14 +158,18 @@
                 console.log("LINE 148");
                 if (this.renew) {
                     // renewing subscription
-                    UsersService.renewSubscription(this.userId, params).then(() => {
-                        this.$emit('submit');
+                    UsersService.renewSubscription(this.userId, params).then(response => {
+                        if (!response.data.paymentError) {
+                            this.$emit('submit');
+                        }
                     }).finally(() => {
                         this.loading = false;
                     });
                 } else {
-                    UsersService.subscribe(this.userId, params).then(() => {
-                        this.$emit('submit');
+                    UsersService.subscribe(this.userId, params).then(response => {
+                        if (!response.data.paymentError) {
+                            this.$emit('submit');
+                        }
                     }).finally(() => {
                         this.loading = false; 
                     });
