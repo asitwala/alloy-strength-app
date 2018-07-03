@@ -52,12 +52,10 @@
               :to="link.pathName"
             >{{ link.name }}</v-btn>
             <v-toolbar-items>
-            <v-tooltip bottom>              
               <v-btn flat class="as-main-toolbar-link" slot="activator"
               @click="openBlog"
               >Blog</v-btn>
               <!-- <span>Coming Soon</span> -->
-            </v-tooltip>
             <v-btn flat class="as-main-toolbar-link" @click="goToFAQ">FAQ</v-btn>
           <div class="as-footer-links">
             <div v-for="footerIcon in footerIcons"
