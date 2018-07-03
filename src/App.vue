@@ -58,6 +58,7 @@
               >Blog</v-btn>
               <!-- <span>Coming Soon</span> -->
             </v-tooltip>
+            <v-btn flat class="as-main-toolbar-link" @click="goToFAQ">FAQ</v-btn>
           <div class="as-footer-links">
             <div v-for="footerIcon in footerIcons"
               :key="footerIcon.name">
@@ -88,8 +89,6 @@
             </div>            
           </div>              
             <!-- <v-btn flat class="as-main-toolbar-link">Why Electrum Performance</v-btn> -->
-
-            <v-btn flat class="as-main-toolbar-link" @click="goToFAQ">FAQ</v-btn>
           </v-toolbar-items>
           <v-toolbar-side-icon v-if="$session.exists() && $session.has('user')" @click="toggleNavigation"></v-toolbar-side-icon>
         </div>

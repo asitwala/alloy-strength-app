@@ -150,7 +150,7 @@
                     console.log('correct credit card!!!');
                     this.loading = false;
                 }
-                return
+                // return
                 let params = {
                     planID: selectedPlan,
                     stripeToken: stripeToken.id
@@ -166,6 +166,7 @@
                         this.loading = false;
                     });
                 } else {
+                    console.log('subscribing...');
                     UsersService.subscribe(this.userId, params).then(response => {
                         if (!response.data.paymentError) {
                             this.$emit('submit');
