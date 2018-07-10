@@ -12,7 +12,7 @@
                 <div class="as-initialize-step-1-packages">
                     <h1>{{ title }}</h1>
                     <p>{{ description }}</p>
-                    <v-radio-group v-model="selectedRadio">
+                    <v-radio-group v-model="selectedRadio" class="as-select-radio-group">
                         <v-card v-for="asPackage in asPackages" :key="asPackage.name"
                             class="as-initialize-available-package"
                             :class="[{'selected': selectedPackage && asPackage.name === selectedPackage.name}]">
@@ -37,6 +37,7 @@
                             </v-card-title>
                         </v-card>
                     </v-radio-group>
+                    <p style="font-size: 12px; margin-top: 8px;">{{ trialDescription }}</p>
                 </div>
 
                 <div class="as-initialize-step-1-stripe">
@@ -95,6 +96,11 @@
                 type: String, 
                 default: `Please select one of the packages below to get started with Electrum Performance's
                 training system.`
+            },
+            trialDescription: {
+                type: String, 
+                default: `All packages start with a 7-day free trial, after which you will be billed automatically. 
+                If you cancel your subscription before the trial ends, your card will not be charged.`
             }
         },
         data() {
@@ -102,13 +108,13 @@
                 asPackages: [
                     {
                         name: "Gold",
-                        description: "6 MONTHS",
+                        description: "6 MONTHS (7-Day Trial)",
                         price: "$90.00 ($15.00/Month)",
                         radioLabel: 'radio-0'
                     },
                     {
                         name: "Silver",
-                        description: "MONTHLY",
+                        description: "MONTHLY (7-Day Trial)",
                         price: "$25.00/Month",
                         radioLabel: 'radio-1'
                     }
@@ -150,7 +156,7 @@
                     console.log('correct credit card!!!');
                     this.loading = false;
                 }
-                return
+                // return
                 let params = {
                     planID: selectedPlan,
                     stripeToken: stripeToken.id
@@ -210,6 +216,14 @@
         min-width: 280px; 
         max-width: 350px;
         margin-right: 24px;
+
+        .as-select-radio-group {
+            padding: 0px !important;
+
+            .input-group__details {
+                display: none !important;
+            }
+        }
     }
 
     .as-initialize-available-package {
