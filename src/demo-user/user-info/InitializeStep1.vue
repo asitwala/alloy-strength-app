@@ -154,7 +154,7 @@
                 }
                 else {
                     console.log('correct credit card!!!');
-                    this.loading = false;
+                    // this.loading = false;
                 }
                 // return
                 let params = {
