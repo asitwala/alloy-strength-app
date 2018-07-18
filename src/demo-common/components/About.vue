@@ -45,7 +45,9 @@
               <p>
                 Alex Sterner, BS, CSCS, USAW is the Co-Founder and Head Strength Coach at Electrum Performance. 
                 He is a Certified Strength and Conditioning Specialist (CSCS) through the National Strength and 
-                Conditioning Association (NSCA). His education in the field began at the University of Connecticut, 
+                Conditioning Association (NSCA). He is also a Strength Coach for the Atos Brazilian Jiu-Jitsu 
+                competition team, who have won the 2017 and 2018 IBJJF Team World Titles.
+                His education in the field began at the University of Connecticut, 
                 where he obtained a bachelor's degree in Kinesiology in 2014. While enrolled, he interned in the 
                 varsity weight room for 7 of the school's athletic teams, and accumulated over 1000 hours under 
                 Coach Maureen Butler and Coach Travis Illian.
@@ -64,10 +66,10 @@
               <p>
                 Upon moving to San Diego, Coach Sterner continued competing in Brazilian Jiu-jitsu under Andre Galvao at 
                 Atos HQ. It was here that he first met JT Torres, who he began strength training at Parisi in the fall 
-                of 2015. Since then he and Coach Bryce have trained the majority of the Atos HQ competition team. This 
-                includes organizing group lifting sessions for the 2017 IBJJF Worlds camp, where Atos secured their first 
-                ever team title. In a 1-on-1 setting he coached Andre Galvao through the 2017 IBJJF Worlds and 2017 ADCC Superfight, 
-                resulting in a gold medal for Galvao on both occasions.
+                of 2015. Since then he and Coach Bryce have trained the majority of the Atos HQ competition team. 
+                This includes organizing group lifting sessions for the 2017 and 2018 IBJJF Worlds camp, where Atos secured 
+                back-to-back team titles. In a 1-on-1 setting he coached Andre Galvao through the 2017 IBJJF Worlds and 2017 
+                ADCC Superfight, resulting in a gold medal for Galvao on both occasions.
               </p>
             </div>
           </div>
@@ -106,7 +108,7 @@
                 Bryce resides in San Diego, working as a Strength Coach at the world-famous Glute Lab. Named one of the top 
                 20 gyms in the US by Men’s Health, Glute Lab is owned by the “Glute Guy” Bret Contreras, PhD, CSCS*D, the world’s 
                 foremost authority on glute training. He is also a Strength Coach for the Atos Brazilian Jiu-Jitsu competition team, 
-                who in June 2017 won the IBJJF World Title for the first time.
+                who have won the 2017 and 2018 IBJJF Team World Titles.
               </p>
 
               <p>

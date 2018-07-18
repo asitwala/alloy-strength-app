@@ -224,8 +224,10 @@
                                     BB = Barbell<br>
                                     DB = Dumbbell<br>
                                     KB = Kettlebell<br>
-                                    CC = Cable column or selectorized equipment
+                                    CC = Cable column or selectorized equipment<br>
                                     BW = Bodyweight<br>
+                                    BU = Bottoms Up<br>
+                                    OHP = Overhead Press<br>
                                     1A = Single arm<br>
                                     1L = Single leg<br>
                                     Pronated = palms down grip<br>
