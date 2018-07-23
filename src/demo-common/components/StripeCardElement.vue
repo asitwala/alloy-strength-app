@@ -2,38 +2,84 @@
   <div class="as-stripe-card-element">
     <!-- TEST: pk_test_uecJvlGuK94TACv9jW9XxmVg -->
     <!-- LIVE: pk_live_PWmtkdqxq5DvLLcRz298lZQs -->
+    <v-text-field
+        v-if="this.IP"
+        type="text"
+        placeholder="Enter Email Here"
+        v-model="email"
+        label="Email"
+    /> 
     <card class='stripe-card'
       :class='{ complete }'
       stripe='pk_live_PWmtkdqxq5DvLLcRz298lZQs'
       :options='stripeOptions'
       @change='complete = $event.complete'
     />
-    <v-btn color="primary" style="margin-left: 0px !important; margin-top: 8px;" class='as-pay-with-stripe' @click='pay' :disabled='!complete'>Submit Payment</v-btn>
+    <v-btn color="primary" style="margin-left: 0px !important; margin-top: 8px;" class='as-pay-with-stripe' 
+    @click='pay' 
+    :disabled='!complete'>Submit Payment</v-btn>
+    <p 
+      style="margin-left: 0px !important;"
+      v-if="this.invalidEmail"
+    >
+    <br><br>
+    Error: You have submitted an invalid email</p>
   </div>
 </template>
  
 <script>
 //import { stripeKey, stripeOptions } from './stripeConfig.json'
 import { Card, createToken } from 'vue-stripe-elements'
+import emailRegex from '@/demo-common/mixins/emailRegex'; 
  
 export default {
   data () {
     return {
       complete: false,
       stripeOptions: {
+        requestPayerEmail:true,
         // see https://stripe.com/docs/stripe.js#element-options for details
-      }
+      },
+      email: '',
+      invalidEmail:false,
     }
   },
   components: { Card },
+  props: {
+    IP: {
+        type: Boolean,
+        default: false
+    },
+  },
   methods: {
     pay () {
+      console.log('this.email: ', this.email);
+      if (this.IP && !emailRegex.test(this.email)) {
+        this.invalidEmail = true;
+        console.log('INVALID EMAIL');
+        return
+      }       
+      else if (this.IP) {
+        console.log('VALID EMAIL');
+        createToken().then(data => {
+          console.log('create token 72');
+          let output = {
+            email:this.email,
+            stripeToken:data.token
+          };
+          console.log('stripe element output: ', output);
+          // this.$emit('created-token', data.token);
+          this.$emit('created-token', output);
+        });
+        return
+      }
       // createToken returns a Promise which resolves in a result object with
       // either a token or an error key.
       // See https://stripe.com/docs/api#tokens for the token object.
       // See https://stripe.com/docs/api#errors for the error object.
       // More general https://stripe.com/docs/stripe.js#stripe-create-token.
       createToken().then(data => {
+        console.log('create token 72');
         this.$emit('created-token', data.token);
       });
     }

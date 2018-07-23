@@ -37,7 +37,7 @@
                             </v-card-title>
                         </v-card>
                     </v-radio-group>
-                    <p style="font-size: 12px; margin-top: 8px;">{{ trialDescription }}</p>
+                    <p v-if="!this.renew" style="font-size: 12px; margin-top: 8px;">{{ trialDescription }}</p>
                 </div>
 
                 <div class="as-initialize-step-1-stripe">
@@ -56,14 +56,28 @@
                         </v-chip>
                         package.
                     </h4>
-                    <v-card class="as-initialize-step-1-stripe-container">
+                    
+                    <v-card class="as-initialize-step-1-stripe-container" v-if="selectedPackage.name !== 'Trial'">
                         <v-card-text>
                             <h2><span style="margin-right: 12px"><v-icon>fa-shopping-cart</v-icon></span>Checkout</h2>
                             <p style="margin-top: 12px; margin-bottom: 4px">Please enter your payment information below</p>
                             <div class="as-initialize-step-1-stripe-component">
-                                <as-stripe @created-token="submitStep1"></as-stripe>
-                                
+                                <as-stripe @created-token="submitStep1"></as-stripe>                                
                             </div>
+                        </v-card-text>
+                    </v-card>
+                    <v-card class="as-initialize-step-1-stripe-container" v-if="selectedPackage.name === 'Trial' && !renew">
+                        <v-card-text>
+                            <h2>
+                                <!-- <span style="margin-right: 12px"><v-icon>fa-shopping-cart</v-icon></span> -->
+                                7-Day Trial</h2>
+                            <p style="margin-top: 12px; margin-bottom: 4px">Sign up for a risk-free, 7-day trial of Electrum Performance. No card required.</p>
+                            <!-- <br> -->
+                            <p style="margin-top: 12px; margin-bottom: 4px">You will be prompted to sign up for a paid subscription at the end of your trial period.</p>
+                            <v-btn color="primary" style="margin-left: 0px !important; margin-top: 8px;" class='as-pay-with-stripe' @click='submitTrial'>Sign Me Up</v-btn>
+                            <!-- <div class="as-initialize-step-1-stripe-component">
+                                <as-stripe @created-token="submitStep1"></as-stripe>                                
+                            </div> -->
                         </v-card-text>
                     </v-card>
                 </div>
@@ -108,16 +122,22 @@
                 asPackages: [
                     {
                         name: "Gold",
-                        description: "6 MONTHS (7-Day Trial)",
+                        description: "6 MONTHS (7-Day Trial Included)",
                         price: "$90.00 ($15.00/Month)",
                         radioLabel: 'radio-0'
                     },
                     {
                         name: "Silver",
-                        description: "MONTHLY (7-Day Trial)",
+                        description: "MONTHLY (7-Day Trial Included)",
                         price: "$25.00/Month",
                         radioLabel: 'radio-1'
-                    }
+                    },
+                    // {
+                    //     name: "Trial",
+                    //     description: "7-Day Trial Only",
+                    //     price: "No credit card required. Risk-free 7-day trial.",
+                    //     radioLabel: 'radio-2'
+                    // }
                 ], 
                 selectedPackage: null,
                 selectedRadio: null,
@@ -126,6 +146,21 @@
             }
         },
         mounted() {
+            if (!this.renew) {                
+                this.asPackages.push(
+                    {
+                        name: "Trial",
+                        description: "7-Day Trial Only",
+                        price: "No card required. Try a risk-free 7-day trial.",
+                        radioLabel: 'radio-2'
+                    }
+                );
+            }
+            else {
+                this.asPackages[0].description = "6 MONTHS";
+                this.asPackages[1].description = "MONTHLY";
+                // this.trialDescription.default = '';
+            }
             let defaultPackage = this.asPackages[0]; // set default package to Gold 
             this.selectPackage(defaultPackage);
         },
@@ -134,12 +169,25 @@
                 this.selectedPackage = asPackage;
                 this.selectedRadio = this.selectedPackage.radioLabel; // use to populate the radio input
             },
+            submitTrial() {
+                this.loading = true;
+                console.log("SIGNING UP FOR TRIAL");
+                // UsersService
+                UsersService.startTrial(this.userId, {}).then(response => {
+                    console.log('start trial response: ', response);
+                    this.$emit('submit', {renew:false});
+                }).finally(() => {
+                    console.log('finally hit line 175');
+                    this.loading = false;
+                });
+            },
             submitStep1(stripeToken) {
                 //{ plan: 'AS_Gold' or 'AS_Silver', stripeToken: stripe token}
                 console.log("submitStep1!!!");
                 this.loading = true;
 
                 let selectedPlan = null;
+                console.log('this.selectedPackage: ', this.selectedPackage);
 
                 if (this.selectedPackage.name === 'Gold') {
                     selectedPlan = 'AS_Gold'; 
@@ -161,24 +209,32 @@
                     planID: selectedPlan,
                     stripeToken: stripeToken.id
                 };
-                console.log("LINE 148");
+                console.log("LINE 148. params: ", params);
                 if (this.renew) {
                     // renewing subscription
                     UsersService.renewSubscription(this.userId, params).then(response => {
+                        console.log(`subscribing... line 216`);
                         if (!response.data.paymentError) {
-                            this.$emit('submit');
+                            this.$emit('submit', {renew: true});
+                            console.log('emit submit!!!');
+                        } else {
+                            console.log(`Payment Error 2`);
                         }
                     }).finally(() => {
                         this.loading = false;
+                        //Redirect to workout page here
                     });
                 } else {
                     console.log('subscribing...');
-                    UsersService.subscribe(this.userId, params).then(response => {
+                    UsersService.subscribe(this.userId, params).then(response => {                        
                         if (!response.data.paymentError) {
-                            this.$emit('submit');
+                            this.$emit('submit', {renew: false});
+                        } else {
+                            console.log(`Payment Error 2`);
                         }
                     }).finally(() => {
                         this.loading = false; 
+                        //Redirect to workout page here
                     });
                 }
             }
@@ -187,7 +243,8 @@
             selectedPackageColorClasses() {
                 return {
                     'as-selected-package-gold': this.selectedPackage ? this.selectedPackage.name === 'Gold' : false,
-                    'as-selected-package-silver': this.selectedPackage ? this.selectedPackage.name === 'Silver' : false
+                    'as-selected-package-silver': this.selectedPackage ? this.selectedPackage.name === 'Silver' : false,
+                    'as-selected-trial': this.selectedPackage ? this.selectedPackage.name === 'Trial' : false,
                 };
             },
             userId() {
@@ -270,7 +327,7 @@
     }
 
     .as-initialize-available-package:nth-of-type(3) {
-        background-color: #8C7853 !important;
+        background-color: #4caf50 !important;
     }
 
     .as-initialize-title-divider {
@@ -296,6 +353,9 @@
 
     .as-selected-package-silver {
         background-color: $greyLighten1 !important;
+    }
+    .as-selected-trial {
+        background-color: #4caf50 !important;
     }
 
     .as-initialize-step-1-stripe {

@@ -72,7 +72,7 @@ export default {
             exerciseTableHeaders: [
                 { text: 'Exercise Type', value: 'exerciseType' },
                 { text: 'Exercise Name', value: 'exerciseName' },
-                { text: 'Max', value: 'max' },
+                { text: 'Estimated Max', value: 'max' },
                 { text: 'Alloy Result', value: 'alloyResult' },
                 { text: 'Last Set', value: 'lastSet' }
             ],

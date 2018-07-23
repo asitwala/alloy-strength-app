@@ -19,8 +19,10 @@
                 Electrum Performance is a virtual training platform that provides cutting-edge individualized online workout programs to athletes of any sport, at any skill or experience level, worldwide. 
                 </p>
             </div>
+            <!-- <p style="font-size:16px; text-align:center; margin-top: 24px;">Interested in individualized programming with our coaches? 
+                <a href="" @click="$router.push({name: 'IndividualizedProgramming'})">Click here for more information.</a>
+            </p>         -->
         </div>
-        
 
         <div class="as-panel-2">
             <div class="as-panel-2-text">
@@ -125,7 +127,7 @@
     .as-panel-2 {
         width: 100%; 
         background-color: rgba(38, 50, 56, 0.9); 
-        margin-top: 48px; 
+        margin-top: 24px; 
         padding-top: 24px;
     }
 

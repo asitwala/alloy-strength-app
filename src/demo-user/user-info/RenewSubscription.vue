@@ -2,6 +2,7 @@
     <div class="as-renew-subscription">
         <as-renew-subscription
             :renew="true"
+            @submit="handlePayment"
             title="Renew Subscription"
             description="Your subscription is no longer valid. Please renew your subscription to continue with Electrum Performance’s training system.">
 
@@ -24,6 +25,13 @@ export default {
     },
     components: {
         'as-renew-subscription': InitializeStep1
+    }, 
+    methods: {
+        handlePayment(val) {
+            if (val.renew) {
+                this.$router.push({name: `Workout`});
+            }
+        }
     }
 }
 

@@ -21,7 +21,7 @@
                     
                     <v-stepper-items class="as-initialize-stepper-content-container">
                         <v-stepper-content step="1" class="as-initialize-stepper-content">
-                            <as-initialize-step-1 ref="step1" @submit="next"/>
+                            <as-initialize-step-1 ref="step1" @submit="handlePayment"/>
                         </v-stepper-content>
 
                         <v-stepper-content step="2" class="as-initialize-stepper-content">
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-    import UsersService from '@/services/UsersService'; 
+    import UsersService from '@/services/UsersService';
 
     let InitializeStep1 = require('./InitializeStep1').default;
     let InitializeStep2 = require('./InitializeStep2').default;
@@ -81,7 +81,16 @@
         methods: {
             next() {
                 this.stepper += 1; 
-            }, 
+            },
+            handlePayment(val) {
+                console.log('handlePayment line 86');
+                if (val.renew) {
+                    console.log('handlePayment renew case');
+                    this.$router.push({name: 'Workout'});
+                } else {
+                    this.next();
+                }
+            },
             handleLevel(levelInfo) {
                 this.givenLevel = levelInfo.level; 
                 this.givenBlockNum = levelInfo.blockNum;

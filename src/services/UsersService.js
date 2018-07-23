@@ -22,6 +22,12 @@ export default {
   forgotPassword(params) {
     return Api().post(`/api/users/forgot-password`, params);
   },
+  individualProgram(params) {
+    return Api().post(`/api/users/individualized-program`, params); // params: { planID: 1 or 2, token: stripe token}
+  },
+  startTrial(userId, params) {
+    return Api().post(`/api/users/${userId}/start-trial`, params); // params: { planID: 1 or 2, token: stripe token}
+  },
   subscribe(userId, params) {
     return Api().post(`/api/users/${userId}/subscribe`, params); // params: { planID: 1 or 2, token: stripe token}
   },

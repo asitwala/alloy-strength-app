@@ -26,6 +26,7 @@ import EmailConfirmation from '@/demo-user/EmailConfirmation';
 import FAQ from '@/demo-home/FAQ'; 
 import Unauthorized from '@/demo-home/Unauthorized';
 import NoPageExists from '@/demo-home/NoPageExists';
+import IndividualizedProgramming from '@/demo-home/IndividualizedProgramming'; 
 
 Vue.use(Router)
 
@@ -146,6 +147,12 @@ const router = new Router({
       path: '/check-email',
       name: 'CheckEmail',
       component: CheckEmail,
+      meta: {requireAuth: false}
+    },
+    {
+      path: '/individualized-programming',
+      name: 'IndividualizedProgramming',
+      component: IndividualizedProgramming,
       meta: {requireAuth: false}
     },
     {
