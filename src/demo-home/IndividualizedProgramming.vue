@@ -396,10 +396,6 @@
         background-color: $greyLighten1 !important;
     }
 
-    .as-initialize-available-package:nth-of-type(3) {
-        background-color: rgb(34, 168, 216) !important;
-    }
-
     .as-initialize-title-divider {
         height: 18px; 
         width: 2px !important; 
@@ -423,9 +419,6 @@
 
     .as-selected-package-silver {
         background-color: $greyLighten1 !important;
-    }
-    .as-selected-trial {
-        background-color: rgb(34, 168, 216) !important;
     }
 
     .as-initialize-step-1-stripe {

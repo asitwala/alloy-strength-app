@@ -27,6 +27,7 @@ import FAQ from '@/demo-home/FAQ';
 import Unauthorized from '@/demo-home/Unauthorized';
 import NoPageExists from '@/demo-home/NoPageExists';
 import IndividualizedProgramming from '@/demo-home/IndividualizedProgramming'; 
+import GalvaoPDF from '@/demo-home/GalvaoPDF'; 
 
 Vue.use(Router)
 
@@ -153,6 +154,12 @@ const router = new Router({
       path: '/individualized-programming',
       name: 'IndividualizedProgramming',
       component: IndividualizedProgramming,
+      meta: {requireAuth: false}
+    },
+    {
+      path: '/shop/galvao-pdf',
+      name: 'GalvaoPDF',
+      component: GalvaoPDF,
       meta: {requireAuth: false}
     },
     {

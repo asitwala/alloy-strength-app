@@ -63,6 +63,7 @@ export default {
         console.log('VALID EMAIL');
         createToken().then(data => {
           console.log('create token 72');
+          this.invalidEmail = false;
           let output = {
             email:this.email,
             stripeToken:data.token

@@ -153,7 +153,7 @@
                 this.emailEntered = (this.email !== ''); 
                 this.passwordEntered = (this.password !== ''); 
                 this.confirmPasswordEntered = (this.confirmPassword !== ''); 
-                this.passwordMinimumLength = (this.password.length >= 8) ;
+                this.passwordMinimumLength = (this.password.length >= 8);
 
                 if (this.$refs.signupForm.validate()) {
                     let params = {
@@ -195,7 +195,7 @@
             }, 
             password: function () {
                 if (!this.passwordEntered) {
-                    this.passwordEntered = true; 
+                    this.passwordEntered = true;             
                     this.$refs.signupForm.validate();
                 }
 
