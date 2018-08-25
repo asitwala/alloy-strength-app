@@ -5,8 +5,13 @@ export default {
     beforeRouteEnter (to, from, next) {
         next(vm => {
             const loggedIn = vm.$session && vm.$session.has('user');
+            const isAdmin = vm.$session && vm.$session.has('user') && vm.$session.get('user').isAdmin;
             const requireAuth = to.meta.requireAuth; 
-            if (!loggedIn && requireAuth) {
+            const requireAdmin = to.meta.requireAdmin;
+
+            const unauthorized = (!loggedIn && requireAuth) || (!isAdmin && requireAdmin);
+
+            if (unauthorized) {
                 vm.$router.push({name: 'Unauthorized', params: {path: to.path}});
             } else {
                 return; 

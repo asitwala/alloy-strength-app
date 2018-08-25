@@ -38,6 +38,7 @@
                         <v-list-tile-title>Reschedule Workouts</v-list-tile-title>
                     </v-list-tile>
 
+                    <!-- Example that is Admin Only -->
                     <v-list-tile v-if="$session.exists() && $session.has('user') ? $session.get('user').isAdmin : false" @click="routeTo('AdminSetLevels')">
                         <v-list-tile-action>
                             <v-icon/>
@@ -65,6 +66,20 @@
                         </v-list-tile-action>
                         <v-list-tile-title>Glossary</v-list-tile-title>
                     </v-list-tile>
+
+                    <v-list-tile v-if="$session.exists() && $session.has('user') ? $session.get('user').isAdmin : false" @click="routeTo('AdminVideos')">
+                        <v-list-tile-action>
+                            <v-icon/>
+                        </v-list-tile-action>
+                        <v-list-tile-title>Admin: Videos</v-list-tile-title>
+                    </v-list-tile>                    
+
+                    <v-list-tile v-if="$session.exists() && $session.has('user') ? $session.get('user').isAdmin : false" @click="routeTo('AdminUsers')">
+                        <v-list-tile-action>
+                            <v-icon/>
+                        </v-list-tile-action>
+                        <v-list-tile-title>Admin: Users</v-list-tile-title>
+                    </v-list-tile>                    
                 </div>
 
                 <div v-else>

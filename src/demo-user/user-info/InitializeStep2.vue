@@ -130,140 +130,141 @@
 </template>
 
 <script>
-    import UsersService from '@/services/UsersService';
+import UsersService from "@/services/UsersService";
 
-    export default {
-        data() {
-            return {
-                // physical stats
-                units: {
-                    weight: 'pounds',
-                    height1: 'feet',
-                    height2: 'inches',
-                },
-                squat: '',
-                benchPress: '',
-                deadlift: '',
-                otherExercises: '',
+export default {
+  data() {
+    return {
+      // physical stats
+      units: {
+        weight: "pounds",
+        height1: "feet",
+        height2: "inches"
+      },
+      squat: "",
+      benchPress: "",
+      deadlift: "",
+      otherExercises: "",
 
-                // experience
-                years: '',
-                months: '',
-                sports: '',
-                priorExperience: {
-                    value: '',
-                    options: ['No', 'Yes']
-                },
-                
-                height1: '',
-                height2: '',
-                weight: '',
+      // experience
+      years: "",
+      months: "",
+      sports: "",
+      priorExperience: {
+        value: "",
+        options: ["No", "Yes"]
+      },
 
-                loading: false
-            }
-        }, 
-        methods: {
-            postInfoAndGetLevel() {
-                this.loading = true;
+      height1: "",
+      height2: "",
+      weight: "",
 
-                let params = {
-                    squatWeight: this.squat,
-                    benchWeight: this.benchPress,
-                    RPEExp: (this.priorExperience.value === 'Yes'),
-                    bodyWeight: this.weight
-                };
-
-                return UsersService.getLevelInitially(this.$session.get('user').id, params).then(response => {
-                    this.$session.set('user', response.data.user); 
-                    this.$session.set('viewingWID', response.data.viewingWID);
-
-                    let levelInfo = {
-                        level: response.data.user.level,
-                        blockNum: response.data.user.blockNum
-                    };
-
-                    this.$emit('submit', levelInfo);
-                });
-            },
-            submitStep2() {
-                this.postInfoAndGetLevel().finally(() => {
-                    this.loading = false;
-                });
-            }
-        }
+      loading: false
     };
+  },
+  methods: {
+    postInfoAndGetLevel() {
+      this.loading = true;
+
+      let params = {
+        squatWeight: this.squat,
+        benchWeight: this.benchPress,
+        RPEExp: this.priorExperience.value === "Yes",
+        bodyWeight: this.weight
+      };
+
+      return UsersService.getLevelInitially(
+        this.$session.get("user").id,
+        params
+      ).then(response => {
+        this.$session.set("user", response.data.user);
+        this.$session.set("viewingWID", response.data.viewingWID);
+
+        let levelInfo = {
+          level: response.data.user.level,
+          blockNum: response.data.user.blockNum
+        };
+
+        this.$emit("submit", levelInfo);
+      });
+    },
+    submitStep2() {
+      this.postInfoAndGetLevel().finally(() => {
+        this.loading = false;
+      });
+    }
+  }
+};
 </script>
 
 <style lang="scss">
-    @import '~@/demo-common/styles/transitions';
-    @import '~@/demo-common/styles/colors';
+@import "~@/demo-common/styles/transitions";
+@import "~@/demo-common/styles/colors";
 
-    .as-initialize-step-2 {
-        min-height: 400px;
-        position: relative;
+.as-initialize-step-2 {
+  min-height: 400px;
+  position: relative;
 
-        .as-loading {
-            position: absolute;
-            right: 50%;
-        }
+  .as-loading {
+    position: absolute;
+    right: 50%;
+  }
+}
+
+.as-initialize-step-2-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.as-initialize-step-2-experience {
+  &:nth-of-type(1) {
+    margin-bottom: 20px;
+  }
+
+  flex: 2;
+  margin-right: 20px;
+  min-width: 400px;
+
+  &-div {
+    flex: 1;
+  }
+
+  &-height {
+    display: flex;
+    flex-wrap: wrap;
+
+    .input-group:nth-of-type(1) {
+      margin-right: 30px;
     }
+  }
+}
 
-    .as-initialize-step-2-info {
-        display: flex; 
-        flex-wrap: wrap;
-        justify-content: space-between; 
-    }
+.as-initialize-step-2-exercises {
+  flex: 1;
+  min-width: 400px;
 
-    .as-initialize-step-2-experience {
+  &-div {
+    flex: 1;
+  }
+}
 
-        &:nth-of-type(1) {
-            margin-bottom: 20px;
-        }
+.as-initialize-step-2-left {
+  flex: 2;
+}
 
-        flex: 2;
-        margin-right: 20px;
-        min-width: 400px;
+.as-initialize-step-2-info {
+  .card__title {
+    background-color: $blueDarken4;
+    color: white;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+}
 
-        &-div {
-            flex: 1; 
-        }
-
-        &-height {
-            display: flex; 
-            flex-wrap: wrap; 
-
-            .input-group:nth-of-type(1) {
-                margin-right: 30px;
-            }
-        }
-    }
-
-    .as-initialize-step-2-exercises {
-        flex: 1; 
-        min-width: 400px;
-
-        &-div {
-            flex: 1; 
-        }
-    }
-
-    .as-initialize-step-2-left {
-        flex: 2;
-    }
-
-    .as-initialize-step-2-info {
-        .card__title {
-            background-color: $blueDarken4;
-            color: white; 
-            padding-top: 8px;
-            padding-bottom: 8px;
-        }
-    }
-
-    .as-initialize-step-2-submit {
-        float: right;
-        margin-top: 16px !important;
-        margin-right: 0px !important;
-    }
-
+.as-initialize-step-2-submit {
+  float: right;
+  margin-top: 16px !important;
+  margin-right: 0px !important;
+}
 </style>

@@ -1,21 +1,21 @@
-import Api from './Api';
+import Api from "./Api";
 
 export default {
   fetchAllInfo() {
-    return Api().get('');
+    return Api().get("");
   },
   fetchUsers() {
-    return Api().get('/users');
+    return Api().get("/users");
   },
   signupUser(params) {
-    return Api().post('/api/users', params); // P1, P2, username, name (to be added)
+    return Api().post("/api/users", params); // P1, P2, username, name (to be added)
   },
   sendEmailConfirmation(userId) {
     return Api().post(`/api/users/${userId}/confirmation-email`);
   },
   updateUser(userId) {
     return Api().get(`/api/users/${userId}`);
-  },  
+  },
   getEmailConfirmation(userId, confString) {
     return Api().get(`/api/users/${userId}/confirm/${confString}`);
   },
@@ -32,20 +32,21 @@ export default {
     return Api().post(`/api/users/${userId}/subscribe`, params); // params: { planID: 1 or 2, token: stripe token}
   },
   renewSubscription(userId, params) {
-    return Api().post(`/api/users/${userId}/renew-subscription`, params); 
+    return Api().post(`/api/users/${userId}/renew-subscription`, params);
   },
-  changeSubscription(userId, params) { // params: { newPlanID: 'AS_Gold' or 'AS_Silver', cancel: true or false }
+  changeSubscription(userId, params) {
+    // params: { newPlanID: 'AS_Gold' or 'AS_Silver', cancel: true or false }
     return Api().put(`/api/users/${userId}/change-subscription`, params);
   },
   getSubscriptionInfo(userId) {
-    return Api().get(`/api/users/${userId}/subscription-info`); 
+    return Api().get(`/api/users/${userId}/subscription-info`);
   },
   loginUser(params) {
     return Api().post(`/api/users/${params.username}/login`, params);
   },
   getLevelInitially(userId, params) {
     return Api().put(`/api/users/${userId}/get-level`, params);
-  }, 
+  },
   generateWorkouts(userId, params) {
     return Api().post(`/api/users/${userId}/get-next-workouts`, params);
   },
@@ -70,4 +71,4 @@ export default {
   getAccessInfo(userId) {
     return Api().get(`api/users/${userId}/access-info`);
   }
-}
+};

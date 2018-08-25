@@ -29,11 +29,26 @@ import NoPageExists from '@/demo-home/NoPageExists';
 import IndividualizedProgramming from '@/demo-home/IndividualizedProgramming'; 
 import GalvaoPDF from '@/demo-home/GalvaoPDF'; 
 
+import AdminVideos from '@/demo-admin/AdminVideos';
+import AdminUsers from '@/demo-admin/AdminUsers';
+
 Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
   routes: [
+    {
+      path: '/admin/users',
+      name: 'AdminUsers',
+      component: AdminUsers,
+      meta: {requireAuth: false, requireAdmin: true}
+    },
+    {
+      path: '/admin/videos',
+      name: 'AdminVideos',
+      component: AdminVideos,
+      meta: {requireAuth: false, requireAdmin: true}
+    },
     {
       path: '/',
       name: 'Homepage',

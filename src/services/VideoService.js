@@ -1,7 +1,7 @@
-import Api from './Api'; 
+import Api from "./Api";
 
 export default {
-    fetchVideoInfo(userId) {
-        return Api().get(`/api/users/${userId}/videos`);
-    }
-}
+  fetchVideoInfo(userId) {
+    return Api().get(`/api/users/${userId}/videos`);
+  }
+};
