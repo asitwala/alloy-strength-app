@@ -343,7 +343,6 @@ export default {
             let todayDate = moment()
               .local()
               .format("YYYY-MM-DD");
-
             this.workoutDates = response.data.workoutDates; //Keep
             this.formatWorkoutDates(); //Keep
             this.selectedDateWithWeekDay = ""; //Keep

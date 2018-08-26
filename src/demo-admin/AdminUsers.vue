@@ -144,138 +144,132 @@
 
 
 <script>
-
-import frequentlyAskedQuestions from '@/demo-home/frequentlyAskedQuestions'; 
-import AdminService from '@/services/AdminService';
-import { VueEditor } from 'vue2-editor'
+import frequentlyAskedQuestions from "@/demo-home/frequentlyAskedQuestions";
+import AdminService from "@/services/AdminService";
+import { VueEditor } from "vue2-editor";
 
 export default {
-    components: {
-        VueEditor
-    },    
-    mounted() {
-        this.fetchUsersInfo();
+  components: {
+    VueEditor
+  },
+  mounted() {
+    this.fetchUsersInfo();
+  },
+  methods: {
+    backtoUsers() {
+      this.selectedUserId = 0;
+      this.selectedUserEmail = "";
+      this.selectedUserName = "";
+      this.selectedUserWorkouts = {};
+      this.viewPressed = false;
+      this.showingWorkout = false;
+      this.recentUserWDates = [];
     },
-    methods: {
-        backtoUsers() {
-            this.selectedUserId = 0;
-            this.selectedUserEmail = '';
-            this.selectedUserName = '';
-            this.selectedUserWorkouts = {};
-            this.viewPressed = false;
-            this.showingWorkout = false;
-            this.recentUserWDates = [];
-        },
-        fetchUsersInfo() {
-            this.loading = true;
-            AdminService.getAllUsers().then(response => {
-                this.users = response.data;
-                this.loading = false;
-            });
-        },
-        viewWorkouts(userId, userEmail, userName, userWorkouts) {
-            this.selectedUserId = userId;
-            this.selectedUserEmail = userEmail;
-            this.selectedUserName = userName;
-            this.selectedUserWorkouts = userWorkouts;
-            let lastWeek = Date.now() - 7 * 24 * 60 * 60 * 1000;
-            this.recentUserWDates.push(new Date(lastWeek));
-            for (var K in userWorkouts) {
-                let workout = userWorkouts[K];
-                let wDate = new Date(workout.Date); 
-                if (wDate <= Date.now()
-                // && wDate > lastWeek
-                ) {
-                    let obj = {
-                        wID: K,
-                        string: workout.Date.split('T')[0] + " (Click to View)",
-                    }
-                    this.recentUserWDates.push(obj);
-                }
-            }
-            this.viewPressed = true;
-            this.search = '';
-        },
-        showWorkout(wID) {
-            this.showingWorkout = true;
-            this.displayWorkout = this.selectedUserWorkouts[wID];
+    fetchUsersInfo() {
+      this.loading = true;
+      AdminService.getAllUsers().then(response => {
+        this.users = response.data;
+        this.loading = false;
+      });
+    },
+    viewWorkouts(userId, userEmail, userName, userWorkouts) {
+      this.selectedUserId = userId;
+      this.selectedUserEmail = userEmail;
+      this.selectedUserName = userName;
+      this.selectedUserWorkouts = userWorkouts;
+      let lastWeek = Date.now() - 7 * 24 * 60 * 60 * 1000;
+      this.recentUserWDates.push(new Date(lastWeek));
+      for (var K in userWorkouts) {
+        let workout = userWorkouts[K];
+        let wDate = new Date(workout.Date);
+        if (
+          wDate <= Date.now()
+          // && wDate > lastWeek
+        ) {
+          let obj = {
+            wID: K,
+            string: workout.Date.split("T")[0] + " (Click to View)"
+          };
+          this.recentUserWDates.push(obj);
         }
+      }
+      this.viewPressed = true;
+      this.search = "";
     },
-    data() {
-        return {
-            users:[],
-            search:'',
-            headers: [
-                {
-                    text: 'Name',
-                    align: 'left',
-                    sortable: true,
-                    value: 'name'
-                },
-                {
-                    text: 'Level',
-                    align: 'left',
-                    sortable: true,
-                    value: 'level'
-                },
-                {
-                    text: 'Email',
-                    align: 'left',
-                    sortable: true,
-                    value: 'username'
-                },
-                {
-                    text: 'Core Stats',
-                    align: 'left',
-                    sortable: false,
-                    value: 'corestats'
-                },
-                {
-                    text: 'Workouts Completed',
-                    align: 'left',
-                    sortable: true,
-                    value: 'workoutsCompleted'
-                },
-                {
-                    text: 'Recent Workouts',
-                    align: 'left',
-                    sortable: false,
-                    value: 'recentWorkouts'
-                },
-            ],
-
-            viewPressed:false,
-            showingWorkout:false,
-
-            loading:false,
-
-            selectedUserId:0,
-            selectedUserName:'',
-            selectedUserEmail:'',
-            selectedUserWorkouts:{},
-            recentUserWDates:[],
-            displayWorkout:{},
-
-            editVideoTitle:'',
-            editVideoUrl:'',
-            editVideoExerciseType:'',
-            editVideoRelatedExercises:[],
-            editVideoDescription:'',
-
-            exerciseCategories:[],
-            relatedExerciseOptions:[
-
-            ],
-
-            videos:[]
-        }
-    },
-    watch: {
-
+    showWorkout(wID) {
+      this.showingWorkout = true;
+      this.displayWorkout = this.selectedUserWorkouts[wID];
     }
-};  
+  },
+  data() {
+    return {
+      users: [],
+      search: "",
+      headers: [
+        {
+          text: "Name",
+          align: "left",
+          sortable: true,
+          value: "name"
+        },
+        {
+          text: "Level",
+          align: "left",
+          sortable: true,
+          value: "level"
+        },
+        {
+          text: "Email",
+          align: "left",
+          sortable: true,
+          value: "username"
+        },
+        {
+          text: "Core Stats",
+          align: "left",
+          sortable: false,
+          value: "corestats"
+        },
+        {
+          text: "Workouts Completed",
+          align: "left",
+          sortable: true,
+          value: "workoutsCompleted"
+        },
+        {
+          text: "Recent Workouts",
+          align: "left",
+          sortable: false,
+          value: "recentWorkouts"
+        }
+      ],
 
+      viewPressed: false,
+      showingWorkout: false,
 
+      loading: false,
+
+      selectedUserId: 0,
+      selectedUserName: "",
+      selectedUserEmail: "",
+      selectedUserWorkouts: {},
+      recentUserWDates: [],
+      displayWorkout: {},
+
+      editVideoTitle: "",
+      editVideoUrl: "",
+      editVideoExerciseType: "",
+      editVideoRelatedExercises: [],
+      editVideoDescription: "",
+
+      exerciseCategories: [],
+      relatedExerciseOptions: [],
+
+      videos: []
+    };
+  },
+  watch: {}
+};
 </script>
 
 
