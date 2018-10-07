@@ -189,9 +189,9 @@
 <script>
 import moment from "moment";
 let SimpleWorkout = require("./SimpleWorkout.vue").default;
-let Subworkout = require("./Subworkout.vue").default;
 let Notification = require("../demo-common/components/Notification.vue")
   .default;
+let Subworkout = require("./Subworkout.vue").default;
 
 import WorkoutLegend from "@/demo-common/components/WorkoutLegend";
 

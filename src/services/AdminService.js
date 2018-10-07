@@ -19,5 +19,8 @@ export default {
     addVideo(params) {
         return Api().post(`/api/admin/videos/`, params);
     },
+    getAllCustomers() {
+        return Api().get(`/api/stripe/customers-custom/`);
+    }
 
 };

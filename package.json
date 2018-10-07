@@ -20,6 +20,7 @@
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vue-session": "^1.0.0",
+    "vue-stripe-checkout": "^1.0.8",
     "vue-stripe-elements": "^0.2.3",
     "vue2-editor": "^2.6.6",
     "vuetify": "^1.0.1"

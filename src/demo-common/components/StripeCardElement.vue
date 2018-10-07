@@ -29,50 +29,49 @@
  
 <script>
 //import { stripeKey, stripeOptions } from './stripeConfig.json'
-import { Card, createToken } from 'vue-stripe-elements'
-import emailRegex from '@/demo-common/mixins/emailRegex'; 
- 
+import { Card, createToken } from "vue-stripe-elements";
+import emailRegex from "@/demo-common/mixins/emailRegex";
+
 export default {
-  data () {
+  data() {
     return {
       complete: false,
       stripeOptions: {
-        requestPayerEmail:true,
+        requestPayerEmail: true
         // see https://stripe.com/docs/stripe.js#element-options for details
       },
-      email: '',
-      invalidEmail:false,
-    }
+      email: "",
+      invalidEmail: false
+    };
   },
   components: { Card },
   props: {
     IP: {
-        type: Boolean,
-        default: false
-    },
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
-    pay () {
-      console.log('this.email: ', this.email);
+    pay() {
+      console.log("this.email: ", this.email);
       if (this.IP && !emailRegex.test(this.email)) {
         this.invalidEmail = true;
-        console.log('INVALID EMAIL');
-        return
-      }       
-      else if (this.IP) {
-        console.log('VALID EMAIL');
+        console.log("INVALID EMAIL");
+        return;
+      } else if (this.IP) {
+        console.log("VALID EMAIL");
         createToken().then(data => {
-          console.log('create token 72');
+          console.log("create token 72");
           this.invalidEmail = false;
           let output = {
-            email:this.email,
-            stripeToken:data.token
+            email: this.email,
+            stripeToken: data.token
           };
-          console.log('stripe element output: ', output);
+          console.log("stripe element output: ", output);
           // this.$emit('created-token', data.token);
-          this.$emit('created-token', output);
+          this.$emit("created-token", output);
         });
-        return
+        return;
       }
       // createToken returns a Promise which resolves in a result object with
       // either a token or an error key.
@@ -80,26 +79,24 @@ export default {
       // See https://stripe.com/docs/api#errors for the error object.
       // More general https://stripe.com/docs/stripe.js#stripe-create-token.
       createToken().then(data => {
-        console.log('create token 72');
-        this.$emit('created-token', data.token);
+        console.log("create token 72");
+        this.$emit("created-token", data.token);
       });
     }
   }
-}
+};
 </script> 
  
 <style lang="scss">
-
-@import '~@/demo-common/styles/colors';
+@import "~@/demo-common/styles/colors";
 
 .as-stripe-card-element {
   display: flex;
   flex-wrap: wrap;
-  flex: 1; 
+  flex: 1;
 }
 
 .as-pay-with-stripe {
-  
 }
 
 .stripe-card {
@@ -130,7 +127,4 @@ export default {
 .stripe-card--webkit-autofill {
   background-color: #fefde5 !important;
 }
-
-
-
 </style>

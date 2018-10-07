@@ -37,7 +37,7 @@
                     <div class="header-description-block" style="display:block">
                         <div class="header-exercise-description">
                             <p style="padding-right: 12px;">{{ describer }}</p>
-                            <div class="suggested-weight-string" v-if="suggestedWeightString">
+                            <div class="suggested-weight-string" v-if="suggestedWeightString && sclass != 'bodyweight'">
                                 <p style="padding-left: 12px; border-left: 1px solid #aaa">{{ suggestedWeightString }} </p>
                             </div>
                         </div>

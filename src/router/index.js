@@ -1,196 +1,210 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import Vue from "vue";
+import Router from "vue-router";
 
-import Homepage from '@/demo-home/Homepage';
-import Glossary from '@/demo-home/Glossary';
+import Homepage from "@/demo-home/Homepage";
+import Glossary from "@/demo-home/Glossary";
 
-import About from '@/demo-common/components/About';
-import Contact from '@/demo-common/components/Contact';
-import Terms from '@/demo-common/components/Terms';
+import About from "@/demo-common/components/About";
+import Contact from "@/demo-common/components/Contact";
+import Terms from "@/demo-common/components/Terms";
 
-import Workout from '@/demo-user/Workout'; 
-import Videos from '@/demo-user/Videos'; 
-import Logout from '@/demo-user/Logout';
-import AdminSetLevels from '@/demo-user/user-info/AdminSetLevels';
-import SetLevels from '@/demo-user/user-info/SetLevels';
-import RescheduleWorkouts from '@/demo-user/user-info/RescheduleWorkouts'; 
-import RenewSubscription from '@/demo-user/user-info/RenewSubscription'; 
-import Initialize from '@/demo-user/user-info/Initialize'; 
-import UserStats from '@/demo-user/user-info/UserStats';
-import Progress from '@/demo-user/user-info/Progress'; 
-import Profile from '@/demo-user/user-info/Profile'; 
+import Workout from "@/demo-user/Workout";
+import Videos from "@/demo-user/Videos";
+import Logout from "@/demo-user/Logout";
+import AdminSetLevels from "@/demo-user/user-info/AdminSetLevels";
+import SetLevels from "@/demo-user/user-info/SetLevels";
+import RescheduleWorkouts from "@/demo-user/user-info/RescheduleWorkouts";
+import RenewSubscription from "@/demo-user/user-info/RenewSubscription";
+import Initialize from "@/demo-user/user-info/Initialize";
+import UserStats from "@/demo-user/user-info/UserStats";
+import Progress from "@/demo-user/user-info/Progress";
+import Profile from "@/demo-user/user-info/Profile";
 
-import CheckEmail from '@/demo-user/CheckEmail'; 
-import EmailConfirmation from '@/demo-user/EmailConfirmation';
+import CheckEmail from "@/demo-user/CheckEmail";
+import EmailConfirmation from "@/demo-user/EmailConfirmation";
 
-import FAQ from '@/demo-home/FAQ'; 
-import Unauthorized from '@/demo-home/Unauthorized';
-import NoPageExists from '@/demo-home/NoPageExists';
-import IndividualizedProgramming from '@/demo-home/IndividualizedProgramming'; 
-import GalvaoPDF from '@/demo-home/GalvaoPDF'; 
+import FAQ from "@/demo-home/FAQ";
+import Unauthorized from "@/demo-home/Unauthorized";
+import NoPageExists from "@/demo-home/NoPageExists";
+import IndividualizedProgramming from "@/demo-home/IndividualizedProgramming";
+import GalvaoPDF from "@/demo-home/GalvaoPDF";
 
-import AdminVideos from '@/demo-admin/AdminVideos';
-import AdminUsers from '@/demo-admin/AdminUsers';
+import AdminVideos from "@/demo-admin/AdminVideos";
+import AdminUsers from "@/demo-admin/AdminUsers";
+import AdminSubscriptions from "@/demo-admin/AdminSubscriptions";
 
-Vue.use(Router)
+import UpdateBilling from "@/demo-user/UpdateBilling";
+
+Vue.use(Router);
 
 const router = new Router({
-  mode: 'history',
+  mode: "history",
   routes: [
     {
-      path: '/admin/users',
-      name: 'AdminUsers',
+      path: "/update-billing",
+      name: "UpdateBilling",
+      component: UpdateBilling,
+      meta: { requireAuth: true }
+    },
+    {
+      path: "/admin/subscriptions",
+      name: "AdminSubscriptions",
+      component: AdminSubscriptions,
+      meta: { requireAuth: false, requireAdmin: true }
+    },
+    {
+      path: "/admin/users",
+      name: "AdminUsers",
       component: AdminUsers,
-      meta: {requireAuth: false, requireAdmin: true}
+      meta: { requireAuth: false, requireAdmin: true }
     },
     {
-      path: '/admin/videos',
-      name: 'AdminVideos',
+      path: "/admin/videos",
+      name: "AdminVideos",
       component: AdminVideos,
-      meta: {requireAuth: false, requireAdmin: true}
+      meta: { requireAuth: false, requireAdmin: true }
     },
     {
-      path: '/',
-      name: 'Homepage',
+      path: "/",
+      name: "Homepage",
       component: Homepage,
-      meta: {requireAuth: false}
+      meta: { requireAuth: false }
     },
     {
-      path: '/faq',
-      name: 'FAQ',
+      path: "/faq",
+      name: "FAQ",
       component: FAQ,
-      meta: {requireAuth: false}
+      meta: { requireAuth: false }
     },
-    { 
-      path: '/about',
-      name: 'About',
+    {
+      path: "/about",
+      name: "About",
       component: About,
-      meta: {requireAuth: false}
+      meta: { requireAuth: false }
     },
-    { 
-      path: '/contact',
-      name: 'Contact',
+    {
+      path: "/contact",
+      name: "Contact",
       component: Contact,
-      meta: {requireAuth: false}
+      meta: { requireAuth: false }
     },
-    { 
-      path: '/terms',
-      name: 'Terms',
+    {
+      path: "/terms",
+      name: "Terms",
       component: Terms,
-      meta: {requireAuth: false}
+      meta: { requireAuth: false }
     },
     {
-      path: '/workout',
-      name: 'Workout',
+      path: "/workout",
+      name: "Workout",
       component: Workout,
-      meta: {requireAuth: true}
-    }, 
+      meta: { requireAuth: true }
+    },
     {
-      path: '/videos',
-      name: 'Videos',
+      path: "/videos",
+      name: "Videos",
       component: Videos,
       props: true,
-      meta: {requireAuth: true}
+      meta: { requireAuth: true }
     },
     {
-      path: '/glossary',
-      name: 'Glossary',
+      path: "/glossary",
+      name: "Glossary",
       component: Glossary,
-      meta: {requireAuth: true}
+      meta: { requireAuth: true }
     },
     {
-      path: '/user-stats',
-      name: 'UserStats',
+      path: "/user-stats",
+      name: "UserStats",
       component: UserStats,
-      meta: {requireAuth: true}
+      meta: { requireAuth: true }
     },
     {
-      path: '/progress',
-      name: 'Progress',
+      path: "/progress",
+      name: "Progress",
       component: Progress,
-      meta: {requireAuth: true}
+      meta: { requireAuth: true }
     },
     {
-      path: '/initialize',
-      name: 'Initialize',
+      path: "/initialize",
+      name: "Initialize",
       component: Initialize,
       props: true,
-      meta: {requireAuth: true}
+      meta: { requireAuth: true }
     },
     {
-      path: '/logout',
-      name: 'Logout',
+      path: "/logout",
+      name: "Logout",
       component: Logout,
-      meta: {requireAuth: false}
+      meta: { requireAuth: false }
     },
     {
-      path: '/reset-workouts',
-      name: 'AdminSetLevels',
+      path: "/reset-workouts",
+      name: "AdminSetLevels",
       component: AdminSetLevels,
-      meta: {requireAuth: true}
+      meta: { requireAuth: true }
     },
     {
-      path: '/set-workouts',
-      name: 'SetLevels',
+      path: "/set-workouts",
+      name: "SetLevels",
       component: SetLevels,
-      meta: {requireAuth: true}
+      meta: { requireAuth: true }
     },
     {
-      path: '/profile',
-      name: 'Profile', 
+      path: "/profile",
+      name: "Profile",
       component: Profile,
-      meta: {requireAuth: true}
+      meta: { requireAuth: true }
     },
     {
-      path: '/reschedule-workouts',
-      name: 'RescheduleWorkouts',
+      path: "/reschedule-workouts",
+      name: "RescheduleWorkouts",
       component: RescheduleWorkouts,
-      meta: {requireAuth: true}
+      meta: { requireAuth: true }
     },
     {
-      path: '/renew-subscription', 
-      name: 'RenewSubscription',
+      path: "/renew-subscription",
+      name: "RenewSubscription",
       component: RenewSubscription,
-      meta: {requireAuth: true}
+      meta: { requireAuth: true }
     },
     {
-      path: '/confirm/:id/:confString',
-      name: 'EmailConfirmation',
+      path: "/confirm/:id/:confString",
+      name: "EmailConfirmation",
       component: EmailConfirmation,
-      meta: {requireAuth: false}
+      meta: { requireAuth: false }
     },
     {
-      path: '/check-email',
-      name: 'CheckEmail',
+      path: "/check-email",
+      name: "CheckEmail",
       component: CheckEmail,
-      meta: {requireAuth: false}
+      meta: { requireAuth: false }
     },
     {
-      path: '/individualized-programming',
-      name: 'IndividualizedProgramming',
+      path: "/individualized-programming",
+      name: "IndividualizedProgramming",
       component: IndividualizedProgramming,
-      meta: {requireAuth: false}
+      meta: { requireAuth: false }
     },
     {
-      path: '/shop/galvao-pdf',
-      name: 'GalvaoPDF',
+      path: "/shop/galvao-pdf",
+      name: "GalvaoPDF",
       component: GalvaoPDF,
-      meta: {requireAuth: false}
+      meta: { requireAuth: false }
     },
     {
-      path: '/unauthorized', 
-      name: 'Unauthorized', 
+      path: "/unauthorized",
+      name: "Unauthorized",
       component: Unauthorized,
-      meta: {requireAuth: false},
+      meta: { requireAuth: false },
       props: true
     },
     {
-      path: '*',
+      path: "*",
       component: NoPageExists,
-      meta: {requireAuth: false}
+      meta: { requireAuth: false }
     }
   ]
 });
-
 
 export default router;

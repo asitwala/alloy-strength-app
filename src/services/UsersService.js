@@ -70,5 +70,9 @@ export default {
   },
   getAccessInfo(userId) {
     return Api().get(`api/users/${userId}/access-info`);
+  },
+  updatePaymentCard(params) {
+    return Api().post(`api/stripe/update-card`, params);
   }
+
 };

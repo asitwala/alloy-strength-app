@@ -7487,6 +7487,10 @@ vue-session@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/vue-session/-/vue-session-1.0.0.tgz#ca642c751f569a48f8dd66f356f1727fbe081f7c"
 
+vue-stripe-checkout@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/vue-stripe-checkout/-/vue-stripe-checkout-1.0.8.tgz#44cd50ec912e3dd2d7a143c1186d5e637129e17c"
+
 vue-stripe-elements@^0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/vue-stripe-elements/-/vue-stripe-elements-0.2.3.tgz#bae6b867c842e11871b01c7e479dedca9de2bd31"
