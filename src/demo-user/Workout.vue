@@ -62,6 +62,13 @@
                             @click="checkSubmit()">
                             Submit
                         </v-btn>
+                        <v-btn 
+                            color="primary"
+                            v-if="!notEditable"
+                            class="as-subworkout-button"
+                            @click="editWorkout()">
+                            Edit Workout
+                        </v-btn>
                     </div>
                 </div>
                 <v-divider/>
@@ -553,6 +560,15 @@ export default {
         this.notificationMessage = `Your workout was successfully reset!`;
         this.notificationType = "reset";
         this.notificationVisible = true;
+      });
+    },
+    editWorkout() {
+      console.log("editWorkout() running...");
+      let userId = this.$session.get("user").id;
+      let WID = this.$session.get("viewingWID");
+
+      WorkoutService.editWorkout(userId, WID).then(response => {
+        this.fetchWorkoutInfo();
       });
     }
   },
