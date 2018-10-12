@@ -60,7 +60,7 @@
                             v-if="!notEditable"
                             class="as-subworkout-button"
                             @click="checkSubmit()">
-                            Submit
+                            Complete
                         </v-btn>
                     </div>
                 </div>
@@ -352,11 +352,13 @@ export default {
               let momentDate = moment(date.Date).format("YYYY-MM-DD");
               let color = "";
 
-              if (momentDate < todayDate) {
+              if (momentDate < todayDate && !date.Completed) { // missed workout
+                color = "red";
+              } else if (momentDate < todayDate) { // completed workout
                 color = "grey";
-              } else if (momentDate > todayDate) {
+              } else if (momentDate > todayDate) { // upcoming workout
                 color = "blue";
-              } else {
+              } else { // current workout
                 color = "green";
               }
 
@@ -454,9 +456,9 @@ export default {
         this.notificationVisible = true;
       } else if (blankFields > 0) {
         if (blankFields === 1) {
-          this.notificationMessage = `It seems like ${blankFields} field was left blank. Would you still like to submit?`;
+          this.notificationMessage = `It seems like ${blankFields} field was left blank. Would you still like to complete this workout?`;
         } else {
-          this.notificationMessage = `It seems like ${blankFields} fields were left blank. Would you still like to submit?`;
+          this.notificationMessage = `It seems like ${blankFields} fields were left blank. Would you still like to complete this workout?`;
         }
         this.notificationType = "submitWarning";
         this.notificationVisible = true;

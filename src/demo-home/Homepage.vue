@@ -46,7 +46,6 @@
 
 <script>
 
-
     import HomepageSlider from '@/demo-home/HomepageSlider'; 
     import LookInside from '@/demo-home/LookInside';
 

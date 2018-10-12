@@ -53,7 +53,7 @@
                     </v-btn>
                 <!-- </div>    -->
             </v-form>            
-            <p style="position: absolute; bottom: 70px; margin:auto; text-align:center; left:0; right:0">
+            <p>
                 Our team can also be contacted at: <a :href="`mailto:${officialEmail}`">{{ officialEmail }}</a>
             </p>
         </div>
@@ -194,6 +194,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 25px 20px;
   .as-loading {
     position: absolute;
     right: 50%;
@@ -205,8 +206,8 @@ export default {
   }
 }
 .as-contact-submit {
-  margin-bottom: 50px !important;
-  margin-top: 16px !important;
-  margin-right: 0px !important;
+  margin-bottom: 36px;
+  margin-top: 16px;
+  margin-right: 0px;
 }
 </style>

@@ -2,92 +2,85 @@
   <div id="app">
     <v-app id="inspire">
       <v-toolbar class="as-main-toolbar">
-        <v-btn icon class="as-logo-btn" @click="goToHomePage">
-          <img class="as-logo" src="../static/logo.svg">
-        </v-btn>
-        <v-toolbar-title class="white--text as-toolbar-title" 
-        @click="goToHomePage">ELECTRUM PERFORMANCE</v-toolbar-title>
-          <div class="as-footer-links" hidden style="display:none;"> <!-- HIDDEN FOR TESTING -->
-            <div v-for="footerIcon in footerIcons"
-              :key="footerIcon.name"> <!-- With tooltip --> 
-              <v-tooltip v-if="footerIcon.tooltipText" top>
-                <v-btn 
-                slot="activator"
-                @click="openFooterLinkNewTab(footerIcon.src)"
-                icon
-                class="mx-3 white--text"
-                >
-                  <v-icon>
-                    {{ footerIcon.name }}
-                  </v-icon>
-                </v-btn>
-                <span>{{ footerIcon.tooltipText }}</span>
-              </v-tooltip>              
-              <v-btn v-else
-              @click="openFooterLinkNewTab(footerIcon.src)"
-              icon
-              class="mx-3 white--text"
-              > <!-- No tooltip --> 
-                <v-icon>
-                  {{ footerIcon.name }}
-                </v-icon>
-              </v-btn>
-            </div>            
-          </div>
-            <!-- <div style="">
-              <p style="margin-bottom: 0px !important; font-size: 12px; color: white; padding: 8px; margin-right: 22px;  margin-left: 16px;">Built by 
-                <span style="color: #1e88e5 !important; cursor: pointer" @click="open1StopDev">
-                  <strong>1-Stop Development</strong>
-                </span>
-              </p>
-            </div> -->
-        <v-spacer></v-spacer>
-          <div class="as-main-toolbar-right">
-          
-          <v-btn
+        <div class="as-main-toolbar-left">
+          <v-btn icon class="as-logo-btn" @click="goToHomePage">
+            <img class="as-logo" src="../static/logo.svg">
+          </v-btn>
+          <v-toolbar-title class="white--text as-toolbar-title" 
+            @click="goToHomePage">ELECTRUM PERFORMANCE
+          </v-toolbar-title>
+        </div>
+    
+        <!-- Header Links --> 
+        <div class="as-main-toolbar-right">
+          <div class="as-main-menu-links">
+            <v-btn
               color="white"
               flat
-              v-for="link in footerLinks"
+              v-for="link in headerLinks"
               :key="link.name"
-              :to="link.pathName"
-            >{{ link.name }}</v-btn>
-            <v-toolbar-items>
-              <v-btn flat class="as-main-toolbar-link" slot="activator"
-              @click="openBlog"
-              >Blog</v-btn>
-              <!-- <span>Coming Soon</span> -->
+              :to="link.pathName">
+              {{ link.name }}
+            </v-btn>
+            <v-btn flat class="as-main-toolbar-link" slot="activator"
+            @click="openBlog"
+            >Blog</v-btn>
             <v-btn flat class="as-main-toolbar-link" @click="goToFAQ">FAQ</v-btn>
-          <div class="as-footer-links">
-            <div v-for="footerIcon in footerIcons"
-              :key="footerIcon.name">
-              <!-- With tooltip --> 
-              <v-tooltip v-if="footerIcon.tooltipText" top>
-                <v-btn 
+          </div>
+
+          <div class="as-main-menu-links-small" style="display:inline-block;">
+            <v-menu
+              :bottom="true"
+              offset-y>
+              <v-btn flat slot="activator"
+                class="ds-menu-item-title" style="position: relative;">
+                Menu
+              </v-btn>
+
+              <v-list dense>
+                <v-list-tile
+                  v-for="link in headerLinks"
+                  :key="link.name"
+                  @click="routeTo(link.pathName)">
+                  <v-list-tile-title>{{ link.name.toUpperCase() }}</v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile @click="openBlog">
+                  BLOG
+                </v-list-tile>
+                <v-list-tile @click="goToFAQ">
+                  FAQ
+                </v-list-tile>
+              </v-list>
+            </v-menu>
+          </div>
+ 
+
+          <div v-for="headerIcon in headerIcons" :key="headerIcon.name">
+            <v-tooltip v-if="headerIcon.tooltipText" top>
+              <v-btn 
                 slot="activator"
-                @click="openFooterLinkNewTab(footerIcon.src)"
+                @click="openHeaderLinkNewTab(headerIcon.src)"
                 icon
                 class="mx-3 white--text"
                 >
                   <v-icon>
-                    {{ footerIcon.name }}
+                    {{ headerIcon.name }}
                   </v-icon>
                 </v-btn>
-                <span>{{ footerIcon.tooltipText }}</span>
-              </v-tooltip>              
-              <!-- No tooltip --> 
-              <v-btn v-else
-              @click="openFooterLinkNewTab(footerIcon.src)"
-              icon
-              class="mx-3 white--text"
-              >
-                <v-icon>
-                  {{ footerIcon.name }}
-                </v-icon>
-              </v-btn>
-            </div>            
-          </div>              
-            <!-- <v-btn flat class="as-main-toolbar-link">Why Electrum Performance</v-btn> -->
-          </v-toolbar-items>
+                <span>{{ headerIcon.tooltipText }}</span>
+            </v-tooltip>              
+            <!-- No tooltip --> 
+            <v-btn v-else
+            @click="openHeaderLinkNewTab(headerIcon.src)"
+            icon
+            class="mx-3 white--text"
+            >
+              <v-icon>
+                {{ headerIcon.name }}
+              </v-icon>
+            </v-btn>
+          </div>
+
           <v-toolbar-side-icon v-if="$session.exists() && $session.has('user')" @click="toggleNavigation"></v-toolbar-side-icon>
         </div>
       </v-toolbar>
@@ -96,14 +89,16 @@
         :visible="showNavigation"
         @update-visibility="setNavigation"/>
 
+      <!-- Main Body --> 
       <div class="as-main-body" style="height: 100%; min-height: 450px;">
         <router-view/>
       </div>
      
+      <!-- Footer --> 
       <v-footer class="as-footer">
         <div class="as-footer-extra-formatting">
           <div class="as-footer-info">
-              <v-btn disabled class="as-footer-copyright" flat >
+              <v-btn disabled class="as-footer-copyright" flat>
                 <span>© {{ currentYear }} &mdash; Electrum Performance Systems. </span> 
                 <span>All Rights Reserved</span>
               </v-btn>
@@ -116,9 +111,6 @@
                 </span>
               </p>
             </div>
-
-          <!-- Footer Links ('About', Social Media, etc.) -->
-
         </div>
       </v-footer>
     </v-app>
@@ -138,7 +130,7 @@
     data: () => ({
       showNavigation: false,
       currentYear: (new Date()).getFullYear(),
-      footerLinks: [
+      headerLinks: [
         {
           pathName:'About',
           name: 'About'
@@ -152,7 +144,7 @@
           name: 'Contact Us'
         },
       ],
-      footerIcons: [
+      headerIcons: [
         {
           name: 'fa-facebook-f',
           src: '',
@@ -183,7 +175,7 @@
       setNavigation(val) {
         this.showNavigation = val;
       },
-      openFooterLinkNewTab(src) {
+      openHeaderLinkNewTab(src) {
         if (src) {
           window.open(src, '_blank');
         }
@@ -218,11 +210,16 @@
     height: unset !important;
     max-height: 150px !important;
 
+    &-left {
+      display: flex;
+      align-items: center;
+      flex-wrap: no-wrap;
+    }
+
     &-right {
       display: flex;
-      flex-wrap: no-wrap;
+      flex-wrap: wrap;
       align-items: center;
-      justify-content: space-between;
       margin-right: 12px;
     }
 
@@ -244,6 +241,7 @@
     .toolbar__content {
       height: unset !important;
       flex-wrap: wrap;
+      justify-content: space-between; 
     }
   }
 
@@ -312,11 +310,28 @@
         background-color: transparent !important;
       }
     }
+  }
 
-    &-links {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
+  /* Responsiveness */
+
+  @mixin for-phone-only {
+    @media (max-width: 599px) { @content; }
+  }
+
+  .as-main-menu-links {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .as-main-menu-links-small {
+    display: none !important;
+  }
+
+  @include for-phone-only {
+    .as-main-menu-links {
+      display: none !important;
+    }
+    .as-main-menu-links-small {
+      display: inline-block !important;
     }
   }
 
