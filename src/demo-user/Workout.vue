@@ -62,12 +62,12 @@
                             @click="checkSubmit()">
                             Submit
                         </v-btn>
-                        <v-btn color="green" 
+                        <!-- <v-btn color="green" 
                             v-if="pastWorkout && !complete && notEditable"
                             class="as-subworkout-button"
                         >
                             Mark As Complete
-                        </v-btn>
+                        </v-btn> -->
                         <v-btn 
                             color="primary"
                             v-if="pastWorkout && (complete || notEditable)"
@@ -345,11 +345,13 @@ export default {
               } else if (response.data.accessLevel === 5) {
                 this.copy = {
                   headerText: `You Have Incomplete Workouts`,
-                  descriptionText: `to reschedule your workouts`,
+                  descriptionText: `to reschedule your workouts, or navigate your missed workouts on the calendar and mark them as complete`,
                   pathName: "RescheduleWorkouts"
                 };
 
                 this.showPrompt = true;
+              } else {
+                this.showPrompt = false;
               }
             }
 
@@ -382,11 +384,16 @@ export default {
               this.hiddenWorkout = true;
               this.hiddenWorkoutMessage = response.data.hiddenText;
             } else {
+              const { Missed, pastWorkout, Completed } = response.data;
+              this.missed = Missed;
+              this.complete = Completed;
+              this.pastWorkout = pastWorkout;
+
               let title = response.data.describer.split(" - ");
               let title1 = title[0].split(", ");
               this.titlePart1 = title1[0];
               this.titlePart1Extend = title1[1];
-              this.titlePart2 = title[1];
+              this.titlePart2 = `${title[1]}${Missed ? " [Incomplete]" : ""}`;
 
               //If Workout Only
               this.date = response.data.date; //Keep?
@@ -394,12 +401,8 @@ export default {
               this.setTableHeaders();
               this.hiddenWorkout = "";
               this.hiddenWorkoutMessage = "";
-              let accessible = todayDate === this.date;
-
-              const { Missed, pastWorkout, Completed } = response.data;
-              this.missed = Missed;
-              this.complete = Completed;
-              this.pastWorkout = pastWorkout;
+              console.log("todayDate, date: ", todayDate, this.date);
+              let accessible = todayDate >= this.date;
 
               if (
                 (response.data.noedits || !accessible) &&

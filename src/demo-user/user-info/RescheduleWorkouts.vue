@@ -18,11 +18,12 @@
                                 :items="previousWorkoutsTableItems"
                                 hide-actions>
                                 <template slot="items" slot-scope="props">
-                                    <td> {{ props.item.workoutDescriber }}</td>
+                                    <td>
+                                      <a @click="viewWorkout(props.item.ID)" style="">{{ props.item.workoutDescriber }}</a>
+                                    </td>
                                     <td> {{ props.item.date }}</td>
                                     <td> {{ props.item.completed ? 'Yes' : 'No'}} 
                                         <v-icon v-if="props.item.completed" small color="green">check_circle</v-icon>
-                                        <a @click="viewWorkout(props.item.ID)">(Click to View)</a>
                                     </td>
                                 </template>
                             </v-data-table>
@@ -48,7 +49,7 @@ export default {
     return {
       previousWorkoutsTableItems: [],
       previousWorkoutsTableHeaders: [
-        { value: "workoutDescriber", text: "Workout" },
+        { value: "workoutDescriber", text: "Workout (Click to View)" },
         { value: "date", text: "Date" },
         { value: "completed", text: "Completed?" }
       ],
