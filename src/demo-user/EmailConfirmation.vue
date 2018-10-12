@@ -37,58 +37,59 @@
 
 
 <script>
-    import Login from '@/demo-home/Login'; 
+import Login from "@/demo-home/Login";
 
-    import UsersService from '@/services/UsersService'; 
+import UsersService from "@/services/UsersService";
 
-    export default {
-        components: {
-            'as-login': Login
-        },
-        data() {
-            return {
-                activated: false,
-                loading: false,
-                alreadyConfirmed: false
-            };
-        },
-        mounted() {
-            this.loading = true; 
-
-            this.getConfirmation().finally(() => {
-                this.loading = false; 
-            });
-        },
-        methods: {
-            getConfirmation() {
-                const userId = this.$route.params.id; 
-                const confString = this.$route.params.confString;
-
-                return UsersService.getEmailConfirmation(userId, confString).then(response => {
-                    if (response.data.match) {
-                        this.activated = true; 
-                    }
-
-                    if (response.data.alreadyConfirmed) {
-                        this.alreadyConfirmed = true;
-                    }
-                });
-            }
-        }
+export default {
+  components: {
+    "as-login": Login
+  },
+  data() {
+    return {
+      activated: false,
+      loading: false,
+      alreadyConfirmed: false
     };
+  },
+  mounted() {
+    this.loading = true;
 
+    this.getConfirmation().finally(() => {
+      this.loading = false;
+    });
+  },
+  methods: {
+    getConfirmation() {
+      const userId = this.$route.params.id;
+      const confString = this.$route.params.confString;
+
+      return UsersService.getEmailConfirmation(userId, confString).then(
+        response => {
+          if (response.data.match) {
+            this.activated = true;
+          }
+
+          if (response.data.alreadyConfirmed) {
+            this.alreadyConfirmed = true;
+          }
+        }
+      );
+    }
+  }
+};
 </script>
 
 
 <style lang="scss">
-    @import '~@/demo-common/styles/colors';
-    @import '~@/demo-common/styles/transitions';
+@import "~@/demo-common/styles/colors";
+@import "~@/demo-common/styles/transitions";
 
-    .as-email-confirmation {
-        text-align: center; 
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+.as-email-confirmation {
+  text-align: center;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 </style>

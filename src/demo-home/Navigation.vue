@@ -135,36 +135,35 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            visible: {
-                type: Boolean,
-                default: false
-            }
-        },
-        data() {
-            return {
-                showDrawer: this.visible || false
-            }; 
-        },
-        methods: {
-            routeTo(pathName) {
-                this.$router.push({name: pathName});
-            }
-        },
-        watch: {
-            showDrawer: function(newVal) {
-                if (this.visible !== newVal) {
-                    this.$emit('update-visibility', newVal);
-                }
-            },
-            visible: function(newVal) {
-                this.showDrawer = newVal; 
-            }
-        }
+export default {
+  props: {
+    visible: {
+      type: Boolean,
+      default: false
     }
+  },
+  data() {
+    return {
+      showDrawer: this.visible || false
+    };
+  },
+  methods: {
+    routeTo(pathName) {
+      this.$router.push({ name: pathName });
+    }
+  },
+  watch: {
+    showDrawer: function(newVal) {
+      if (this.visible !== newVal) {
+        this.$emit("update-visibility", newVal);
+      }
+    },
+    visible: function(newVal) {
+      this.showDrawer = newVal;
+    }
+  }
+};
 </script>
 
 <style lang="scss">
-
 </style>

@@ -37,7 +37,7 @@
                     <div class="header-description-block" style="display:block">
                         <div class="header-exercise-description">
                             <p style="padding-right: 12px;">{{ describer }}</p>
-                            <div class="suggested-weight-string" v-if="suggestedWeightString">
+                            <div class="suggested-weight-string" v-if="suggestedWeightString && sclass != 'bodyweight'">
                                 <p style="padding-left: 12px; border-left: 1px solid #aaa">{{ suggestedWeightString }} </p>
                             </div>
                         </div>
@@ -82,218 +82,219 @@
 </template>
 
 <script>
-
-// TODO -- figure out what's the issue with imports 
-let RepsRow = require('./RepsRow.vue').default;
-let WeightsRow = require('./WeightsRow.vue').default;
-let RPERow = require('./RPERow.vue').default; 
-let TempoRow = require('./TempoRow.vue').default; 
+// TODO -- figure out what's the issue with imports
+let RepsRow = require("./RepsRow.vue").default;
+let WeightsRow = require("./WeightsRow.vue").default;
+let RPERow = require("./RPERow.vue").default;
+let TempoRow = require("./TempoRow.vue").default;
 
 export default {
-    components: {
-        'as-rep-row': RepsRow,
-        'as-weight-row': WeightsRow,
-        'as-RPE-row': RPERow,
-        'as-tempo-row': TempoRow
+  components: {
+    "as-rep-row": RepsRow,
+    "as-weight-row": WeightsRow,
+    "as-RPE-row": RPERow,
+    "as-tempo-row": TempoRow
+  },
+  props: {
+    type: {
+      type: String,
+      required: true
     },
-    props: {
-        type: {
-            type: String,
-            required: true
-        },
-        notEditable: {
-            type: Boolean
-        },
-        name: {
-            type: String,
-            required: true
-        },
-        sclass: {
-            type: String,
-        },
-        describer: {
-            type: String,
-            required: true
-        },
-        suggestedWeightString: {
-            type: String
-        },
-        specialClass: {
-            type: String
-        },
-        specialDescriber: {
-            type: String
-        },
-        video: {
-            type: Object, 
-            required: false
-        },
-        RPEOptions: {
-            type: Array,
-            required: true
-        },
-        dataTableItems: {
-            type: Array,
-            required: true
-        },
-        number: {
-            type: Number
-        },
-        hasButton: {
-            type: Boolean
-        },
-        buttonName: {
-            type: String
-        },
-        buttonDisplay: {
-            type: String,
-        },
-        headers: {
-            type: Array,
-            required: true
-        },
-        warnNextSet: {
-            type: Boolean
-        },
-        warningText: {
-            type: String
-        },
-        setWarningOk: {
-            type: Boolean
-        }
+    notEditable: {
+      type: Boolean
     },
-    methods: {
-        goToVideo() {
-            this.$router.push({name: "Videos", params: {videoFromWorkout: this.video}});
-        },
-        getNextSet() {
-            this.$emit('refresh', {patternNumber: this.number, buttonName: this.buttonName});
-        },
-        showSetWarning() {
-            if (this.warnNextSet) {
-                let warningInfo = {
-                    warnNextSet: this.warnNextSet,
-                    warningText: this.warningText
-                };
-                this.$emit('showWarning', warningInfo);
-            } else {
-                this.getNextSet();
-            }
-        }
+    name: {
+      type: String,
+      required: true
     },
-    computed: {
-        hasVideo() {
-            return Object.keys(this.video).length > 0; 
-        },
-        dynamicColorClasses() {
-            return {
-                'as-strength-stop': (this.specialClass === 'stop'),
-                'as-strength-drop': (this.specialClass === 'drop'),
-                'as-alloy': (this.specialClass === 'alloy')
-            };
-        }
+    sclass: {
+      type: String
     },
-    watch: {
-        setWarningOk: function(newVal) {
-            if (newVal && this.warnNextSet) {
-                this.getNextSet();
-            }
-        }
+    describer: {
+      type: String,
+      required: true
+    },
+    suggestedWeightString: {
+      type: String
+    },
+    specialClass: {
+      type: String
+    },
+    specialDescriber: {
+      type: String
+    },
+    video: {
+      type: Object,
+      required: false
+    },
+    RPEOptions: {
+      type: Array,
+      required: true
+    },
+    dataTableItems: {
+      type: Array,
+      required: true
+    },
+    number: {
+      type: Number
+    },
+    hasButton: {
+      type: Boolean
+    },
+    buttonName: {
+      type: String
+    },
+    buttonDisplay: {
+      type: String
+    },
+    headers: {
+      type: Array,
+      required: true
+    },
+    warnNextSet: {
+      type: Boolean
+    },
+    warningText: {
+      type: String
+    },
+    setWarningOk: {
+      type: Boolean
     }
+  },
+  methods: {
+    goToVideo() {
+      this.$router.push({
+        name: "Videos",
+        params: { videoFromWorkout: this.video }
+      });
+    },
+    getNextSet() {
+      this.$emit("refresh", {
+        patternNumber: this.number,
+        buttonName: this.buttonName
+      });
+    },
+    showSetWarning() {
+      if (this.warnNextSet) {
+        let warningInfo = {
+          warnNextSet: this.warnNextSet,
+          warningText: this.warningText
+        };
+        this.$emit("showWarning", warningInfo);
+      } else {
+        this.getNextSet();
+      }
+    }
+  },
+  computed: {
+    hasVideo() {
+      return Object.keys(this.video).length > 0;
+    },
+    dynamicColorClasses() {
+      return {
+        "as-strength-stop": this.specialClass === "stop",
+        "as-strength-drop": this.specialClass === "drop",
+        "as-alloy": this.specialClass === "alloy"
+      };
+    }
+  },
+  watch: {
+    setWarningOk: function(newVal) {
+      if (newVal && this.warnNextSet) {
+        this.getNextSet();
+      }
+    }
+  }
 };
-
 </script>
 
 <style lang="scss">
+@import "~@/demo-common/styles/colors";
 
-    @import '~@/demo-common/styles/colors';
+.as-subworkout {
+  width: 100%;
+  margin-bottom: 20px;
 
-    .as-subworkout {
-        width: 100%;
-        margin-bottom: 20px;
+  &-table {
+    tr {
+      &:hover {
+        background: transparent !important;
+      }
+    }
+  }
 
-        &-table {
-            tr {
-                &:hover {
-                    background: transparent !important;
-                }
-            }
-        }
-        
-        &-name {
-            margin: 0px 8px 0px 12px;
-            font-size: 20px;
-        }
+  &-name {
+    margin: 0px 8px 0px 12px;
+    font-size: 20px;
+  }
 
-        .expansion-panel__header {
-            //background-color: $blueDarken2;
-            background-color: $greyLighten2;
-            padding-left: 12px;
-            padding-top: 12px;
-            //background-color: $blueGreyDarken3;
-            //color: white; 
-        }
+  .expansion-panel__header {
+    //background-color: $blueDarken2;
+    background-color: $greyLighten2;
+    padding-left: 12px;
+    padding-top: 12px;
+    //background-color: $blueGreyDarken3;
+    //color: white;
+  }
 
-        .as-video-icon {
-            margin-left: 6px;
-            margin-right: 6px;
-            margin-bottom: 12px;
-        }
+  .as-video-icon {
+    margin-left: 6px;
+    margin-right: 6px;
+    margin-bottom: 12px;
+  }
 
-        &-header {
-            .header-container {
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
+  &-header {
+    .header-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
 
-                .video-icon {
-                    color: $lightBlueDarken3;
-                    padding: 2px 8px;
-                }
+      .video-icon {
+        color: $lightBlueDarken3;
+        padding: 2px 8px;
+      }
 
-                .header-divider {
-                    margin: 0px 8px;
-                }
-            }
-
-            .header-exercise-description {
-                margin-bottom: 0px !important;
-                display: flex;
-                align-items: center;
-
-                .suggested-weight-string {
-                    margin-left: 4px;
-                }
-            }
-        }
-
-        .expansion-panel {
-            margin-bottom: 20px;
-        }
-
-        .small-dialog {
-            display: block !important; 
-        }
+      .header-divider {
+        margin: 0px 8px;
+      }
     }
 
-    .get-next-set {
-        width: 100%; 
-        .get-next-set-button {
-            float: right;
-        }
+    .header-exercise-description {
+      margin-bottom: 0px !important;
+      display: flex;
+      align-items: center;
+
+      .suggested-weight-string {
+        margin-left: 4px;
+      }
     }
+  }
 
-    .as-strength-stop {
-        color: #1976d2 !important;
-    }
+  .expansion-panel {
+    margin-bottom: 20px;
+  }
 
-    .as-strength-drop {
-        color: #4caf50 !important;
-    }
+  .small-dialog {
+    display: block !important;
+  }
+}
 
-    .as-alloy {
-        color: red !important;
-    }
+.get-next-set {
+  width: 100%;
+  .get-next-set-button {
+    float: right;
+  }
+}
 
+.as-strength-stop {
+  color: #1976d2 !important;
+}
 
+.as-strength-drop {
+  color: #4caf50 !important;
+}
+
+.as-alloy {
+  color: red !important;
+}
 </style>

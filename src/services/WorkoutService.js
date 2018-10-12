@@ -24,5 +24,8 @@ export default {
       `/api/users/${userId}/workouts/${workoutId}/pattern/${patternId}/update`,
       body
     );
+  },
+  editWorkout(userId, workoutId) {
+    return Api().put(`/api/users/${userId}/workouts/${workoutId}/edit`);
   }
 };

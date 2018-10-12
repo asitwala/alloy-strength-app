@@ -231,6 +231,7 @@
                             this.$emit('submit', {renew: false});
                         } else {
                             console.log(`Payment Error 2`);
+                            //Add payment error case here
                         }
                     }).finally(() => {
                         this.loading = false; 

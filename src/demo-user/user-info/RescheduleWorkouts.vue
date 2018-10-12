@@ -18,7 +18,9 @@
                                 :items="previousWorkoutsTableItems"
                                 hide-actions>
                                 <template slot="items" slot-scope="props">
-                                    <td> {{ props.item.workoutDescriber }}</td>
+                                    <td>
+                                      <a @click="viewWorkout(props.item.ID)" style="">{{ props.item.workoutDescriber }}</a>
+                                    </td>
                                     <td> {{ props.item.date }}</td>
                                     <td> {{ props.item.completed ? 'Yes' : 'No'}} 
                                         <v-icon v-if="props.item.completed" small color="green">check_circle</v-icon>
@@ -47,7 +49,7 @@ export default {
     return {
       previousWorkoutsTableItems: [],
       previousWorkoutsTableHeaders: [
-        { value: "workoutDescriber", text: "Workout" },
+        { value: "workoutDescriber", text: "Workout (Click to View)" },
         { value: "date", text: "Date" },
         { value: "completed", text: "Completed?" }
       ],
@@ -58,6 +60,10 @@ export default {
     this.getPreviousWorkouts();
   },
   methods: {
+    viewWorkout(wId) {
+      this.$session.set("viewingWID", wId);
+      this.$router.push({ name: "Workout" });
+    },
     getPreviousWorkouts() {
       this.loading = true;
       UsersService.getPreviousWorkouts(this.$session.get("user").id)
@@ -78,6 +84,7 @@ export default {
             }`;
             previousWorkout.completed = workout.Completed;
             previousWorkout.missed = workout.Missed;
+            previousWorkout.ID = workout.ID;
             this.previousWorkoutsTableItems.push(previousWorkout);
           });
         })

@@ -62,6 +62,19 @@
                             @click="checkSubmit()">
                             Complete
                         </v-btn>
+                        <!-- <v-btn color="green" 
+                            v-if="pastWorkout && !complete && notEditable"
+                            class="as-subworkout-button"
+                        >
+                            Mark As Complete
+                        </v-btn> -->
+                        <v-btn 
+                            color="primary"
+                            v-if="pastWorkout && (complete || notEditable)"
+                            class="as-subworkout-button"
+                            @click="editWorkout()">
+                            Edit Workout
+                        </v-btn>
                     </div>
                 </div>
                 <v-divider/>
@@ -190,7 +203,8 @@
 import moment from "moment";
 let SimpleWorkout = require("./SimpleWorkout.vue").default;
 let Subworkout = require("./Subworkout.vue").default;
-let Notification = require("../demo-common/components/Notification.vue").default;
+let Notification = require("../demo-common/components/Notification.vue")
+  .default;
 
 import WorkoutLegend from "@/demo-common/components/WorkoutLegend";
 
@@ -331,18 +345,19 @@ export default {
               } else if (response.data.accessLevel === 5) {
                 this.copy = {
                   headerText: `You Have Incomplete Workouts`,
-                  descriptionText: `to reschedule your workouts`,
+                  descriptionText: `to reschedule your workouts, or navigate your missed workouts on the calendar and mark them as complete`,
                   pathName: "RescheduleWorkouts"
                 };
 
                 this.showPrompt = true;
+              } else {
+                this.showPrompt = false;
               }
             }
 
             let todayDate = moment()
               .local()
               .format("YYYY-MM-DD");
-
             this.workoutDates = response.data.workoutDates; //Keep
             this.formatWorkoutDates(); //Keep
             this.selectedDateWithWeekDay = ""; //Keep
@@ -371,11 +386,16 @@ export default {
               this.hiddenWorkout = true;
               this.hiddenWorkoutMessage = response.data.hiddenText;
             } else {
+              const { Missed, pastWorkout, Completed } = response.data;
+              this.missed = Missed;
+              this.complete = Completed;
+              this.pastWorkout = pastWorkout;
+
               let title = response.data.describer.split(" - ");
               let title1 = title[0].split(", ");
               this.titlePart1 = title1[0];
               this.titlePart1Extend = title1[1];
-              this.titlePart2 = title[1];
+              this.titlePart2 = `${title[1]}${Missed ? " [Incomplete]" : ""}`;
 
               //If Workout Only
               this.date = response.data.date; //Keep?
@@ -383,10 +403,12 @@ export default {
               this.setTableHeaders();
               this.hiddenWorkout = "";
               this.hiddenWorkoutMessage = "";
-              let accessible = todayDate === this.date;
+              console.log("todayDate, date: ", todayDate, this.date);
+              let accessible = todayDate >= this.date;
 
               if (
                 (response.data.noedits || !accessible) &&
+                !response.data.retroEditing &&
                 !this.$session.get("user").isAdmin
               ) {
                 this.notEditable = true;
@@ -556,6 +578,13 @@ export default {
         this.notificationType = "reset";
         this.notificationVisible = true;
       });
+    },
+    editWorkout() {
+      let userId = this.$session.get("user").id;
+      let WID = this.$session.get("viewingWID");
+      WorkoutService.editWorkout(userId, WID).then(response => {
+        this.fetchWorkoutInfo();
+      });
     }
   },
   data() {
@@ -592,6 +621,12 @@ export default {
 
       // no edits
       notEditable: false,
+      // missed workout
+      missed: false,
+      // completed workout
+      complete: false,
+      // old/past workout
+      pastWorkout: false,
 
       // workout prompt
       copy: {},

@@ -14,41 +14,35 @@
 
 
 <script>
-
 export default {
-    props: {
-        showPrompt: {
-            type: Boolean,
-            default: false
-        },
-        copy: {
-            type: Object,
-            default: () => {}
-        }
+  props: {
+    showPrompt: {
+      type: Boolean,
+      default: false
+    },
+    copy: {
+      type: Object,
+      default: () => {}
     }
+  }
 };
-
 </script>
 
 
 <style lang="scss">
-
-@import '~@/demo-common/styles/colors';
+@import "~@/demo-common/styles/colors";
 
 .as-workout-prompt {
+  .as-header {
+    color: $redBase;
+  }
 
-    .as-header {
-        color: $redBase;
-    }
+  margin: 0 20px;
 
-    margin: 0 20px;
+  margin-top: 12px;
 
-    margin-top: 12px;
-
-    .as-link {
-        color: $redBase;
-    }
+  .as-link {
+    color: $redBase;
+  }
 }
-
-
 </style>
