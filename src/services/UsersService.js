@@ -54,6 +54,7 @@ export default {
     return Api().post(`/api/users/${userId}/admin/generate-workouts`, params);
   },
   getPreviousWorkouts(userId) {
+    console.log("pulling from: ", `/api/users/${userId}/reschedule-workouts`);
     return Api().get(`/api/users/${userId}/reschedule-workouts`);
   },
   rescheduleWorkouts(userId, params) {
@@ -74,5 +75,4 @@ export default {
   updatePaymentCard(params) {
     return Api().post(`api/stripe/update-card`, params);
   }
-
 };

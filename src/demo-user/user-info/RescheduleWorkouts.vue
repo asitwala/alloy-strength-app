@@ -22,6 +22,7 @@
                                     <td> {{ props.item.date }}</td>
                                     <td> {{ props.item.completed ? 'Yes' : 'No'}} 
                                         <v-icon v-if="props.item.completed" small color="green">check_circle</v-icon>
+                                        <a @click="viewWorkout(props.item.ID)">(Click to View)</a>
                                     </td>
                                 </template>
                             </v-data-table>
@@ -58,6 +59,10 @@ export default {
     this.getPreviousWorkouts();
   },
   methods: {
+    viewWorkout(wId) {
+      this.$session.set("viewingWID", wId);
+      this.$router.push({ name: "Workout" });
+    },
     getPreviousWorkouts() {
       this.loading = true;
       UsersService.getPreviousWorkouts(this.$session.get("user").id)
@@ -78,6 +83,7 @@ export default {
             }`;
             previousWorkout.completed = workout.Completed;
             previousWorkout.missed = workout.Missed;
+            previousWorkout.ID = workout.ID;
             this.previousWorkoutsTableItems.push(previousWorkout);
           });
         })

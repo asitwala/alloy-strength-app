@@ -62,9 +62,15 @@
                             @click="checkSubmit()">
                             Submit
                         </v-btn>
+                        <v-btn color="green" 
+                            v-if="pastWorkout && !complete && notEditable"
+                            class="as-subworkout-button"
+                        >
+                            Mark As Complete
+                        </v-btn>
                         <v-btn 
                             color="primary"
-                            v-if="!notEditable"
+                            v-if="pastWorkout && (complete || notEditable)"
                             class="as-subworkout-button"
                             @click="editWorkout()">
                             Edit Workout
@@ -390,8 +396,14 @@ export default {
               this.hiddenWorkoutMessage = "";
               let accessible = todayDate === this.date;
 
+              const { Missed, pastWorkout, Completed } = response.data;
+              this.missed = Missed;
+              this.complete = Completed;
+              this.pastWorkout = pastWorkout;
+
               if (
                 (response.data.noedits || !accessible) &&
+                !response.data.retroEditing &&
                 !this.$session.get("user").isAdmin
               ) {
                 this.notEditable = true;
@@ -563,10 +575,8 @@ export default {
       });
     },
     editWorkout() {
-      console.log("editWorkout() running...");
       let userId = this.$session.get("user").id;
       let WID = this.$session.get("viewingWID");
-
       WorkoutService.editWorkout(userId, WID).then(response => {
         this.fetchWorkoutInfo();
       });
@@ -606,6 +616,12 @@ export default {
 
       // no edits
       notEditable: false,
+      // missed workout
+      missed: false,
+      // completed workout
+      complete: false,
+      // old/past workout
+      pastWorkout: false,
 
       // workout prompt
       copy: {},
